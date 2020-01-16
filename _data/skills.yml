@@ -10,11 +10,14 @@ frameworks:
   - item: React
   - item: Jekyll
   - item: Node
-
-tools:
   - item: Bash
   - item: Git & Github
   - item: MongoDB
+
+
+ds:
+  - item: Computer Vision
+  - item: Generative Adversarial Networks
 
 business:
   - item: Accounting

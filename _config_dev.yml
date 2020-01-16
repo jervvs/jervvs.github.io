@@ -1,10 +1,10 @@
 # Site settings
-name: Brittany Chiang
-title: Brittany Chiang | Front End Software Engineer
-description: Design-minded front-end software engineer focused on building beautiful interfaces and experiences
-url: https://bchiang7.github.io/
+name: Jervis Chan
+title: Jervis Chan 
+description: Computer science student fascinated about machine learning and software development.
+url: https://jervvs.github.io/
 baseurl: ''
-email: brittany.chiang@gmail.com
+email: jerv0003@e.ntu.edu.sg
 cover: https://bchiang7.github.io/img/og.png
 logo: https://bchiang7.github.io/img/emojis/technologist.png
 resume: https://bchiang7.github.io/resume.pdf

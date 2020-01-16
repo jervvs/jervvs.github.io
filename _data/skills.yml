@@ -5,6 +5,9 @@ languages:
   - item: C/C++
   - item: Java
   - item: JavaScript
+  - item: Bash
+  - item: Git & Github
+  - item: MongoDB
 
 frameworks:
   - item: React

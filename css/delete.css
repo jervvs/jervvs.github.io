@@ -64,6 +64,58 @@
 	font-style: italic
 }
 
+/* test */
+
+
+
+@font-face {
+	font-family: Adobe;
+	src: url(../fonts/adobepro/AdobeTextPro-Regular.ttf);
+    src: url(../fonts/adobepro/AdobeTextPro-Regular.ttf) format("truetype");
+    font-weight: 400;
+	font-style: normal
+}
+
+@font-face {
+	font-family: Adobe;
+    src: url(../fonts/adobepro/AdobeTextPro-It.ttf);
+	src: url(../fonts/adobepro/AdobeTextPro-It.ttf) format("truetype");
+    font-weight: 400;
+	font-style: italic
+}
+
+@font-face {
+	font-family: Adobe;
+	src: url(../fonts/adobepro/AdobeTextPro-Semibold.ttf);
+    src: url(../fonts/adobepro/AdobeTextPro-Semibold.ttf) format("truetype");
+    font-weight: 500;
+	font-style: normal
+}
+
+@font-face {
+    font-family: Adobe;
+	src: url(../fonts/adobepro/AdobeTextPro-SemiboldIt.ttf);
+    src: url(../fonts/adobepro/AdobeTextPro-SemiboldIt.ttf) format("truetype");
+    font-weight: 500;
+	font-style: italic
+}
+
+@font-face {
+	font-family: Adobe;
+	src: url(../fonts/adobepro/AdobeTextPro-Bold.ttf);
+	src: url(../fonts/adobepro/AdobeTextPro-Bold.ttf) format("truetype");
+	font-weight: 700;
+	font-style: normal
+}
+
+@font-face {
+	font-family: Adobe;
+    src: url(../fonts/adobepro/AdobeTextPro-BoldIt.ttf);
+	src: url(../fonts/adobepro/AdobeTextPro-BoldIt.ttf) format("truetype");
+    font-weight: 700;
+	font-style: italic
+}
+
 html {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box
@@ -680,6 +732,7 @@ strong {
 }
 
 .intro__tagline .name {
+    font-family: Adobe;
 	font-weight: 700
 }
 

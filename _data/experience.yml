@@ -2,7 +2,9 @@
   url: https://www.upstatement.com/
   time: May 2018 - Present
   position: Engineer
-  description: Small React project created during an interview process to browse and search surf videos via the YouTube API.
+  description: | 
+    Small React project created during an interview process to browse and search 
+    surf videos via the YouTube API.
 
 
 - company: Scout

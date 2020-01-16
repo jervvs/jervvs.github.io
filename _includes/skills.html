@@ -35,6 +35,14 @@
           {% endfor %}
         </ul>
       </div>
+      <div class="skillz__category">
+        <div class="skillz__category__label">Business</div>
+        <ul>
+          {% for thing in site.data.skills.business %}
+          <li class="skillz__category__item">{{thing.item}}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 </section>

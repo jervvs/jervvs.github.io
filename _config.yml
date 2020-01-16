@@ -11,10 +11,10 @@ resume: https://jervvs.github.io/JERVISCHAN_Resume.pdf
 social:
   - title: email
     url: mailto:jerv0003@e.ntu.edu.sg
-  - title: github
-    url: https://github.com/jervvs
   - title: linkedin
     url: https://www.linkedin.com/in/jervis-chan/
+  # - title: github
+  #   url: https://github.com/jervvs
 
 
 # Build settings

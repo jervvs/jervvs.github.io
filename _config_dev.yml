@@ -1,13 +1,13 @@
 # Site settings
 name: Jervis Chan
-title: Jervis Chan 
-description: Computer science student fascinated about machine learning and software development.
+title: Jervis Chan | Aspiring Full Stack Data Scientist
+description: Computer science / business student fascinated about machine learning and software development and their applications on real life problems.
 url: https://jervvs.github.io/
 baseurl: ''
 email: jerv0003@e.ntu.edu.sg
-cover: https://bchiang7.github.io/img/og.png
-logo: https://bchiang7.github.io/img/emojis/technologist.png
-resume: https://bchiang7.github.io/resume.pdf
+cover: #https://bchiang7.github.io/img/og.png
+logo: https://jervvs.github.io/img/emojis/unicorn.png
+resume: https://jervvs.github.io/JERVISCHAN_Resume.pdf
 social:
   - title: email
     url: mailto:jerv0003@e.ntu.edu.sg

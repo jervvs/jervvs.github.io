@@ -7,6 +7,14 @@
     <span class="name">Jervis Chan</span>, a computer science &amp; business student fascinated about machine learning &amp; software development and their applications on real-life problems.
     <span class="emoji unicorn"></span>
   </h2>
+  <div class="footer__links">
+    {% for link in site.social %}
+    <a href="{{link.url}}" target="_blank" title="{{link.title}}">
+      <span class="text">{{link.title}}</span>
+      <img src="{{site.baseurl}}/img/social/{{link.title}}.svg" alt="{{link.title}}">
+    </a>
+    {% endfor %}
+  </div>
 
   <!-- <h3 class="intro__contact">
     <span>Get in touch </span>

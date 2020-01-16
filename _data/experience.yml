@@ -2,10 +2,11 @@
   url: https://www.upstatement.com/
   time: May 2018 - Present
   position: Engineer
-  description:
-    - Small React project created during an interview process to browse and search 
-    - surf videos via the YouTube API.
-
+  description: | 
+  \noindent
+    * Foo
+    * Bar
+    * Baz
 
 - company: Scout
   url: https://web.northeastern.edu/scout/

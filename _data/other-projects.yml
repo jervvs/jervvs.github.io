@@ -11,10 +11,23 @@
   url: 
   code: 
   description: 
-    Proposed the implementation of a sector rotation strategy through the use of a reinforcement learning algorithm (Proximal Policy Optimization) and trained reinforcement learning agents on custom stock trading environment built on OpenAI’s Gym. <br>
-    <a class="small" href="http://projects.hackbeanpot.com/2017-projects.html">🏆 Won Best UI/UX Design at Hackbeanpot 2017 🏆</a>
+    Developed a web application that aided in epidemiology analysis in the context of poor data gathering and data analysis of public health data in India. <br>
+    <span class="small">🏆 Won Top 10 🏆</span>
   used:
-    - thing: Reinforcement Learning
-    - thing: OpenAI Gym
+    - thing: Data Wrangling
+    - thing: Data Visualisation
     - thing: Python
- 
+    - thing: Folium
+
+- name: Rohde and Schwarz Engineering Competition
+  url: 
+  code: 
+  description: 
+    Developed a solution to regression problem of predicting 5G bandwidth demand  <br>
+    <span class="small">🏆 Top in Asia 🏆</span>
+    <span class="small">🏆 Highest Scoring Team in International Finals 🏆</span>
+  used:
+    - thing: Applied Machine Learning
+    - thing: XGBoost/Tree-based Models
+    - thing: Python
+    - thing: Folium

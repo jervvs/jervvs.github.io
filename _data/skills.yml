@@ -1,4 +1,4 @@
-languages:
+programming:
   - item: Python
   - item: SQL
   - item: R
@@ -7,17 +7,12 @@ languages:
   - item: JavaScript
   - item: Bash
   - item: Git & Github
-  - item: MongoDB
-
-frameworks:
-  - item: React
-  - item: Jekyll
-  - item: Node
-  - item: Bash
-  - item: Git & Github
-  - item: MongoDB
 
 ds:
+  - item: Data Wrangling
+  - item: Data Visualisation
+  - item: Applied Machine Learning
+  - item: Reinforcement Learning
   - item: Computer Vision
   - item: Generative Adversarial Networks
 

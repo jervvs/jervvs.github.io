@@ -1,12 +1,12 @@
 - company: "Nanyang Technological University (Dauwels Lab)"
-  url: 
+  url: https://www.dauwelslab.com/
   time: Aug 2019 - Present
   position: Student Researcher
-  description: Hi
-  # \noindent
-  #   * Foo
-  #   * Bar
-  #   * Baz
+  description: |
+   \noindent
+     * Foo
+     * Bar
+     * Baz
 
 - company: AMD
   url: https://www.amd.com/en

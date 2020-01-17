@@ -539,10 +539,10 @@ strong {
 }
 
 .intro {
-    padding-top: 120px;
+	padding: 120px 100px;
     height: 100vh;
     text-align: center;
-	/* display: -webkit-box;
+	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
 	-webkit-box-orient: vertical;
@@ -552,7 +552,7 @@ strong {
 	-ms-flex-pack: distribute;
 	justify-content: space-around;
 	max-width: 1440px;
-	margin: 0 auto */
+	margin: 0 auto
 }
 
 @media screen and (max-width:630px) {

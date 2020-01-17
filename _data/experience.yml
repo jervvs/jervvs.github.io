@@ -2,13 +2,23 @@
   url: https://www.dauwelslab.com/
   time: Aug 2019 - Present
   position: Student Researcher
-  description: |
-   * Foo
-   * Bar
-   * Baz
+  description:
+    Studied generative models, in particular generative adversarial networks and variational auto-encoders, and their application in explainable artificial intelligence.
 
 - company: AMD
   url: https://www.amd.com/en
   time: May - Aug 2019
   position: "Co-op Engineer (Product Engineering)"
-  description: Small React project created during an interview process to browse and search surf videos via the YouTube API.
+  description: 
+    + Involved in new product bring-up, gaining knowledge on APU and CPU advanced test methodologies and hands-on experience on advanced test platforms. <br>
+    + Applied unsupervised machine learning methods, such as Autoencoders, DBScan Clustering and K-Means Clustering, to identify and label defect patterns in silicon wafers, aiding in yield analysis. <br>
+    + Developed Python and Perl scripts, automating data cleaning, analysis and visualization of test data. 
+
+- company: Blockchain At NTU
+  url: https://ntublockchain.org/
+  time: Aug - Aug 2019
+  position: Director of Business Development
+  description: 
+    	Led business development team in contacting potential partners or sponsors for event collaborations or research grants. <br>
+    	Engaged in school outreach and publicity as Student Outreach Lead for ETHSingapore by ETHGlobal, welcoming more than 100 participants from across the world. <br>
+    	Organised and hosted sharings from industry experts, including those from Ethereum Foundation and Akomba. <br>

@@ -6,5 +6,15 @@
     - thing: Reinforcement Learning
     - thing: OpenAI Gym
     - thing: Python
- 
 
+- name: Singapore-India Hackathon
+  url: 
+  code: 
+  description: 
+    Proposed the implementation of a sector rotation strategy through the use of a reinforcement learning algorithm (Proximal Policy Optimization) and trained reinforcement learning agents on custom stock trading environment built on OpenAI’s Gym. <br>
+    <a class="small" href="http://projects.hackbeanpot.com/2017-projects.html">🏆 Won Best UI/UX Design at Hackbeanpot 2017 🏆</a>
+  used:
+    - thing: Reinforcement Learning
+    - thing: OpenAI Gym
+    - thing: Python
+ 

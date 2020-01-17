@@ -1,15 +1,15 @@
-- company: Upstatement
-  url: https://www.upstatement.com/
-  time: May 2018 - Present
-  position: Engineer
+- company: "Nanyang Technological University (Dauwels Lab)"
+  url: 
+  time: Aug 2019 - Present
+  position: Student Researcher
   description: Hi
   # \noindent
   #   * Foo
   #   * Bar
   #   * Baz
 
-- company: Scout
-  url: https://web.northeastern.edu/scout/
-  time: Jan - June 2018
-  position: Studio Developer
+- company: AMD
+  url: https://www.amd.com/en
+  time: May - Aug 2019
+  position: "Co-op Engineer (Product Engineering)"
   description: Small React project created during an interview process to browse and search surf videos via the YouTube API.

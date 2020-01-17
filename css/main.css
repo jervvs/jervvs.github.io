@@ -549,10 +549,10 @@ strong {
 	-webkit-box-direction: normal;
 	-ms-flex-direction: column;
 	flex-direction: column;
-	-ms-flex-pack: distribute; */ */
+	-ms-flex-pack: distribute;
 	justify-content: space-around;
 	max-width: 1440px;
-	margin: 0 auto
+	margin: 0 auto */
 }
 
 @media screen and (max-width:630px) {

@@ -541,7 +541,6 @@ strong {
 .intro {
 	padding: 120px 100px;
     height: 100vh;
-    text-align: center;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;

@@ -23,11 +23,9 @@
   url: 
   code: 
   description: 
-    Developed a solution to regression problem of predicting 5G bandwidth demand  <br>
-    <span class="small">🏆 Top in Asia 🏆</span>
-    <span class="small">🏆 Highest Scoring Team in International Finals 🏆</span>
+    Developed a solution to regression problem of predicting 5G bandwidth demand.  <br>
+    <span class="small">🏆 Top in Asia &amp; Highest Scoring Team in International Finals 🏆</span>
   used:
     - thing: Applied Machine Learning
     - thing: XGBoost/Tree-based Models
     - thing: Python
-    - thing: Folium

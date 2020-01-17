@@ -540,7 +540,8 @@ strong {
 
 .intro {
 	padding: 120px 100px;
-	height: 100vh;
+    height: 100vh;
+    text-align: center;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -734,6 +735,11 @@ strong {
 .intro__tagline .name {
     font-family: Adobe;
 	font-weight: 700
+}
+
+.intro__tagline .role {
+    font-family: Adobe;
+	font-weight: 500
 }
 
 .intro__tagline .unicorn {

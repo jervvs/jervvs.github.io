@@ -11,7 +11,7 @@ programming:
 ds:
   - item: Data Wrangling
   - item: Data Visualisation
-  - item: Applied Machine Learning
+  - item: Statistical Machine Learning
   - item: Reinforcement Learning
   - item: Computer Vision
   - item: Generative Adversarial Networks

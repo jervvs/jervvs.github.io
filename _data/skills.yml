@@ -6,7 +6,6 @@ programming:
   - item: Java
   - item: JavaScript
   - item: Bash
-  - item: Git & Github
 
 ds:
   - item: Data Wrangling

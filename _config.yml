@@ -18,6 +18,13 @@ social:
 
 
 # Build settings
+use_math: true
+
+titles_from_headings:
+  enabled:     true
+  strip_title: true
+  collections: true
+
 markdown: kramdown
 
 exclude:
@@ -38,3 +45,6 @@ keep_files:
 plugins_dir:
   - jekyll-minifier
   - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-gist
+  - jekyll-octicons

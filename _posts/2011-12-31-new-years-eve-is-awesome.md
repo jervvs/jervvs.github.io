@@ -1,6 +1,7 @@
 ---
-layout: post
+layout: default
 title:  "Welcome to Jekyll!"
+permalink: /https://jervvs.github.io/post1
 ---
 
 # Welcome

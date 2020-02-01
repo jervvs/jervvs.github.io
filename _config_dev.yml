@@ -25,6 +25,7 @@ titles_from_headings:
   strip_title: true
   collections: true
 
+# Build settings
 markdown: kramdown
 
 exclude:
@@ -45,6 +46,3 @@ keep_files:
 plugins_dir:
   - jekyll-minifier
   - jekyll-sitemap
-  - jekyll-feed
-  - jekyll-gist
-  - jekyll-octicons

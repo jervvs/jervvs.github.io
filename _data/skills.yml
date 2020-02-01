@@ -16,3 +16,4 @@ ds:
 
 frameworks:
   - item: Keras
+  - item: PyTorch

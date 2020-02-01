@@ -1,4 +1,4 @@
-programming:
+languages:
   - item: Python
   - item: SQL
   - item: R
@@ -6,14 +6,10 @@ programming:
   - item: Java
   - item: JavaScript
 
-ds:
-  - item: Data Wrangling
-  - item: Data Visualisation
-  - item: Statistical Machine Learning
-  - item: Reinforcement Learning
-  - item: Computer Vision
-  - item: Generative Adversarial Networks
-
 frameworks:
   - item: Keras
   - item: PyTorch
+
+tools:
+  - item: Bash
+  - item: Git & GitHub

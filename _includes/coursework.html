@@ -8,16 +8,16 @@
       <div class="skillz__category">
         <div class="skillz__category__label">Computer Science</div>
         <ul>
-          {% for language in site.data.coursework.cs %}
-          <li class="skillz__category__item">{{language.item}}</li>
+          {% for course in site.data.coursework.cs %}
+          <li class="skillz__category__item">{{course.item}}</li>
           {% endfor %}
         </ul>
       </div>
       <div class="skillz__category">
         <div class="skillz__category__label">Math</div>
         <ul>
-          {% for language in site.data.coursework.math %}
-          <li class="skillz__category__item">{{language.item}}</li>
+          {% for thing in site.data.coursework.math %}
+          <li class="skillz__category__item">{{thing.item}}</li>
           {% endfor %}
         </ul>
       </div>

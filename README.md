@@ -1,3 +1,5 @@
+Site inspired and designed by Brittany Chiang (https://github.com/bchiang7)
+
 
 ## Dependencies
 

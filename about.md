@@ -1,6 +1,6 @@
 ---
 
-layout: default
+layout: pages
 title: "PAGE TITLE"
 permalink: /https://jervvs.github.io/about
 

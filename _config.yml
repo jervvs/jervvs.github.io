@@ -16,7 +16,6 @@ social:
   # - title: github
   #   url: https://github.com/jervvs
 
-
 # Build settings
 use_math: true
 
@@ -46,3 +45,11 @@ keep_files:
 plugins_dir:
   - jekyll-minifier
   - jekyll-sitemap
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "pages" # previously `post` in Jekyll 2.2.
+    values:
+      layout: "default"

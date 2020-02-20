@@ -16,7 +16,6 @@ social:
   # - title: github
   #   url: https://github.com/jervvs
 
-
 # Build settings
 use_math: true
 
@@ -27,6 +26,14 @@ titles_from_headings:
 
 # Build settings
 markdown: kramdown
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "pages" # previously `post` in Jekyll 2.2.
+    values:
+      layout: "default"
 
 exclude:
   - 'Gemfile'
@@ -46,3 +53,4 @@ keep_files:
 plugins_dir:
   - jekyll-minifier
   - jekyll-sitemap
+

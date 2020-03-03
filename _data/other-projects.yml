@@ -11,10 +11,10 @@
 - name: MOBLIMA Movie Booking
   url: 
   code: 
-  description: Developed movie booking application as part of Object-Oriented Design and Programming Module.
+  description: Developed movie booking application making use of Object-Oriented Design principles.
   used:
     - thing: Java
-    - thing: Eclipse
+    - thing: UML Modelling
 
 - name: UBS Quant Hackathon
   url: 

@@ -1,3 +1,13 @@
+- name: Data@ANZ Program
+  url: https://github.com/jervvs/anz-virtual-internship
+  code: 
+  description: Performed exploratory data analysis and predictive analysis on transactions of 100 customers over a period of 3 months.
+  used:
+    - thing: Python
+    - thing: Data Visualisation
+    - thing: Regression
+    - thing: Tree-based Models
+
 - name: MOBLIMA Movie Booking
   url: 
   code: 

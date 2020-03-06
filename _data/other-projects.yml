@@ -2,6 +2,7 @@
   url: https://github.com/jervvs/JPMC-tech-task-3-PY3
   code: 
   description: Built stock monitoring chart to visualise and analyse share price data, implemented using JPMorgan Chase's Perspective software.
+  used:
     - thing: Python
     - thing: Typescript
     - thing: React

@@ -1,3 +1,12 @@
+- name: JPMC Virtual Internship
+  url: https://github.com/jervvs/JPMC-tech-task-3-PY3
+  code: 
+  description: Built stock monitoring chart to visualise and analyse share price data, implemented using JPMorgan Chase's Perspective software.
+    - thing: Python
+    - thing: Typescript
+    - thing: React
+    - thing: Data Visualisation
+
 - name: Data@ANZ Program
   url: https://github.com/jervvs/anz-virtual-internship
   code: 

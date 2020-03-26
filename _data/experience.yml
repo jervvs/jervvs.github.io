@@ -1,9 +1,9 @@
-- company: "Nanyang Technological University (Dauwels Lab)"
-  url: https://www.dauwelslab.com/
-  time: Aug 2019 - Present
-  position: Student Researcher
-  description:
-    + Studied generative models, in particular generative adversarial networks and variational auto-encoders, and their application in explainable artificial intelligence.
+# - company: "Nanyang Technological University (Dauwels Lab)"
+#   url: https://www.dauwelslab.com/
+#   time: Aug 2019 - Present
+#   position: Student Researcher
+#   description:
+#     + Studied generative models, in particular generative adversarial networks and variational auto-encoders, and their application in explainable artificial intelligence.
 
 - company: AMD
   url: https://www.amd.com/en
@@ -14,11 +14,11 @@
     + Applied unsupervised machine learning methods, such as Autoencoders, DBScan Clustering and K-Means Clustering, to identify and label defect patterns in silicon wafers, aiding in yield analysis. <br>
     + Developed Python and Perl scripts, automating data cleaning, analysis and visualization of test data. 
 
-- company: Blockchain At NTU
-  url: https://ntublockchain.org/
-  time: Aug - Aug 2019
-  position: Director of Business Development
-  description: 
-    +	Led business development team in contacting potential partners or sponsors for event collaborations or research grants. <br>
-    +	Engaged in school outreach and publicity as Student Outreach Lead for ETHSingapore by ETHGlobal, welcoming more than 100 participants from across the world. <br>
-    +	Organised and hosted sharings from industry experts, including those from Ethereum Foundation and Akomba. <br>
+# - company: Blockchain At NTU
+#   url: https://ntublockchain.org/
+#   time: Aug - Aug 2019
+#   position: Director of Business Development
+#   description: 
+#     +	Led business development team in contacting potential partners or sponsors for event collaborations or research grants. <br>
+#     +	Engaged in school outreach and publicity as Student Outreach Lead for ETHSingapore by ETHGlobal, welcoming more than 100 participants from across the world. <br>
+#     +	Organised and hosted sharings from industry experts, including those from Ethereum Foundation and Akomba. <br>

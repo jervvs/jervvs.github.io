@@ -8,7 +8,8 @@ languages:
   - item: JavaScript
 
 frameworks:
-  - item: 
+  - item: Django
+  - item: React
 
 ds:
   - item: Keras

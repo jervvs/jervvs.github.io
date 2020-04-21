@@ -1,9 +1,10 @@
 languages:
   - item: Python
+  - item: Golang
+  - item: Java
   - item: SQL
   - item: R
   - item: C/C++
-  - item: Java
   - item: JavaScript
 
 frameworks:

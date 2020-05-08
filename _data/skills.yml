@@ -6,10 +6,13 @@ languages:
   - item: R
   - item: C/C++
   - item: JavaScript
+  - item: TypeScript
+  - item: HTML/CSS
 
 frameworks:
   - item: Django
   - item: React
+  - item: Angular
 
 ds:
   - item: Keras

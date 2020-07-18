@@ -38,7 +38,7 @@
 - name: Django Clone Projects
   url: 
   code: 
-  description: Developed clone websites of a medium-like blog and a social media site in Django
+  description: Developed clone websites of a medium-like blog and a social media site in Django, working with custom user models and class-based views.
   used:
     - thing: Python
     - thing: Django

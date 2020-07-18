@@ -21,8 +21,8 @@
   url: 
   code: 
   description: 
-  Developed classification model based on EfficientNet with FastAI for the optical character classification of Bengali grapheme elements. <br>
-  <span class="small">🏆 Kaggle Silver Medalist 🏆</span>
+    Developed classification model based on EfficientNet with FastAI for the optical character classification of Bengali grapheme elements. <br>
+    <span class="small">🏆 Kaggle Silver Medalist 🏆</span>
   used:
     - thing: Python
     - thing: PyTorch (FastAI)

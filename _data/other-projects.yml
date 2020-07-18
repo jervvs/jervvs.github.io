@@ -2,6 +2,7 @@
   url: 
   code: 
   description: Implemented well-known GANs to study applications in disentangled representation and explainable artificial intelligence as part of NTU Undergraduate Research Experience (URECA).
+  used:
     - thing: Python 
     - thing: PyTorch 
     - thing: GAN

@@ -1,10 +1,3 @@
-# - company: "Nanyang Technological University (Dauwels Lab)"
-#   url: https://www.dauwelslab.com/
-#   time: Aug 2019 - Present
-#   position: Student Researcher
-#   description:
-#     + Studied generative models, in particular generative adversarial networks and variational auto-encoders, and their application in explainable artificial intelligence.
-
 - company: Shopee
   url: https://shopee.sg/
   time: Jun 2020 - Present
@@ -14,7 +7,7 @@
     + Handled tickets and issues for Data Nexus and Lumos, proposing improvements of common issues to developers. <br>
     + Created wireframes for improvements in UI for Data Nexus and Lumos. <br>
     + Investigated failing workflows and educated users to improve workflows, saving consumption of resources. <br>
-    + Performed user education and migration for SeaMoney Business Intelligence team reports to Data Nexus, automating and improving their workflows, saving man-hours per report. <br>
+    + Performed user education and migration for SeaMoney Business Intelligence team reports to Data Nexus, automating and improving their workflows, saving man-hours per report.
 
 - company: Alphien
   url: https://www.alphien.com/
@@ -23,7 +16,7 @@
   description: 
     + Developed payout, portfolio and portfolio optimization functions in R for Alphien quantitative library. <br>
     + Developed monitor functions and bot scripts to automate report generation and sending of quantitative strategy reports to clients. <br>
-    + Designed and wireframed investor portal and portfolio optimization platform with Figma. <br>
+    + Designed and wireframed investor portal and portfolio optimization platform with Figma.
 
 - company: AMD
   url: https://www.amd.com/en
@@ -31,14 +24,4 @@
   position: "Product Engineer (Co-Op)"
   description: 
     + Developed Python and Perl scripts for data processing, cleaning and visualization of test data, aiding test engineers in inference and testing of new product units. <br>
-    + Developed unsupervised machine learning model to identify, cluster and label defect patterns in silicon wafers, aiding yield engineers with yield analysis and inference. <br>
-
-# - company: Blockchain At NTU
-#   url: https://ntublockchain.org/
-#   time: Aug - Aug 2019
-#   position: Director of Business Development
-#   description: 
-    	# Led business development team in contacting potential partners or sponsors for event collaborations or research grants. <br>
-    	# Engaged in school outreach and publicity as Student Outreach Lead for ETHSingapore by ETHGlobal, welcoming more than 100 participants from across the world. <br>
-    	# Organised and hosted sharings from industry experts, including those from Ethereum Foundation and Akomba. <br>
-
+    + Developed unsupervised machine learning model to identify, cluster and label defect patterns in silicon wafers, aiding yield engineers with yield analysis and inference. 

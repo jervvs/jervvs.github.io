@@ -1,3 +1,48 @@
+- name: GAN Implementation
+  url: 
+  code: 
+  description: Implemented well-known GANs to study applications in disentangled representation and explainable artificial intelligence as part of NTU Undergraduate Research Experience (URECA).
+  used:
+    - thing: Python 
+    - thing: PyTorch 
+    - thing: GAN
+    - thing: Deep Learning
+
+- name: COVIDsualisation
+  url: 
+  code: 
+  description: Built interactive dashboard with Plotly and Dash to visualise COVID-19 statistics in Singapore, illustrating daily changes, and comparisons with other countries.
+  used:
+    - thing: Python
+    - thing: Plotly/Dash
+    - thing: Data Visualisation
+
+- name: Bengali.AI Handwritten Grapheme Classification
+  url: 
+  code: 
+  description: 
+    Developed classification model based on EfficientNet with FastAI for the optical character classification of Bengali grapheme elements. <br>
+    <span class="small">🏆 Kaggle Silver Medalist 🏆</span>
+  used:
+    - thing: Python
+    - thing: PyTorch (FastAI)
+    - thing: Computer Vision (Image Classification)
+
+- name: Weather Monitoring Application
+  url: 
+  code: 
+  description: Developed purely front-end weather monitoring application with Angular, obtaining data with OpenWeatherMap API, that allowed monitoring of multiple city data independently in different panels.
+  used:
+    - thing: Angular
+
+- name: Django Clone Projects
+  url: 
+  code: 
+  description: Developed clone websites of a medium-like blog and a social media site in Django, working with custom user models and class-based views.
+  used:
+    - thing: Python
+    - thing: Django
+
 - name: JPMC Virtual Internship
   url: https://github.com/jervvs/JPMC-tech-task-3-PY3
   code: 

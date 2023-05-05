@@ -1,0 +1,17 @@
+{
+  "name": "jervis-portfolio",
+  "version": "0.1.0",
+  "homepage": "https://jervvs.github.io/jervis-portfolio",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "deploy": "next build && gh-pages -d out"
+  },
+  "dependencies": {
+    "tailwindcss": "^3.3.2"
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
+  }
+}

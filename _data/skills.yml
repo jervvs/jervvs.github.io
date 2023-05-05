@@ -1,0 +1,30 @@
+languages:
+  - item: Python
+  - item: Java
+  - item: SQL
+  - item: R
+  - item: JavaScript
+  - item: HTML/CSS
+
+frameworks:
+  - item: Django
+  - item: React
+  - item: Angular
+  - item: Keras
+  - item: PyTorch
+  - item: FastAI
+  - item: Plotly/Dash
+
+skills:
+  - item: Data Science
+  - item: Machine Learning/AI
+  - item: Web Development
+  - item: Product Management
+
+tools:
+  - item: Bash
+  - item: Git & GitHub
+  - item: Hadoop
+  - item: Spark
+  - item: Hive
+  - item: Airflow

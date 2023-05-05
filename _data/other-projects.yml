@@ -1,0 +1,104 @@
+- name: GAN Implementation
+  url: 
+  code: 
+  description: Implemented well-known GANs to study applications in disentangled representation and explainable artificial intelligence as part of NTU Undergraduate Research Experience (URECA).
+  used:
+    - thing: Python 
+    - thing: PyTorch 
+    - thing: GAN
+    - thing: Deep Learning
+
+- name: COVIDsualisation
+  url: 
+  code: 
+  description: Built interactive dashboard with Plotly and Dash to visualise COVID-19 statistics in Singapore, illustrating daily changes, and comparisons with other countries.
+  used:
+    - thing: Python
+    - thing: Plotly/Dash
+    - thing: Data Visualisation
+
+- name: Bengali.AI Handwritten Grapheme Classification
+  url: 
+  code: 
+  description: 
+    Developed classification model based on EfficientNet with FastAI for the optical character classification of Bengali grapheme elements. <br>
+    <span class="small">🏆 Kaggle Silver Medalist 🏆</span>
+  used:
+    - thing: Python
+    - thing: PyTorch (FastAI)
+    - thing: Computer Vision (Image Classification)
+
+- name: Weather Monitoring Application
+  url: 
+  code: 
+  description: Developed purely front-end weather monitoring application with Angular, obtaining data with OpenWeatherMap API, that allowed monitoring of multiple city data independently in different panels.
+  used:
+    - thing: Angular
+
+- name: Django Clone Projects
+  url: 
+  code: 
+  description: Developed clone websites of a medium-like blog and a social media site in Django, working with custom user models and class-based views.
+  used:
+    - thing: Python
+    - thing: Django
+
+- name: JPMC Virtual Internship
+  url: https://github.com/jervvs/JPMC-tech-task-3-PY3
+  code: 
+  description: Built stock monitoring chart to visualise and analyse share price data, implemented using JPMorgan Chase's Perspective software.
+  used:
+    - thing: Python
+    - thing: Typescript
+    - thing: React
+    - thing: Data Visualisation
+
+- name: Data@ANZ Program
+  url: https://github.com/jervvs/anz-virtual-internship
+  code: 
+  description: Performed exploratory data analysis and predictive analysis on transactions of 100 customers over a period of 3 months.
+  used:
+    - thing: Python
+    - thing: Data Visualisation
+    - thing: Regression
+    - thing: Tree-based Models
+
+- name: MOBLIMA Movie Booking
+  url: 
+  code: 
+  description: Developed movie booking application making use of Object-Oriented Design principles.
+  used:
+    - thing: Java
+    - thing: UML Modelling
+
+- name: UBS Quant Hackathon
+  url: 
+  code: 
+  description: Proposed the implementation of a sector rotation strategy through the use of a reinforcement learning algorithm (Proximal Policy Optimization) and trained reinforcement learning agents on custom stock trading environment built on OpenAI’s Gym.
+  used:
+    - thing: Reinforcement Learning
+    - thing: OpenAI Gym
+    - thing: Python
+
+- name: Singapore-India Hackathon
+  url: 
+  code: 
+  description: 
+    Developed a web application that aided in epidemiology analysis in the context of poor data gathering and data analysis of public health data in India. <br>
+    <span class="small">🏆 Won Top 10 🏆</span>
+  used:
+    - thing: Data Wrangling
+    - thing: Data Visualisation
+    - thing: Python
+    - thing: Folium
+
+- name: Rohde and Schwarz Engineering Competition
+  url: 
+  code: 
+  description: 
+    Developed a solution to regression problem of predicting 5G bandwidth demand.  <br>
+    <span class="small">🏆 Top in Asia &amp; Highest Scoring Team in International Finals 🏆</span>
+  used:
+    - thing: Applied Machine Learning
+    - thing: XGBoost/Tree-based Models
+    - thing: Python

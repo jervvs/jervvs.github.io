@@ -1,0 +1,56 @@
+# Site settings
+name: Jervis Chan
+title: Jervis Chan | Aspiring Full Stack Data Scientist
+description: Computer science / business student fascinated about machine learning and software development and their applications on real life problems.
+url: https://jervvs.github.io/
+baseurl: ''
+email: jerv0003@e.ntu.edu.sg
+cover: #https://bchiang7.github.io/img/og.png
+logo: https://jervvs.github.io/img/emojis/unicorn.png
+resume: https://jervvs.github.io/JERVISCHANJUNYONG_Resume.pdf
+social:
+  - title: email
+    url: mailto:jerv0003@e.ntu.edu.sg
+  - title: linkedin
+    url: https://www.linkedin.com/in/jervis-chan/
+  # - title: github
+  #   url: https://github.com/jervvs
+
+# Build settings
+use_math: true
+
+titles_from_headings:
+  enabled:     true
+  strip_title: true
+  collections: true
+
+# Build settings
+markdown: kramdown
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "pages" # previously `post` in Jekyll 2.2.
+    values:
+      layout: "default"
+
+exclude:
+  - 'Gemfile'
+  - 'Gemfile.lock'
+  - '*.gemspec'
+  - 'README.md'
+  - 'node_modules'
+  - 'build'
+  - 'gulpfile.js'
+  - 'package.json'
+
+keep_files:
+  - 'CNAME'
+  - '.git'
+  - '.gitignore'
+
+plugins_dir:
+  - jekyll-minifier
+  - jekyll-sitemap
+

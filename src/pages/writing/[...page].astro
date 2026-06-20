@@ -26,17 +26,17 @@ const activeTag = Astro.url.searchParams.get('tag') || '';
 <BaseLayout title="Writing" description="Essays on systems, craft, and making things work.">
   <a href="/" class="back-link">← Home</a>
   <h1 class="listing-title">Writing</h1>
-  <p class="listing-subtitle">Essays on systems, craft, and making things work.</p>
-
-  <!-- Tag filter bar -->
-  {allTags.length > 0 && (
-    <div class="tag-filter" id="tag-filter">
-      <button class="tag-pill active" data-tag="">All</button>
-      {allTags.map(tag => (
-        <button class="tag-pill" data-tag={tag}>{tag}</button>
-      ))}
-    </div>
-  )}
+  <div class="listing-header">
+    <p class="listing-subtitle">Essays on systems, craft, and making things work.</p>
+    {allTags.length > 0 && (
+      <div class="tag-filter" id="tag-filter">
+        <button class="tag-pill active" data-tag="">All</button>
+        {allTags.map(tag => (
+          <button class="tag-pill" data-tag={tag}>{tag}</button>
+        ))}
+      </div>
+    )}
+  </div>
 
   <div class="list-cards" id="post-list">
     {page.data.map(post => (
@@ -77,42 +77,45 @@ const activeTag = Astro.url.searchParams.get('tag') || '';
     margin-bottom: 8px;
   }
 
+  .listing-header {
+    margin-bottom: 28px;
+  }
+
   .listing-subtitle {
     font-size: 14px;
     font-weight: 300;
     color: var(--text-muted);
-    margin-bottom: 24px;
+    margin-bottom: 12px;
   }
 
-  /* Tag filter */
+  /* Tag filter — compact inline */
   .tag-filter {
     display: flex;
-    gap: 6px;
+    gap: 4px;
     flex-wrap: wrap;
-    margin-bottom: 28px;
+    align-items: center;
   }
 
   .tag-pill {
     font-family: 'Outfit', sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 300;
     color: var(--text-muted);
-    padding: 4px 12px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    padding: 2px 8px;
+    border: none;
+    border-radius: 8px;
     background: none;
     cursor: pointer;
     transition: all 0.2s;
   }
 
   .tag-pill:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    color: var(--text);
+    background: var(--border);
   }
 
   .tag-pill.active {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: var(--text);
     color: var(--bg);
   }
 

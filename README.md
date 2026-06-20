@@ -1,8 +1,10 @@
 # Personal Portfolio
 
-A minimal, extensible portfolio site built with [Astro](https://astro.build). Features writing, projects, photography, and a dark/light theme with seaside-inspired design.
+A minimal, extensible portfolio site built with [Astro](https://astro.build). Earth-tone palette, seaside-inspired ambient design, dark/light theming, and a content model where adding new work is as simple as writing a text file.
 
 **Live:** [jervvs.github.io](https://jervvs.github.io)
+
+---
 
 ## Quick Start
 
@@ -14,108 +16,195 @@ npm run dev
 # Open http://localhost:4321
 ```
 
-## Adding Content
+---
 
-All content lives in `src/content/`. Each content type has its own folder and schema.
+## Content Model
 
-### Adding a Post
+All content lives in `src/content/`. There are four content types, each with its own folder and schema. Adding content = creating a Markdown file with the right frontmatter.
 
-Create a Markdown file in `src/content/posts/`:
+### Writing (`src/content/posts/`)
+
+Long-form essays and articles. Sorted by date, newest first.
 
 ```markdown
 ---
 title: "Your Post Title"
 date: 2026-06-20
-description: "A short summary for the listing card (optional)."
+description: "Summary for the listing card (optional)."
 tags: ["topic", "another"]
 draft: false
 ---
 
-Your content here. Supports full Markdown: **bold**, *italic*, 
-[links](https://example.com), code blocks, blockquotes, lists.
+Your content here. Full Markdown supported.
 ```
 
-Set `draft: true` to hide from production. Preview drafts locally with `npm run dev`.
+| Field | Required | Notes |
+|---|---|---|
+| `title` | Yes | Appears everywhere — cards, page, RSS |
+| `date` | Yes | Controls sort order |
+| `description` | No | Card summary. If omitted, card shows no description |
+| `tags` | No | Clickable filter pills on the listing page |
+| `draft` | No | `true` = hidden from production, visible in `npm run dev` |
 
-### Adding a Photo
+**Listing page:** `/writing/` — cards with tag filtering. Paginated at 12 posts per page.
 
-1. Add your image to `public/images/photos/` (or `src/assets/photos/` for optimization)
-2. Create a Markdown file in `src/content/photos/`:
+**Detail page:** `/writing/[slug]/` — centered prose with reading progress bar and share button.
+
+### Photography (`src/content/photos/`)
+
+Individual photos grouped into collections (e.g., "Singapore", "Tokyo", "AI Art").
 
 ```markdown
 ---
-title: "Photo Title"
+title: "Morning Tide"
 date: 2026-05-15
-image: "/images/photos/your-photo.jpg"
-caption: "Optional caption"
-location: "Where it was taken"
-size: "square"
-tags: ["tag1", "tag2"]
+image: "/images/photos/changi-beach.jpg"
+caption: "First light on the shore"
+location: "Changi Beach, Singapore"
+size: "tall"
+collection: "Singapore"
+tags: ["sea", "morning"]
 ---
 ```
 
-**Size options:**
-- `square` (default) — 1×1 grid cell
-- `tall` — spans 2 rows, portrait orientation
-- `wide` — spans 2 columns, panoramic/landscape
+| Field | Required | Notes |
+|---|---|---|
+| `title` | Yes | Shown in gallery overlay and lightbox |
+| `date` | Yes | Sort within collection |
+| `image` | Yes | Path to image file |
+| `caption` | No | Shown in lightbox |
+| `location` | No | Shown in overlay and lightbox |
+| `size` | No | `square` (default), `tall` (2 rows), `wide` (2 columns) |
+| `collection` | Yes | Groups photos into sections on the gallery page |
+| `tags` | No | For future filtering |
 
-### Adding a Project
+**Gallery page:** `/photography/` — masonry grid grouped by collection, with lightbox on click (keyboard navigable: arrows + Escape).
 
-Create a file in `src/content/projects/`:
+**Adding a new collection:** Just use a new `collection` name in any photo's frontmatter. It appears as a new section automatically.
+
+### Projects (`src/content/projects/`)
+
+Discrete things you've built. Each has a detail page with body content.
 
 ```markdown
 ---
 title: "Project Name"
-description: "What it does."
+description: "One-line pitch."
 url: "https://github.com/you/project"
-order: 1
-tags: ["tag1", "tag2"]
----
-```
-
-`order` controls the sort order (lower = first). `url` is optional — if set, the card links externally with ↗.
-
-### Adding a Building Item
-
-Same as projects, in `src/content/building/`:
-
-```markdown
----
-title: "Thing I'm Working On"
-description: "What it is and why."
 order: 1
 tags: ["tag"]
 ---
+
+Write about the project here. What it does, why you built it.
+Link to related writing or other work.
 ```
 
-### Using Drafts
+| Field | Required | Notes |
+|---|---|---|
+| `title` | Yes | Project name |
+| `description` | Yes | Card summary |
+| `url` | No | External link — shows "View project ↗" on detail page |
+| `order` | No | `0` = pinned to homepage. `1` = default (listing only). Lower = first |
+| `tags` | No | Filterable on listing page |
 
-- Set `draft: true` in any post's frontmatter → hidden from production
-- Run `npm run dev` to preview drafts locally
-- Set `draft: false` and push → published
+**Listing page:** `/projects/` — cards with tag filtering.
 
-### Post Ideas
+**Detail page:** `/projects/[slug]/` — body content + optional external link.
 
-Jot down ideas in `src/content/posts/_ideas.md`. This file is ignored by Astro (prefixed with `_`).
+### Building (`src/content/building/`)
+
+Long-term themes and journeys — things without a finish date. Each Building item ties together related projects and writing via a timeline.
+
+```markdown
+---
+title: "A Better Me"
+description: "Physical health, mental clarity, and habits that compound."
+order: 0
+relatedWork:
+  - "posts/treating-fitness-like-engineering"
+  - "projects/90-day-recomp"
+tags: ["fitness", "health"]
+---
+
+Your content here — what this journey is about,
+what it looks like right now, why it matters.
+```
+
+| Field | Required | Notes |
+|---|---|---|
+| `title` | Yes | Theme name |
+| `description` | Yes | Card summary |
+| `url` | No | External link |
+| `order` | No | `0` = pinned to homepage. `1` = default |
+| `relatedWork` | No | Array of `"collection/id"` refs — auto-resolves title, date, and URL from each item's frontmatter |
+| `tags` | No | Display labels |
+
+**Detail page:** `/building/[slug]/` — body content + auto-generated timeline of related work, sorted by date.
+
+**The `relatedWork` ref format:** `"collection/id"` where collection is `posts`, `projects`, or `building`, and id is the filename without `.md`. The template automatically looks up the title and date from the referenced content. No data duplication.
+
+---
+
+## Homepage
+
+The homepage shows a hero section, an animated wave divider, and category columns. Each column shows items with `order: 0` (pinned). To feature an item on the homepage, set `order: 0` in its frontmatter.
+
+The Photography column shows collection names. The "Now" section reads from `src/content/now.md` — edit this file directly.
+
+---
+
+## Design Elements
+
+### Seaside Ambient
+- **Film grain overlay** — SVG noise texture for tactile warmth
+- **Animated wave divider** — continuously translating SVG wave between hero and categories
+- **Drifting ambient glow** — two radial gradients slowly moving across the page
+- **Staggered fade-up animations** — content fades in sequentially on page load
+
+All animations respect `prefers-reduced-motion`.
+
+### Dark/Light Theme
+- Follows your OS setting by default (automatic dark mode at night)
+- Manual toggle overrides the system preference
+- Smooth CSS transitions between themes
+
+### Logo
+Drop a PNG at `public/images/logo.png` — it renders at 28px height, any aspect ratio. If no image exists, shows "JC" text.
+
+---
+
+## Tag Filtering
+
+Writing and Projects listing pages have tag filtering. Tags in frontmatter automatically appear as filter pills. Clicking a tag filters cards instantly (client-side). The URL updates to `?tag=fitness` for sharing.
+
+Tags on cards are display-only — the filter bar at the top of the listing page is the interactive element.
+
+---
+
+## Pagination
+
+Writing paginates automatically at 12 posts per page. Pages are generated at build time as static HTML: `/writing/`, `/writing/2/`, `/writing/3/`, etc.
+
+---
 
 ## Media in Posts
 
 ### Inline Image
 ```markdown
 ![Alt text](/images/your-image.jpg)
-*Caption text below the image*
+*Caption text*
 ```
 
 ### Side-by-Side Images
 ```html
 <div class="media-pair">
   <figure>
-    <img src="/images/left.jpg" alt="Left image">
-    <figcaption>Left caption</figcaption>
+    <img src="/images/left.jpg" alt="Left">
+    <figcaption>Left</figcaption>
   </figure>
   <figure>
-    <img src="/images/right.jpg" alt="Right image">
-    <figcaption>Right caption</figcaption>
+    <img src="/images/right.jpg" alt="Right">
+    <figcaption>Right</figcaption>
   </figure>
 </div>
 ```
@@ -125,92 +214,90 @@ Jot down ideas in `src/content/posts/_ideas.md`. This file is ignored by Astro (
 <iframe width="100%" height="400" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
 ```
 
+---
+
 ## Adding a New Content Type
 
-To add a completely new category (e.g., "Talks", "AI Art"):
+To add a completely new category (e.g., "Reviews"):
 
 1. **Define the schema** in `src/content.config.ts`:
    ```typescript
-   const talks = defineCollection({
-     loader: glob({ pattern: '**/*.md', base: './src/content/talks' }),
+   const reviews = defineCollection({
+     loader: glob({ pattern: '**/*.md', base: './src/content/reviews' }),
      schema: z.object({
        title: z.string(),
        date: z.coerce.date(),
        // ... your fields
      }),
    });
-
-   export const collections = { posts, photos, projects, building, talks };
+   export const collections = { posts, photos, projects, building, reviews };
    ```
 
-2. **Create the content folder:** `src/content/talks/`
+2. **Create the folder:** `src/content/reviews/`
 
-3. **Create a listing page** at `src/pages/talks/index.astro` — copy `src/pages/projects/index.astro` as a template and adjust the collection name and query.
+3. **Create a listing page** at `src/pages/reviews/index.astro` — copy `src/pages/projects/index.astro` as a template.
 
-4. **Add a nav link** in `src/components/Nav.astro` — add to the `links` array:
+4. **Create a detail page** at `src/pages/reviews/[...slug].astro` — copy `src/pages/projects/[...slug].astro`.
+
+5. **Add a nav link** in `src/components/Nav.astro`:
    ```typescript
-   { href: '/talks/', label: 'Talks' },
+   { href: '/reviews/', label: 'Reviews' },
    ```
 
-5. **Add a homepage column** in `src/pages/index.astro` — query the collection and add a `<CategoryColumn>`.
+6. **Add a homepage column** in `src/pages/index.astro` — query the collection and add a `<CategoryColumn>`.
 
-6. **Add content** — create `.md` files in `src/content/talks/`.
+7. **Add content** — create `.md` files in `src/content/reviews/`.
+
+8. **Reference from Building** — add `"reviews/my-review"` to any Building item's `relatedWork` array.
+
+---
 
 ## Customization
 
 ### Colors
-
 Edit CSS custom properties in `src/styles/global.css`:
-
 ```css
 :root {
   --bg: #FAF7F2;        /* Page background */
   --text: #2B2520;       /* Primary text */
-  --accent: #5B6B4A;     /* Links, hover states */
-  /* ... see global.css for all tokens */
+  --accent: #5B6B4A;     /* Links, active states */
+  /* ... see file for all tokens */
 }
 ```
-
 Both light and dark themes are defined there.
 
 ### Typography
-
-The site uses [Outfit](https://fonts.google.com/specimen/Outfit). To change:
-1. Install a different `@fontsource/` package
-2. Update imports in `src/styles/global.css`
-3. Update `font-family` in the body rule
+Uses [Outfit](https://fonts.google.com/specimen/Outfit) via `@fontsource/outfit`. To change: install a different `@fontsource/` package, update imports in `global.css`, update `font-family`.
 
 ### Site Info
-
 Edit `src/config.ts` for name, tagline, bio, and social links.
 
 ### "Now" Section
-
 Edit `src/content/now.md` directly.
 
 ### About Page
-
 Edit `src/pages/about.astro` directly. Replace the gradient placeholder with your own photo.
+
+---
 
 ## Deployment
 
 ### GitHub Pages (default)
-
-The site auto-deploys via GitHub Actions on push to `main`. The workflow is at `.github/workflows/deploy.yml`.
+Auto-deploys via GitHub Actions on push to `main`. Workflow: `.github/workflows/deploy.yml`.
 
 **First-time setup:**
-1. Go to your repo → Settings → Pages
+1. Go to repo → Settings → Pages
 2. Set Source to "GitHub Actions"
 3. Push to `main`
 
 ### Custom Domain
-
 1. Add a `CNAME` file to `public/` with your domain
 2. Configure DNS per [GitHub's guide](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site)
 
 ### Other Hosts
+Static HTML. `npm run build` → output in `dist/`. Works on Cloudflare Pages, Vercel, Netlify, S3.
 
-The site is static HTML. `npm run build` outputs to `dist/`. Deploy anywhere: Cloudflare Pages, Vercel, Netlify, S3.
+---
 
 ## Project Structure
 
@@ -220,23 +307,27 @@ src/
 ├── content.config.ts         # Content collection schemas
 ├── styles/global.css         # Design tokens, animations, theme
 ├── layouts/
-│   ├── BaseLayout.astro      # HTML shell, nav, sea ambient
-│   └── PostLayout.astro      # Writing post wrapper
+│   ├── BaseLayout.astro      # HTML shell, nav, theme, sea ambient
+│   └── PostLayout.astro      # Writing post layout
 ├── components/
 │   ├── Nav.astro             # Desktop + mobile navigation
+│   ├── Logo.astro            # PNG logo with text fallback
 │   ├── ThemeToggle.astro     # Dark/light toggle
+│   ├── WaveDivider.astro     # Animated SVG wave
+│   ├── SeaAmbient.astro      # Drifting ambient glow
 │   ├── CategoryColumn.astro  # Homepage category column
-│   ├── ContentCard.astro     # Listing card (writing/projects/building)
+│   ├── ContentCard.astro     # Listing card
 │   ├── GalleryGrid.astro     # Photography masonry grid
 │   ├── Lightbox.astro        # Photo lightbox
-│   └── ...                   # Wave divider, sea ambient, etc.
+│   ├── ReadingProgress.astro # Scroll progress bar
+│   └── ShareButton.astro     # Web Share / copy link
 ├── content/
 │   ├── posts/                # Writing (Markdown)
 │   ├── photos/               # Photography entries
 │   ├── projects/             # Project entries
 │   ├── building/             # Building entries
-│   └── now.md                # "Now" section content
-└── pages/                    # Routes (one per page)
+│   └── now.md                # "Now" section
+└── pages/                    # Routes
 ```
 
 ## License

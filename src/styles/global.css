@@ -17,9 +17,9 @@
   --warm: #C4956A;
   --surface: #FFFFFF;
   --code-bg: #F0EBE3;
-  --grain-opacity: 0.025;
-  --sea-glow: rgba(139, 168, 140, 0.06);
-  --sea-glow-2: rgba(180, 160, 130, 0.04);
+  --grain-opacity: 0.03;
+  --sea-glow: rgba(139, 168, 140, 0.1);
+  --sea-glow-2: rgba(180, 160, 130, 0.07);
   --toggle-bg: #E6DFD4;
   --toggle-dot: #2B2520;
 }
@@ -37,9 +37,9 @@
   --warm: #D4A87A;
   --surface: #252118;
   --code-bg: #2A2520;
-  --grain-opacity: 0.035;
-  --sea-glow: rgba(139, 168, 140, 0.03);
-  --sea-glow-2: rgba(180, 160, 130, 0.02);
+  --grain-opacity: 0.04;
+  --sea-glow: rgba(139, 168, 140, 0.06);
+  --sea-glow-2: rgba(180, 160, 130, 0.04);
   --toggle-bg: #3A332A;
   --toggle-dot: #E7DFD3;
 }
@@ -142,7 +142,7 @@ body::after {
 .wave-divider svg path {
   fill: none;
   stroke: var(--border);
-  stroke-width: 0.5;
+  stroke-width: 1;
   transition: stroke 0.4s;
 }
 

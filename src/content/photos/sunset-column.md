@@ -5,5 +5,6 @@ image: "/images/photos/sunset-column.jpg"
 caption: "Light through the pier"
 location: "West Coast Park"
 size: "tall"
+collection: "Singapore"
 tags: ["sunset", "pier"]
 ---

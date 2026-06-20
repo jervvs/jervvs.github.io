@@ -10,15 +10,27 @@ import { readFileSync } from 'node:fs';
 const posts = (await getCollection('posts'))
   .filter(p => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+  .slice(0, 2);
 
-const photos = (await getCollection('photos'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const allPhotos = (await getCollection('photos'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group by collection, get unique collection names with date ranges
+const photoCollections = new Map<string, { name: string; count: number; newestDate: Date }>();
+for (const p of allPhotos) {
+  const key = p.data.collection;
+  if (!photoCollections.has(key)) {
+    photoCollections.set(key, { name: key, count: 0, newestDate: p.data.date });
+  }
+  const col = photoCollections.get(key)!;
+  col.count++;
+  if (p.data.date > col.newestDate) col.newestDate = p.data.date;
+}
+const recentCollections = Array.from(photoCollections.values()).slice(0, 2);
 
 const projectItems = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
+  .slice(0, 2);
 
 const buildingItems = (await getCollection('building'))
   .sort((a, b) => a.data.order - b.data.order);
@@ -49,10 +61,10 @@ const buildingColumnItems = buildingItems.map(b => ({
   href: `/building/`,
 }));
 
-const photoColumnItems = photos.map(p => ({
-  title: p.data.title,
-  description: p.data.caption,
-  href: `/photography/`,
+const photoColumnItems = recentCollections.map(col => ({
+  title: col.name,
+  description: `${col.count} photos`,
+  href: `/photography/#${col.name.toLowerCase().replace(/\s+/g, '-')}`,
 }));
 
 const socialLinks = Object.values(SITE.social);

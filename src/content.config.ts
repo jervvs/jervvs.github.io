@@ -21,6 +21,7 @@ const photos = defineCollection({
     caption: z.string().optional(),
     location: z.string().optional(),
     size: z.enum(['square', 'tall', 'wide']).default('square'),
+    collection: z.string(),              // e.g., "Singapore", "Tokyo", "Coastlines"
     tags: z.array(z.string()).default([]),
   }),
 });

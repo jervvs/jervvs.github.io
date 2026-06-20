@@ -1,6 +1,6 @@
 ---
 ---
-<button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
+<button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"></button>
 
 <style>
   .theme-toggle {
@@ -33,11 +33,19 @@
   }
 </style>
 
-<script is:inline>
-  document.getElementById('theme-toggle')?.addEventListener('click', () => {
-    const html = document.documentElement;
-    const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
-    html.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-  });
+<script>
+  function initThemeToggle() {
+    document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const html = document.documentElement;
+        const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      });
+    });
+  }
+
+  // Run on initial load and after every View Transition navigation
+  initThemeToggle();
+  document.addEventListener('astro:after-swap', initThemeToggle);
 </script>

@@ -5,5 +5,6 @@ image: "/images/photos/driftwood.jpg"
 caption: "Washed ashore"
 location: "Pulau Ubin"
 size: "square"
+collection: "Singapore"
 tags: ["wood", "shore"]
 ---

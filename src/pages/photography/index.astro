@@ -7,25 +7,55 @@ import { getCollection } from 'astro:content';
 const photos = (await getCollection('photos'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const photoData = photos.map(p => ({
-  title: p.data.title,
-  image: p.data.image,
-  location: p.data.location,
-  date: p.data.date,
-  size: p.data.size,
-  tags: p.data.tags,
-  caption: p.data.caption,
-}));
+// Group photos by collection
+const collections = new Map<string, typeof photos>();
+for (const photo of photos) {
+  const key = photo.data.collection;
+  if (!collections.has(key)) collections.set(key, []);
+  collections.get(key)!.push(photo);
+}
+
+// Get date range label for each collection
+function getDateLabel(photos: typeof photos[0][]): string {
+  const dates = photos.map(p => p.data.date);
+  const newest = new Date(Math.max(...dates.map(d => d.valueOf())));
+  const oldest = new Date(Math.min(...dates.map(d => d.valueOf())));
+  const fmt = (d: Date) => new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(d);
+  return newest.getFullYear() === oldest.getFullYear() && newest.getMonth() === oldest.getMonth()
+    ? fmt(newest)
+    : `${fmt(oldest)} — ${fmt(newest)}`;
+}
 ---
 
 <BaseLayout title="Photography" description="Moments from around Singapore and beyond.">
   <a href="/" class="back-link">← Home</a>
   <h1 class="listing-title">Photography</h1>
-  <p class="listing-subtitle">Moments from around Singapore and beyond.</p>
+  <p class="listing-subtitle">Moments captured in collections.</p>
 
-  <div class="gallery-container">
-    <GalleryGrid photos={photoData} />
-  </div>
+  {Array.from(collections.entries()).map(([name, collectionPhotos]) => {
+    const photoData = collectionPhotos.map(p => ({
+      title: p.data.title,
+      image: p.data.image,
+      location: p.data.location,
+      date: p.data.date,
+      size: p.data.size,
+      tags: p.data.tags,
+      caption: p.data.caption,
+    }));
+
+    return (
+      <section class="photo-collection" id={name.toLowerCase().replace(/\s+/g, '-')}>
+        <div class="collection-header">
+          <h2 class="collection-name">{name}</h2>
+          <span class="collection-date">{getDateLabel(collectionPhotos)}</span>
+        </div>
+        <div class="collection-count">{collectionPhotos.length} photos</div>
+        <div class="gallery-container">
+          <GalleryGrid photos={photoData} />
+        </div>
+      </section>
+    );
+  })}
 
   <Lightbox />
 </BaseLayout>
@@ -42,7 +72,38 @@ const photoData = photos.map(p => ({
     font-size: 14px;
     font-weight: 300;
     color: var(--text-muted);
-    margin-bottom: 36px;
+    margin-bottom: 48px;
+  }
+
+  .photo-collection {
+    margin-bottom: 64px;
+  }
+
+  .collection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .collection-name {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .collection-date {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+  }
+
+  .collection-count {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 20px;
   }
 
   .gallery-container {

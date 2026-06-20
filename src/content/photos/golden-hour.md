@@ -5,5 +5,6 @@ image: "/images/photos/golden-hour.jpg"
 caption: "The city at dusk"
 location: "Marina Bay"
 size: "wide"
+collection: "Singapore"
 tags: ["sunset", "city"]
 ---

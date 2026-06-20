@@ -2,6 +2,19 @@
 title: "A Writing Practice"
 description: "Building the discipline to write regularly — and figuring out why it matters."
 order: 0
+relatedWork:
+  - title: "Your Next Portfolio Is a Folder of Text Files"
+    url: "/projects/this-site/"
+  - title: "The Art of Running Systems at Scale"
+    url: "/writing/the-art-of-running-systems-at-scale/"
+  - title: "On Systems Thinking"
+    url: "/writing/on-systems-thinking/"
+  - title: "Moving to Singapore"
+    url: "/writing/moving-to-singapore/"
+  - title: "How I Built This Site (And Why You Should Steal It)"
+    url: "/writing/building-a-portfolio-with-astro/"
+  - title: "Treating Fitness Like Engineering"
+    url: "/writing/treating-fitness-like-engineering/"
 tags: ["writing", "craft"]
 ---
 
@@ -16,18 +29,6 @@ This is why I'm building a writing practice — not to become a writer, but to b
 - **Frequency matters more than quality.** A mediocre post published is worth more than a perfect post stuck in drafts. The quality comes from the reps.
 - **Writing for an audience changes the thinking.** When you write for yourself, you can be lazy. When you write for others, you have to earn their attention.
 - **The hardest part is starting.** Once the first paragraph exists, the rest follows. The blank page is the real enemy.
-
-## Related Writing
-
-- [The Art of Running Systems at Scale](/writing/the-art-of-running-systems-at-scale/) — my first attempt at writing about what I do
-- [On Systems Thinking](/writing/on-systems-thinking/) — connecting operational work to bigger ideas
-- [Moving to Singapore](/writing/moving-to-singapore/) — something personal, not technical
-- [How I Built This Site](/writing/building-a-portfolio-with-astro/) — writing about the tool I built to support the writing
-- [Treating Fitness Like Engineering](/writing/treating-fitness-like-engineering/) — applying systems thinking to the body
-
-## Related Projects
-
-- [Your Next Portfolio Is a Folder of Text Files](/projects/this-site/) — I built this site specifically to lower the friction between having an idea and publishing it
 
 ## Why It's in "Building"
 

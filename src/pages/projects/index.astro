@@ -5,27 +5,97 @@ import { getCollection } from 'astro:content';
 
 const projects = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+const allTags = [...new Set(projects.flatMap(p => p.data.tags))].sort();
 ---
 
 <BaseLayout title="Projects" description="Things I've built.">
   <a href="/" class="back-link">← Home</a>
   <h1 class="listing-title">Projects</h1>
-  <p class="listing-subtitle">Things I've built.</p>
 
-  <div class="list-cards">
+  <div class="listing-header">
+    <p class="listing-subtitle">Things I've built.</p>
+    {allTags.length > 0 && (
+      <div class="tag-filter" id="tag-filter">
+        <button class="tag-pill active" data-tag="">All</button>
+        {allTags.map(tag => (
+          <button class="tag-pill" data-tag={tag}>{tag}</button>
+        ))}
+      </div>
+    )}
+  </div>
+
+  <div class="list-cards" id="post-list">
     {projects.map(project => (
-      <ContentCard
-        title={project.data.title}
-        href={`/projects/${project.id}/`}
-        description={project.data.description}
-        tags={project.data.tags}
-      />
+      <div class="card-wrapper" data-tags={project.data.tags.join(',')}>
+        <ContentCard
+          title={project.data.title}
+          href={`/projects/${project.id}/`}
+          description={project.data.description}
+          tags={project.data.tags}
+        />
+      </div>
     ))}
   </div>
+
+  <p class="no-results" id="no-results" style="display: none;">No projects with this tag.</p>
 </BaseLayout>
 
 <style>
   .listing-title { font-size: 28px; font-weight: 200; letter-spacing: -0.03em; margin-bottom: 8px; }
-  .listing-subtitle { font-size: 14px; font-weight: 300; color: var(--text-muted); margin-bottom: 36px; }
+  .listing-header { margin-bottom: 28px; }
+  .listing-subtitle { font-size: 14px; font-weight: 300; color: var(--text-muted); margin-bottom: 12px; }
+
+  .tag-filter { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+  .tag-pill {
+    font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 300;
+    color: var(--text-muted); padding: 2px 8px; border: none; border-radius: 8px;
+    background: none; cursor: pointer; transition: all 0.2s;
+  }
+  .tag-pill:hover { color: var(--text); background: var(--border); }
+  .tag-pill.active { background: var(--text); color: var(--bg); }
+
   .list-cards { display: flex; flex-direction: column; gap: 14px; }
+  .card-wrapper.hidden { display: none; }
+  .no-results { font-size: 14px; font-weight: 300; color: var(--text-muted); padding: 40px 0; text-align: center; }
 </style>
+
+<script>
+  function initTagFilter() {
+    const filterBar = document.getElementById('tag-filter');
+    const postList = document.getElementById('post-list');
+    const noResults = document.getElementById('no-results');
+    if (!filterBar || !postList) return;
+
+    const pills = filterBar.querySelectorAll('.tag-pill');
+    const cards = postList.querySelectorAll('.card-wrapper');
+
+    function filterByTag(tag: string) {
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const cardTags = (card as HTMLElement).getAttribute('data-tags') || '';
+        const matches = !tag || cardTags.split(',').includes(tag);
+        (card as HTMLElement).classList.toggle('hidden', !matches);
+        if (matches) visibleCount++;
+      });
+      pills.forEach(pill => {
+        pill.classList.toggle('active', (pill as HTMLElement).getAttribute('data-tag') === tag);
+      });
+      if (noResults) (noResults as HTMLElement).style.display = visibleCount === 0 ? 'block' : 'none';
+
+      const url = new URL(window.location.href);
+      if (tag) { url.searchParams.set('tag', tag); } else { url.searchParams.delete('tag'); }
+      history.replaceState({}, '', url.toString());
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => filterByTag((pill as HTMLElement).getAttribute('data-tag') || ''));
+    });
+
+    const urlTag = new URL(window.location.href).searchParams.get('tag');
+    if (urlTag) filterByTag(urlTag);
+  }
+
+  initTagFilter();
+  document.addEventListener('astro:after-swap', initTagFilter);
+</script>

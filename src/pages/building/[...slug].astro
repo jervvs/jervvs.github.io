@@ -31,6 +31,19 @@ const { Content } = await render(item);
       <Content />
     </div>
 
+    {item.data.relatedWork.length > 0 && (
+      <div class="related-work">
+        <div class="section-label">Related Work</div>
+        <ul class="related-list">
+          {item.data.relatedWork.map(work => (
+            <li>
+              <a href={work.url} class="related-link">{work.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
     {item.data.url && item.data.url !== '#' && (
       <div class="building-link-section">
         <a href={item.data.url} class="building-link" target="_blank" rel="noopener noreferrer">
@@ -115,6 +128,37 @@ const { Content } = await render(item);
   .building-body :global(li) {
     font-size: 15px; font-weight: 300; line-height: 1.8;
     color: var(--text-secondary); margin-bottom: 8px;
+  }
+
+  .related-work {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .related-work .section-label {
+    margin-bottom: 14px;
+  }
+
+  .related-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .related-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.3s;
+  }
+
+  .related-link:hover {
+    text-decoration-color: var(--accent);
   }
 
   .building-link-section {

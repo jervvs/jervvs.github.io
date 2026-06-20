@@ -44,6 +44,10 @@ const building = defineCollection({
     description: z.string(),
     url: z.string().optional(),
     order: z.number().default(1),   // 0 = pinned to homepage, 1 = default
+    relatedWork: z.array(z.object({
+      title: z.string(),
+      url: z.string(),
+    })).default([]),
     tags: z.array(z.string()).default([]),
   }),
 });

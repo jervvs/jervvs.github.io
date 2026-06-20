@@ -2,6 +2,11 @@
 title: "A Better Me"
 description: "A long-term project in physical health, mental clarity, and building habits that compound."
 order: 0
+relatedWork:
+  - title: "90-Day Recomposition"
+    url: "/projects/90-day-recomp/"
+  - title: "Treating Fitness Like an Engineering Problem"
+    url: "/writing/treating-fitness-like-engineering/"
 tags: ["fitness", "health", "habits"]
 ---
 
@@ -21,11 +26,6 @@ The approach: **treat self-improvement like engineering.** Define constraints, b
 - Wind-down at 11:15pm
 - Write something every week
 
-## Related Projects
-
-- [90-Day Recomposition](/projects/90-day-recomp/) — the structured fitness plan
-- [Treating Fitness Like an Engineering Problem](/writing/treating-fitness-like-engineering/) — the philosophy behind the approach
-
 ## Why It's in "Building"
 
-Because it's not a project with a finish date. It's a direction I'm moving in — something I expect to be working on, in some form, for the rest of my life. The specific projects (90-day recomp, a 5K time, a body fat target) come and go. The practice of paying attention to my health is permanent.
+Because it's not a project with a finish date. It's a direction I'm moving in — something I expect to be working on, in some form, for the rest of my life. The specific projects come and go. The practice of paying attention to my health is permanent.

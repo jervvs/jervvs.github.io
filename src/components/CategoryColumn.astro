@@ -1,0 +1,111 @@
+---
+interface CategoryItem {
+  title: string;
+  description?: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  title: string;
+  items: CategoryItem[];
+  viewAllHref: string;
+  viewAllLabel?: string;
+  delay?: number;
+}
+
+const {
+  title,
+  items,
+  viewAllHref,
+  viewAllLabel = `All ${title.toLowerCase()} →`,
+  delay = 2,
+} = Astro.props;
+---
+
+<div class={`category animate-in delay-${delay}`}>
+  <div class="category-title section-label">{title}</div>
+  <div class="category-items">
+    {items.map(item => (
+      <a
+        href={item.href}
+        class="category-item"
+        target={item.external ? '_blank' : undefined}
+        rel={item.external ? 'noopener noreferrer' : undefined}
+      >
+        <div class="item-title">
+          {item.title}{item.external && <span class="external-arrow"> ↗</span>}
+        </div>
+        {item.description && (
+          <div class="item-desc">{item.description}</div>
+        )}
+      </a>
+    ))}
+    <a href={viewAllHref} class="view-all">{viewAllLabel}</a>
+  </div>
+</div>
+
+<style>
+  .category-title {
+    margin-bottom: 18px;
+  }
+
+  .category-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .category-item {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .category-item:hover {
+    transform: translateX(4px);
+  }
+
+  .item-title {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 3px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.3s, color 0.3s;
+  }
+
+  .category-item:hover .item-title {
+    text-decoration-color: var(--accent);
+  }
+
+  .external-arrow {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .item-desc {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.55;
+    transition: color 0.3s;
+  }
+
+  .view-all {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-top: 6px;
+    display: inline-block;
+    transition: color 0.3s;
+  }
+
+  .view-all:hover {
+    color: var(--accent);
+  }
+</style>

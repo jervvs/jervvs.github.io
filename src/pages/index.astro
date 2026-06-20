@@ -1,7 +1,200 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import WaveDivider from '../components/WaveDivider.astro';
+import CategoryColumn from '../components/CategoryColumn.astro';
+import { SITE } from '../config';
+import { getCollection } from 'astro:content';
+import { readFileSync } from 'node:fs';
+
+// Query all collections
+const posts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const photos = (await getCollection('photos'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const projectItems = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const buildingItems = (await getCollection('building'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+// Read "Now" content
+let nowContent = '';
+try {
+  nowContent = readFileSync('./src/content/now.md', 'utf-8').trim();
+} catch { nowContent = ''; }
+
+// Map collections to CategoryColumn items
+const writingItems = posts.map(p => ({
+  title: p.data.title,
+  description: p.data.description,
+  href: `/writing/${p.id}/`,
+}));
+
+const projectColumnItems = projectItems.map(p => ({
+  title: p.data.title,
+  description: p.data.description,
+  href: p.data.url || `/projects/`,
+  external: !!p.data.url && p.data.url !== '#',
+}));
+
+const buildingColumnItems = buildingItems.map(b => ({
+  title: b.data.title,
+  description: b.data.description,
+  href: `/building/`,
+}));
+
+const photoColumnItems = photos.map(p => ({
+  title: p.data.title,
+  description: p.data.caption,
+  href: `/photography/`,
+}));
+
+const socialLinks = Object.values(SITE.social);
 ---
-<BaseLayout title="Home" currentPath="/">
-  <h1 style="font-weight: 200; font-size: 32px; letter-spacing: -0.03em;">Jervis Chan</h1>
-  <p style="color: var(--text-secondary); font-weight: 300; margin-top: 14px;">Layout + nav working. Toggle dark mode, check mobile hamburger.</p>
+
+<BaseLayout currentPath="/">
+  <!-- Hero -->
+  <section class="hero animate-in delay-1">
+    <h1 class="hero-name">{SITE.name}</h1>
+    <p class="hero-tagline">{SITE.tagline}</p>
+    <p class="hero-bio">{SITE.bio}</p>
+  </section>
+
+  <WaveDivider />
+
+  <!-- Category Columns -->
+  <div class="categories">
+    <CategoryColumn
+      title="Writing"
+      items={writingItems}
+      viewAllHref="/writing/"
+      delay={2}
+    />
+    <CategoryColumn
+      title="Projects"
+      items={projectColumnItems}
+      viewAllHref="/projects/"
+      delay={3}
+    />
+    <CategoryColumn
+      title="Building"
+      items={buildingColumnItems}
+      viewAllHref="/building/"
+      delay={4}
+    />
+    <CategoryColumn
+      title="Photography"
+      items={photoColumnItems}
+      viewAllHref="/photography/"
+      viewAllLabel="All photos →"
+      delay={5}
+    />
+  </div>
+
+  <!-- Now -->
+  {nowContent && (
+    <section class="section-divider animate-in delay-6">
+      <div class="section-label">Now</div>
+      <p class="now-text">{nowContent}</p>
+    </section>
+  )}
+
+  <!-- Connect -->
+  <section class="section-divider animate-in delay-7">
+    <div class="section-label">Connect</div>
+    <p class="connect-text">
+      Find me on
+      {socialLinks.map((link, i) => (
+        <>
+          <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
+          {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
+        </>
+      ))}.
+    </p>
+  </section>
 </BaseLayout>
+
+<style>
+  .hero {
+    padding-bottom: 48px;
+  }
+
+  .hero-name {
+    font-size: 32px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 14px;
+    transition: color 0.3s;
+  }
+
+  .hero-tagline {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    transition: color 0.3s;
+  }
+
+  .hero-bio {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    max-width: 480px;
+    transition: color 0.3s;
+  }
+
+  .categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 40px 0;
+  }
+
+  .section-divider {
+    padding: 36px 0;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .section-divider .section-label {
+    margin-bottom: 14px;
+  }
+
+  .now-text {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    max-width: 480px;
+    transition: color 0.3s;
+  }
+
+  .connect-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+  }
+
+  @media (max-width: 700px) {
+    .categories {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .categories {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

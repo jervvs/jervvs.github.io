@@ -1,6 +1,13 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// Map collection names to URL prefixes
+const urlPrefixes: Record<string, string> = {
+  posts: 'writing',
+  projects: 'projects',
+  building: 'building',
+};
 
 export async function getStaticPaths() {
   const items = await getCollection('building');
@@ -12,6 +19,29 @@ export async function getStaticPaths() {
 
 const { item } = Astro.props;
 const { Content } = await render(item);
+
+// Resolve related work refs → { title, url, date? }
+const resolvedWork = await Promise.all(
+  item.data.relatedWork.map(async (ref: string) => {
+    const [collection, id] = ref.split('/');
+    const entry = await getEntry(collection as any, id);
+    if (!entry) return null;
+    const urlPrefix = urlPrefixes[collection] || collection;
+    return {
+      title: entry.data.title,
+      url: `/${urlPrefix}/${id}/`,
+      date: (entry.data as any).date as Date | undefined,
+    };
+  })
+);
+
+const timeline = resolvedWork
+  .filter((w): w is NonNullable<typeof w> => w !== null)
+  .sort((a, b) => {
+    if (a.date && b.date) return b.date.valueOf() - a.date.valueOf();
+    if (a.date) return -1;
+    return 1;
+  });
 ---
 
 <BaseLayout title={item.data.title} description={item.data.description}>
@@ -31,27 +61,25 @@ const { Content } = await render(item);
       <Content />
     </div>
 
-    {item.data.relatedWork.length > 0 && (() => {
-      const sorted = [...item.data.relatedWork].sort((a, b) => b.date.valueOf() - a.date.valueOf());
-      const fmt = (d: Date) => new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(d);
-      return (
-        <div class="related-work">
-          <div class="section-label">Timeline</div>
-          <div class="timeline">
-            {sorted.map((work, i) => (
-              <a href={work.url} class="timeline-item">
-                <span class="timeline-date">{fmt(work.date)}</span>
-                <span class="timeline-dot-wrapper">
-                  <span class="timeline-dot"></span>
-                  {i < sorted.length - 1 && <span class="timeline-line"></span>}
-                </span>
-                <span class="timeline-title">{work.title}</span>
-              </a>
-            ))}
-          </div>
+    {timeline.length > 0 && (
+      <div class="related-work">
+        <div class="section-label">Timeline</div>
+        <div class="timeline">
+          {timeline.map((work, i) => (
+            <a href={work.url} class="timeline-item">
+              <span class="timeline-date">
+                {work.date ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(work.date) : ''}
+              </span>
+              <span class="timeline-dot-wrapper">
+                <span class="timeline-dot"></span>
+                {i < timeline.length - 1 && <span class="timeline-line"></span>}
+              </span>
+              <span class="timeline-title">{work.title}</span>
+            </a>
+          ))}
         </div>
-      );
-    })()}
+      </div>
+    )}
 
     {item.data.url && item.data.url !== '#' && (
       <div class="building-link-section">

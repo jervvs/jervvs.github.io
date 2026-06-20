@@ -22,15 +22,17 @@ const pageTitle = title ? `${title} — ${SITE.name}` : SITE.name;
 
 <html lang="en">
 <head>
-  <!-- No-FOUC: apply theme before paint + after View Transition swaps -->
+  <!-- Theme: respect system preference, manual toggle overrides -->
   <script is:inline>
     (function() {
-      var t = localStorage.getItem('theme');
-      if (t) document.documentElement.setAttribute('data-theme', t);
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '');
+      if (theme) document.documentElement.setAttribute('data-theme', theme);
     })();
     document.addEventListener('astro:after-swap', function() {
-      var t = localStorage.getItem('theme');
-      if (t) document.documentElement.setAttribute('data-theme', t);
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : '');
+      if (theme) document.documentElement.setAttribute('data-theme', theme);
     });
   </script>
   <meta charset="UTF-8">

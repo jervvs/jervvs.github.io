@@ -1,0 +1,43 @@
+---
+import ClientRouter from 'astro/components/ClientRouter.astro';
+import Nav from '../components/Nav.astro';
+import SeaAmbient from '../components/SeaAmbient.astro';
+import { SITE } from '../config';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title,
+  description = SITE.tagline,
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${SITE.name}` : SITE.name;
+---
+
+<html lang="en">
+<head>
+  <!-- No-FOUC: apply theme before paint -->
+  <script is:inline>
+    const t = localStorage.getItem('theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description}>
+  <title>{pageTitle}</title>
+  <ClientRouter />
+</head>
+<body>
+  <SeaAmbient />
+  <Nav currentPath={currentPath} />
+  <main class="page-content">
+    <slot />
+  </main>
+</body>
+</html>

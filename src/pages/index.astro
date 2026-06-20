@@ -1,17 +1,7 @@
 ---
-import '../styles/global.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jervis Chan</title>
-</head>
-<body>
-  <div class="sea-ambient"></div>
-  <div class="page-content">
-    <h1 style="font-weight: 200; font-size: 32px; letter-spacing: -0.03em;">Jervis Chan</h1>
-    <p style="color: var(--text-secondary); font-weight: 300; margin-top: 14px;">Design tokens working. Check: warm cream bg, Outfit font, muted text.</p>
-  </div>
-</body>
-</html>
+<BaseLayout title="Home" currentPath="/">
+  <h1 style="font-weight: 200; font-size: 32px; letter-spacing: -0.03em;">Jervis Chan</h1>
+  <p style="color: var(--text-secondary); font-weight: 300; margin-top: 14px;">Layout + nav working. Toggle dark mode, check mobile hamburger.</p>
+</BaseLayout>

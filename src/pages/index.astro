@@ -29,11 +29,11 @@ for (const p of allPhotos) {
 const recentCollections = Array.from(photoCollections.values()).slice(0, 2);
 
 const projectItems = (await getCollection('projects'))
-  .sort((a, b) => a.data.order - b.data.order)
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
   .slice(0, 2);
 
 const buildingItems = (await getCollection('building'))
-  .sort((a, b) => a.data.order - b.data.order);
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
 
 // Read "Now" content
 let nowContent = '';

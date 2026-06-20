@@ -31,18 +31,27 @@ const { Content } = await render(item);
       <Content />
     </div>
 
-    {item.data.relatedWork.length > 0 && (
-      <div class="related-work">
-        <div class="section-label">Related Work</div>
-        <ul class="related-list">
-          {item.data.relatedWork.map(work => (
-            <li>
-              <a href={work.url} class="related-link">{work.title}</a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
+    {item.data.relatedWork.length > 0 && (() => {
+      const sorted = [...item.data.relatedWork].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+      const fmt = (d: Date) => new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(d);
+      return (
+        <div class="related-work">
+          <div class="section-label">Timeline</div>
+          <div class="timeline">
+            {sorted.map((work, i) => (
+              <a href={work.url} class="timeline-item">
+                <span class="timeline-date">{fmt(work.date)}</span>
+                <span class="timeline-dot-wrapper">
+                  <span class="timeline-dot"></span>
+                  {i < sorted.length - 1 && <span class="timeline-line"></span>}
+                </span>
+                <span class="timeline-title">{work.title}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })()}
 
     {item.data.url && item.data.url !== '#' && (
       <div class="building-link-section">
@@ -137,28 +146,78 @@ const { Content } = await render(item);
   }
 
   .related-work .section-label {
-    margin-bottom: 14px;
+    margin-bottom: 20px;
   }
 
-  .related-list {
-    list-style: none;
+  .timeline {
     display: flex;
     flex-direction: column;
-    gap: 10px;
   }
 
-  .related-link {
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 72px 20px 1fr;
+    gap: 0 12px;
+    align-items: start;
+    text-decoration: none;
+    color: inherit;
+    padding: 2px 0;
+    transition: transform 0.2s;
+  }
+
+  .timeline-item:hover {
+    transform: translateX(4px);
+  }
+
+  .timeline-date {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    text-align: right;
+    padding-top: 2px;
+    transition: color 0.3s;
+  }
+
+  .timeline-dot-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+  }
+
+  .timeline-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .timeline-line {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+    margin-top: 4px;
+    transition: background 0.3s;
+  }
+
+  .timeline-title {
     font-size: 14px;
     font-weight: 400;
     color: var(--text);
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--border);
-    transition: text-decoration-color 0.3s;
+    transition: text-decoration-color 0.3s, color 0.3s;
+    padding-bottom: 20px;
   }
 
-  .related-link:hover {
+  .timeline-item:hover .timeline-title {
     text-decoration-color: var(--accent);
+  }
+
+  .timeline-item:last-child .timeline-title {
+    padding-bottom: 0;
   }
 
   .building-link-section {

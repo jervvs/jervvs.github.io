@@ -3,18 +3,24 @@ title: "A Writing Practice"
 description: "Building the discipline to write regularly — and figuring out why it matters."
 order: 0
 relatedWork:
-  - title: "Your Next Portfolio Is a Folder of Text Files"
-    url: "/projects/this-site/"
-  - title: "The Art of Running Systems at Scale"
-    url: "/writing/the-art-of-running-systems-at-scale/"
-  - title: "On Systems Thinking"
-    url: "/writing/on-systems-thinking/"
-  - title: "Moving to Singapore"
-    url: "/writing/moving-to-singapore/"
   - title: "How I Built This Site (And Why You Should Steal It)"
     url: "/writing/building-a-portfolio-with-astro/"
-  - title: "Treating Fitness Like Engineering"
+    date: 2026-06-20
+  - title: "Treating Fitness Like an Engineering Problem"
     url: "/writing/treating-fitness-like-engineering/"
+    date: 2026-06-18
+  - title: "The Art of Running Systems at Scale"
+    url: "/writing/the-art-of-running-systems-at-scale/"
+    date: 2026-06-15
+  - title: "Your Next Portfolio Is a Folder of Text Files"
+    url: "/projects/this-site/"
+    date: 2026-06-01
+  - title: "On Systems Thinking"
+    url: "/writing/on-systems-thinking/"
+    date: 2026-02-12
+  - title: "Moving to Singapore"
+    url: "/writing/moving-to-singapore/"
+    date: 2025-08-20
 tags: ["writing", "craft"]
 ---
 

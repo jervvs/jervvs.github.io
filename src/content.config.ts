@@ -47,6 +47,7 @@ const building = defineCollection({
     relatedWork: z.array(z.object({
       title: z.string(),
       url: z.string(),
+      date: z.coerce.date(),
     })).default([]),
     tags: z.array(z.string()).default([]),
   }),

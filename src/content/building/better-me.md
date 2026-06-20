@@ -3,10 +3,12 @@ title: "A Better Me"
 description: "A long-term project in physical health, mental clarity, and building habits that compound."
 order: 0
 relatedWork:
-  - title: "90-Day Recomposition"
-    url: "/projects/90-day-recomp/"
   - title: "Treating Fitness Like an Engineering Problem"
     url: "/writing/treating-fitness-like-engineering/"
+    date: 2026-06-18
+  - title: "90-Day Recomposition"
+    url: "/projects/90-day-recomp/"
+    date: 2026-06-10
 tags: ["fitness", "health", "habits"]
 ---
 

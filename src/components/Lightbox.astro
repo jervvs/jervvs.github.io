@@ -169,9 +169,15 @@
       document.getElementById('lightbox-tags')!.textContent = item.tags || '—';
 
       const imgEl = document.getElementById('lightbox-image')!;
-      const galleryImg = item.el.querySelector('.gallery-img') as HTMLElement;
-      if (galleryImg) {
-        imgEl.style.background = window.getComputedStyle(galleryImg).background;
+      // Use real image if available, otherwise fall back to gradient
+      const realImg = item.el.querySelector('.gallery-img img') as HTMLImageElement;
+      if (realImg && realImg.style.display !== 'none') {
+        imgEl.style.background = `url(${realImg.src}) center/cover no-repeat`;
+      } else {
+        const galleryImg = item.el.querySelector('.gallery-img') as HTMLElement;
+        if (galleryImg) {
+          imgEl.style.background = window.getComputedStyle(galleryImg).background;
+        }
       }
 
       lightbox.classList.add('open');

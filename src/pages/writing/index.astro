@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Writing" description="Essays on systems, craft, and making things work.">
+  <a href="/" class="back-link">← Home</a>
+  <h1 class="listing-title">Writing</h1>
+  <p class="listing-subtitle">Essays on systems, craft, and making things work.</p>
+
+  <div class="list-cards">
+    {posts.map(post => (
+      <ContentCard
+        title={post.data.title}
+        href={`/writing/${post.id}/`}
+        description={post.data.description}
+        date={post.data.date}
+        tags={post.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .listing-title {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .listing-subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+  }
+
+  .list-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+</style>

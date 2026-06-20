@@ -1,0 +1,50 @@
+---
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+---
+
+<button class="share-btn" data-title={title} data-url={url} id="share-btn">
+  Share ↗
+</button>
+
+<style>
+  .share-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .share-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>
+
+<script is:inline>
+  document.getElementById('share-btn')?.addEventListener('click', async function() {
+    const title = this.getAttribute('data-title');
+    const url = this.getAttribute('data-url');
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+      } catch {}
+    } else if (navigator.clipboard) {
+      await navigator.clipboard.writeText(url);
+      const original = this.textContent;
+      this.textContent = 'Copied!';
+      setTimeout(() => { this.textContent = original; }, 2000);
+    }
+  });
+</script>

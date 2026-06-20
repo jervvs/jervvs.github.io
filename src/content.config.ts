@@ -42,6 +42,7 @@ const building = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
+    url: z.string().optional(),
     order: z.number().default(0),
     tags: z.array(z.string()).default([]),
   }),

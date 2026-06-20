@@ -31,6 +31,14 @@ const { Content } = await render(item);
       <Content />
     </div>
 
+    {item.data.url && item.data.url !== '#' && (
+      <div class="building-link-section">
+        <a href={item.data.url} class="building-link" target="_blank" rel="noopener noreferrer">
+          Learn more ↗
+        </a>
+      </div>
+    )}
+
     <footer class="building-footer">
       <a href="/building/" class="back-link" style="margin-bottom: 0;">← All building</a>
     </footer>
@@ -107,6 +115,22 @@ const { Content } = await render(item);
   .building-body :global(li) {
     font-size: 15px; font-weight: 300; line-height: 1.8;
     color: var(--text-secondary); margin-bottom: 8px;
+  }
+
+  .building-link-section {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .building-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--accent);
+    transition: color 0.3s;
   }
 
   .building-footer {

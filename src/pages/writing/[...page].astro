@@ -1,0 +1,222 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('posts'))
+    .filter(p => !p.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+// Collect all unique tags across all posts for the filter bar
+const allPosts = (await getCollection('posts'))
+  .filter(p => !p.data.draft);
+const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))].sort();
+
+// Check for active tag filter from URL
+const activeTag = Astro.url.searchParams.get('tag') || '';
+---
+
+<BaseLayout title="Writing" description="Essays on systems, craft, and making things work.">
+  <a href="/" class="back-link">← Home</a>
+  <h1 class="listing-title">Writing</h1>
+  <p class="listing-subtitle">Essays on systems, craft, and making things work.</p>
+
+  <!-- Tag filter bar -->
+  {allTags.length > 0 && (
+    <div class="tag-filter" id="tag-filter">
+      <button class="tag-pill active" data-tag="">All</button>
+      {allTags.map(tag => (
+        <button class="tag-pill" data-tag={tag}>{tag}</button>
+      ))}
+    </div>
+  )}
+
+  <div class="list-cards" id="post-list">
+    {page.data.map(post => (
+      <div class="card-wrapper" data-tags={post.data.tags.join(',')}>
+        <ContentCard
+          title={post.data.title}
+          href={`/writing/${post.id}/`}
+          description={post.data.description}
+          date={post.data.date}
+          tags={post.data.tags}
+        />
+      </div>
+    ))}
+  </div>
+
+  <!-- No results message -->
+  <p class="no-results" id="no-results" style="display: none;">No posts with this tag.</p>
+
+  <!-- Pagination -->
+  {page.lastPage > 1 && (
+    <nav class="pagination">
+      {page.url.prev && (
+        <a href={page.url.prev} class="pagination-link">← Newer</a>
+      )}
+      <span class="pagination-info">Page {page.currentPage} of {page.lastPage}</span>
+      {page.url.next && (
+        <a href={page.url.next} class="pagination-link">Older →</a>
+      )}
+    </nav>
+  )}
+</BaseLayout>
+
+<style>
+  .listing-title {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .listing-subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  /* Tag filter */
+  .tag-filter {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+
+  .tag-pill {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tag-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .tag-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .list-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card-wrapper {
+    transition: opacity 0.2s, display 0.2s;
+  }
+
+  .card-wrapper.hidden {
+    display: none;
+  }
+
+  .no-results {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 40px 0;
+    text-align: center;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pagination-link {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .pagination-link:hover {
+    color: var(--accent);
+  }
+
+  .pagination-info {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+  }
+</style>
+
+<script>
+  function initTagFilter() {
+    const filterBar = document.getElementById('tag-filter');
+    const postList = document.getElementById('post-list');
+    const noResults = document.getElementById('no-results');
+    if (!filterBar || !postList) return;
+
+    const pills = filterBar.querySelectorAll('.tag-pill');
+    const cards = postList.querySelectorAll('.card-wrapper');
+
+    function filterByTag(tag: string) {
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const cardTags = (card as HTMLElement).getAttribute('data-tags') || '';
+        const matches = !tag || cardTags.split(',').includes(tag);
+        (card as HTMLElement).classList.toggle('hidden', !matches);
+        if (matches) visibleCount++;
+      });
+
+      pills.forEach(pill => {
+        pill.classList.toggle('active', (pill as HTMLElement).getAttribute('data-tag') === tag);
+      });
+
+      if (noResults) {
+        (noResults as HTMLElement).style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+
+      // Update URL without navigation
+      const url = new URL(window.location.href);
+      if (tag) {
+        url.searchParams.set('tag', tag);
+      } else {
+        url.searchParams.delete('tag');
+      }
+      history.replaceState({}, '', url.toString());
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterByTag((pill as HTMLElement).getAttribute('data-tag') || '');
+      });
+    });
+
+    // Apply initial filter from URL
+    const urlTag = new URL(window.location.href).searchParams.get('tag');
+    if (urlTag) filterByTag(urlTag);
+  }
+
+  initTagFilter();
+  document.addEventListener('astro:after-swap', initTagFilter);
+</script>

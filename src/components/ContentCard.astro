@@ -29,7 +29,7 @@ const formattedDate = date
   {description && <div class="card-item-desc">{description}</div>}
   {tags.length > 0 && (
     <div class="card-item-tags">
-      {tags.map(tag => <span class="card-item-tag">{tag}</span>)}
+      {tags.map(tag => <a href={`/writing/?tag=${tag}`} class="card-item-tag" onclick="event.stopPropagation()">{tag}</a>)}
     </div>
   )}
 </a>

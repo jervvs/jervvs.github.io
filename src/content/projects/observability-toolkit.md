@@ -1,7 +1,6 @@
 ---
 title: "CLI Toolkit"
-description: "A collection of command-line tools for querying logs and metrics quickly."
-url: "#"
-order: 2
+description: "Command-line tools for quickly finding answers in logs and metrics."
+order: 3
 tags: ["cli", "tools"]
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Autoscaling"
-description: "Exploring how systems can scale themselves — adjusting capacity based on real demand instead of guesswork."
+description: "Can systems learn to right-size themselves? Exploring elastic capacity that adjusts to real demand."
 order: 1
-tags: ["infrastructure", "design"]
+tags: ["design", "systems"]
 ---

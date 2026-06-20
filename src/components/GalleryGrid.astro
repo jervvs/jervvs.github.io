@@ -17,6 +17,7 @@ const { photos } = Astro.props;
 
 // Color gradients for placeholder images (used when real images aren't loaded)
 const gradients: Record<string, string> = {
+  // Singapore
   'changi-beach': 'linear-gradient(180deg, #c4d4e0, #8ba0b4, #5a7088)',
   'sand-patterns': 'linear-gradient(135deg, #d4c4a8, #b8a88c)',
   'coastal-garden': 'linear-gradient(135deg, #8b9e7e, #6b8060)',
@@ -26,6 +27,12 @@ const gradients: Record<string, string> = {
   'trail': 'linear-gradient(135deg, #b8c4a8, #8ba07e)',
   'sunset-column': 'linear-gradient(180deg, #c4956a, #a87a50, #8b6040)',
   'concrete-moss': 'linear-gradient(135deg, #9b8e7e, #7a6e5e)',
+  // Tokyo
+  'shibuya-crossing': 'linear-gradient(135deg, #2a2040, #4a3060, #6a4080)',
+  'temple-garden': 'linear-gradient(180deg, #6b8e5a, #4a7040, #3a5830)',
+  'tokyo-alley': 'linear-gradient(135deg, #8b6030, #c48840, #e8a850)',
+  'fish-market': 'linear-gradient(135deg, #c4a08c, #a88070, #8b6050)',
+  'tokyo-tower': 'linear-gradient(180deg, #5a7088, #4a6078, #d47040)',
 };
 
 function getGradient(image: string): string {

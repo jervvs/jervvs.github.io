@@ -1,7 +1,7 @@
 ---
 title: "This Site"
-description: "A minimal, extensible portfolio built with Astro. Earth tones, seaside ambient design, dark/light theming."
+description: "A personal portfolio built with Astro — designed so adding new content is as simple as writing a text file."
 url: "https://github.com/jervvs/jervvs.github.io"
-order: 4
+order: 1
 tags: ["web", "design", "astro"]
 ---

@@ -1,7 +1,6 @@
 ---
 title: "AI Ops Agent"
-description: "An AI assistant that helps triage alerts, run diagnostics, and suggest fixes for infrastructure issues."
-url: "#"
-order: 1
+description: "An AI assistant that helps diagnose problems and suggest fixes — like having a smart colleague who never sleeps."
+order: 2
 tags: ["ai", "automation"]
 ---

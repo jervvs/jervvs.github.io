@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { getCollection } from 'astro:content';
+
+const items = (await getCollection('building'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Building" description="Work in progress.">
+  <a href="/" class="back-link">← Home</a>
+  <h1 class="listing-title">Building</h1>
+  <p class="listing-subtitle">Work in progress.</p>
+
+  <div class="list-cards">
+    {items.map(item => (
+      <ContentCard
+        title={item.data.title}
+        href="#"
+        description={item.data.description}
+        tags={item.data.tags}
+      />
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .listing-title { font-size: 28px; font-weight: 200; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .listing-subtitle { font-size: 14px; font-weight: 300; color: var(--text-muted); margin-bottom: 36px; }
+  .list-cards { display: flex; flex-direction: column; gap: 14px; }
+</style>

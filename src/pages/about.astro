@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config';
+
+const socialLinks = Object.values(SITE.social);
+---
+
+<BaseLayout title="About" description="About Jervis Chan.">
+  <a href="/" class="back-link">← Home</a>
+
+  <!-- Hero photo -->
+  <div class="about-hero">
+    <div class="about-hero-placeholder" role="img" aria-label="An environmental photo — replace with your own"></div>
+    <p class="about-hero-caption">Replace with your own photo</p>
+  </div>
+
+  <h1 class="about-name">Jervis Chan</h1>
+  <p class="about-subtitle">Operations engineer based in Singapore.</p>
+
+  <div class="about-body">
+    <section class="about-section first">
+      <div class="section-label">Background</div>
+      <p>I studied computer science and business at NTU under the Renaissance Engineering Programme. I came into engineering through math and puzzles — the satisfaction of finding a clean solution to a messy problem is what pulled me into coding, and it's what keeps me in operations.</p>
+    </section>
+
+    <section class="about-section">
+      <div class="section-label">What I Do</div>
+      <p>I keep infrastructure running at scale across hundreds of production environments. Right now I'm building AI agents that can triage alerts, run through standard procedures, and propose fixes automatically.</p>
+    </section>
+
+    <section class="about-section">
+      <div class="section-label">What I Think About</div>
+      <p>Systems — not just the technical kind. How teams work together, how information flows through an organization, how small decisions compound into large outcomes. The craft of running things well.</p>
+    </section>
+
+    <section class="about-section">
+      <div class="section-label">Outside Work</div>
+      <div class="about-items">
+        <div class="about-item">
+          <div class="about-item-label">Creating</div>
+          <div class="about-item-value">
+            <a href={SITE.social.tiktok.url} class="text-link" target="_blank" rel="noopener noreferrer">TikTok</a> videos, <a href="/photography/" class="text-link">photography</a>, this site
+          </div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-label">Moving</div>
+          <div class="about-item-value">Gym, formerly competitive cheerleading</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-label">Consuming</div>
+          <div class="about-item-value">Too much coffee, SRE books, management writing</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-label">Dreaming</div>
+          <div class="about-item-value">A house by the sea</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <div class="section-label">Connect</div>
+      <p class="connect-text">
+        Find me on
+        {socialLinks.map((link, i) => (
+          <>
+            <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
+            {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
+          </>
+        ))}.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-hero {
+    margin-bottom: 32px;
+  }
+
+  .about-hero-placeholder {
+    width: 100%;
+    height: 360px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #c4d4e0 0%, #8ba0b4 30%, #9b8e7e 60%, #d4c4a8 100%);
+  }
+
+  .about-hero-caption {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: right;
+    margin-top: 8px;
+  }
+
+  .about-name {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .about-subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .about-section {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .about-section.first {
+    margin-top: 32px;
+  }
+
+  .about-section .section-label {
+    margin-bottom: 14px;
+  }
+
+  .about-body p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-secondary);
+  }
+
+  .about-items {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .about-item-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-bottom: 3px;
+  }
+
+  .about-item-value {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .connect-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+  }
+</style>

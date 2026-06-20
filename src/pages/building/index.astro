@@ -16,7 +16,7 @@ const items = (await getCollection('building'))
     {items.map(item => (
       <ContentCard
         title={item.data.title}
-        href="#"
+        href={`/building/${item.id}/`}
         description={item.data.description}
         tags={item.data.tags}
       />

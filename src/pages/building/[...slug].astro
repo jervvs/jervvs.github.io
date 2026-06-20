@@ -1,0 +1,117 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const items = await getCollection('building');
+  return items.map(item => ({
+    params: { slug: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+const { Content } = await render(item);
+---
+
+<BaseLayout title={item.data.title} description={item.data.description}>
+  <a href="/building/" class="back-link">← Back to building</a>
+
+  <article class="building-page">
+    <h1 class="building-title">{item.data.title}</h1>
+    <p class="building-desc">{item.data.description}</p>
+
+    {item.data.tags.length > 0 && (
+      <div class="building-tags">
+        {item.data.tags.map(tag => <span class="building-tag">{tag}</span>)}
+      </div>
+    )}
+
+    <div class="building-body">
+      <Content />
+    </div>
+
+    <footer class="building-footer">
+      <a href="/building/" class="back-link" style="margin-bottom: 0;">← All building</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .building-title {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+  }
+
+  .building-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .building-tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .building-tag {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .building-body {
+    max-width: 660px;
+  }
+
+  .building-body :global(p) {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .building-body :global(h2) {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-top: 48px;
+    margin-bottom: 18px;
+  }
+
+  .building-body :global(strong) { font-weight: 500; color: var(--text); }
+
+  .building-body :global(a) {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.3s;
+  }
+
+  .building-body :global(a:hover) { text-decoration-color: var(--accent); }
+
+  .building-body :global(ul) { margin: 20px 0; padding-left: 24px; list-style: revert; }
+
+  .building-body :global(li) {
+    font-size: 15px; font-weight: 300; line-height: 1.8;
+    color: var(--text-secondary); margin-bottom: 8px;
+  }
+
+  .building-footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+</style>

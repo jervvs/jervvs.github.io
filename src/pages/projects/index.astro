@@ -16,10 +16,9 @@ const projects = (await getCollection('projects'))
     {projects.map(project => (
       <ContentCard
         title={project.data.title}
-        href={project.data.url || '#'}
+        href={`/projects/${project.id}/`}
         description={project.data.description}
         tags={project.data.tags}
-        external={!!project.data.url && project.data.url !== '#'}
       />
     ))}
   </div>

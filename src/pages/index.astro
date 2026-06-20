@@ -48,20 +48,16 @@ const writingItems = posts.map(p => ({
   href: `/writing/${p.id}/`,
 }));
 
-const projectColumnItems = projectItems.map(p => {
-  const hasRealUrl = p.data.url && p.data.url !== '#';
-  return {
-    title: p.data.title,
-    description: p.data.description,
-    href: hasRealUrl ? p.data.url : '/projects/',
-    external: !!hasRealUrl,
-  };
-});
+const projectColumnItems = projectItems.map(p => ({
+  title: p.data.title,
+  description: p.data.description,
+  href: `/projects/${p.id}/`,
+}));
 
-const buildingColumnItems = buildingItems.map(b => ({
+const buildingColumnItems = buildingItems.slice(0, 2).map(b => ({
   title: b.data.title,
   description: b.data.description,
-  href: '/building/',
+  href: `/building/${b.id}/`,
 }));
 
 const photoColumnItems = recentCollections.map(col => ({

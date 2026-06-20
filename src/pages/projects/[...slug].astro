@@ -1,0 +1,153 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <a href="/projects/" class="back-link">← Back to projects</a>
+
+  <article class="project-page">
+    <h1 class="project-title">{project.data.title}</h1>
+    <p class="project-desc">{project.data.description}</p>
+
+    {project.data.tags.length > 0 && (
+      <div class="project-tags">
+        {project.data.tags.map(tag => <span class="project-tag">{tag}</span>)}
+      </div>
+    )}
+
+    <div class="project-body">
+      <Content />
+    </div>
+
+    {project.data.url && project.data.url !== '#' && (
+      <div class="project-link-section">
+        <a href={project.data.url} class="project-link" target="_blank" rel="noopener noreferrer">
+          View project ↗
+        </a>
+      </div>
+    )}
+
+    <footer class="project-footer">
+      <a href="/projects/" class="back-link" style="margin-bottom: 0;">← All projects</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-title {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+  }
+
+  .project-desc {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .project-tag {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .project-body {
+    max-width: 660px;
+  }
+
+  .project-body :global(p) {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .project-body :global(h2) {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-top: 48px;
+    margin-bottom: 18px;
+  }
+
+  .project-body :global(strong) {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .project-body :global(a) {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.3s;
+  }
+
+  .project-body :global(a:hover) {
+    text-decoration-color: var(--accent);
+  }
+
+  .project-body :global(ul) {
+    margin: 20px 0;
+    padding-left: 24px;
+    list-style: revert;
+  }
+
+  .project-body :global(li) {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .project-link-section {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-link {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  .project-footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+</style>

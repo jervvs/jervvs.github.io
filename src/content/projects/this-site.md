@@ -2,7 +2,7 @@
 title: "Your Next Portfolio Is a Folder of Text Files"
 description: "A personal portfolio built with Astro — where adding new content is as simple as writing a text file and pushing it."
 url: "https://github.com/jervvs/jervvs.github.io"
-order: 1
+order: 0
 tags: ["web", "design", "astro"]
 ---
 

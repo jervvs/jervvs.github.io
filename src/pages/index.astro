@@ -26,7 +26,7 @@ for (const p of allPhotos) {
   col.count++;
   if (p.data.date > col.newestDate) col.newestDate = p.data.date;
 }
-const recentCollections = Array.from(photoCollections.values()).slice(0, 2);
+const recentCollections = Array.from(photoCollections.values()).slice(0, 7);
 
 const projectItems = (await getCollection('projects'))
   .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
@@ -62,7 +62,6 @@ const buildingColumnItems = buildingItems.slice(0, 2).map(b => ({
 
 const photoColumnItems = recentCollections.map(col => ({
   title: col.name,
-  description: `${col.count} photos`,
   href: `/photography/#${col.name.toLowerCase().replace(/\s+/g, '-')}`,
 }));
 

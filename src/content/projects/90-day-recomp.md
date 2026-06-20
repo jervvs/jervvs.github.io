@@ -1,7 +1,7 @@
 ---
 title: "90-Day Recomposition"
 description: "A structured plan to lose 20kg sustainably — built around constraints, not willpower."
-order: 2
+order: 0
 tags: ["fitness", "health", "systems"]
 ---
 

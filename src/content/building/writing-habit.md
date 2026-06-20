@@ -1,7 +1,7 @@
 ---
 title: "A Writing Practice"
 description: "Building the discipline to write regularly — and figuring out why it matters."
-order: 2
+order: 0
 tags: ["writing", "craft"]
 ---
 

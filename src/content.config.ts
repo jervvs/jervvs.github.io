@@ -21,7 +21,7 @@ const photos = defineCollection({
     caption: z.string().optional(),
     location: z.string().optional(),
     size: z.enum(['square', 'tall', 'wide']).default('square'),
-    collection: z.string(),              // e.g., "Singapore", "Tokyo", "Coastlines"
+    collection: z.string(),
     tags: z.array(z.string()).default([]),
   }),
 });
@@ -32,7 +32,7 @@ const projects = defineCollection({
     title: z.string(),
     description: z.string(),
     url: z.string().optional(),
-    order: z.number().default(0),
+    order: z.number().default(1),   // 0 = pinned to homepage, 1 = default
     tags: z.array(z.string()).default([]),
   }),
 });
@@ -43,7 +43,7 @@ const building = defineCollection({
     title: z.string(),
     description: z.string(),
     url: z.string().optional(),
-    order: z.number().default(0),
+    order: z.number().default(1),   // 0 = pinned to homepage, 1 = default
     tags: z.array(z.string()).default([]),
   }),
 });

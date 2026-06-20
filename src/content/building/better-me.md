@@ -1,7 +1,7 @@
 ---
 title: "A Better Me"
 description: "A long-term project in physical health, mental clarity, and building habits that compound."
-order: 1
+order: 0
 tags: ["fitness", "health", "habits"]
 ---
 

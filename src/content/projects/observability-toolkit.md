@@ -1,7 +1,7 @@
 ---
-title: "Observability Toolkit"
-description: "CLI suite for querying logs and metrics across distributed systems."
+title: "CLI Toolkit"
+description: "A collection of command-line tools for querying logs and metrics quickly."
 url: "#"
 order: 2
-tags: ["observability", "cli", "tools"]
+tags: ["cli", "tools"]
 ---

@@ -1,7 +1,7 @@
 ---
-title: "Fleet Assistant"
-description: "AI-assisted operations agent that triages infrastructure alerts, runs through standard procedures, and proposes fixes."
+title: "AI Ops Agent"
+description: "An AI assistant that helps triage alerts, run diagnostics, and suggest fixes for infrastructure issues."
 url: "#"
 order: 1
-tags: ["ai", "operations", "automation"]
+tags: ["ai", "automation"]
 ---

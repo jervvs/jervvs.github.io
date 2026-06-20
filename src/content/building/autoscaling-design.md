@@ -1,6 +1,6 @@
 ---
-title: "Infrastructure Autoscaling"
-description: "Designing elastic capacity for production systems — scaling resources up and down based on workload signals."
+title: "Autoscaling"
+description: "Exploring how systems can scale themselves — adjusting capacity based on real demand instead of guesswork."
 order: 1
-tags: ["infrastructure", "automation", "design"]
+tags: ["infrastructure", "design"]
 ---

@@ -1,6 +1,6 @@
 ---
-title: "Incident Playbook"
-description: "Structured runbooks for common infrastructure incidents, with decision trees and automated remediation steps."
+title: "Runbook Generator"
+description: "Turns unstructured notes into structured decision trees for on-call engineers."
 order: 3
-tags: ["operations", "documentation"]
+tags: ["documentation", "automation"]
 ---

@@ -1,6 +1,6 @@
 ---
-title: "Fleet Visibility Dashboard"
-description: "Building a unified view of storage health across all production environments — capacity, performance, and anomaly detection in one place."
+title: "A Dashboard"
+description: "Designing a single view that shows the health of everything that matters — without drowning in noise."
 order: 2
-tags: ["observability", "infrastructure"]
+tags: ["design", "observability"]
 ---

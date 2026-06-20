@@ -1,0 +1,153 @@
+---
+interface Photo {
+  title: string;
+  image: string;
+  location?: string;
+  date: Date;
+  size: 'square' | 'tall' | 'wide';
+  tags: string[];
+  caption?: string;
+}
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+
+// Color gradients for placeholder images (used when real images aren't loaded)
+const gradients: Record<string, string> = {
+  'changi-beach': 'linear-gradient(180deg, #c4d4e0, #8ba0b4, #5a7088)',
+  'sand-patterns': 'linear-gradient(135deg, #d4c4a8, #b8a88c)',
+  'coastal-garden': 'linear-gradient(135deg, #8b9e7e, #6b8060)',
+  'driftwood': 'linear-gradient(135deg, #e6dfd4, #c4b89c)',
+  'golden-hour': 'linear-gradient(135deg, #d4a87a, #b8886a, #9b7060)',
+  'storm-coming': 'linear-gradient(135deg, #7a8e9e, #5a7088)',
+  'trail': 'linear-gradient(135deg, #b8c4a8, #8ba07e)',
+  'sunset-column': 'linear-gradient(180deg, #c4956a, #a87a50, #8b6040)',
+  'concrete-moss': 'linear-gradient(135deg, #9b8e7e, #7a6e5e)',
+};
+
+function getGradient(image: string): string {
+  const name = image.split('/').pop()?.replace('.jpg', '') || '';
+  return gradients[name] || 'linear-gradient(135deg, #d4c4a8, #b8a88c)';
+}
+---
+
+<div class="gallery-grid">
+  {photos.map((photo, i) => (
+    <div
+      class={`gallery-item ${photo.size !== 'square' ? photo.size : ''}`}
+      data-index={i}
+      data-title={photo.title}
+      data-location={photo.location || ''}
+      data-date={new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(photo.date)}
+      data-tags={photo.tags.join(', ')}
+      data-image={photo.image}
+    >
+      <div
+        class="gallery-img"
+        style={`background: ${getGradient(photo.image)};`}
+        role="img"
+        aria-label={photo.title}
+      ></div>
+      <div class="gallery-overlay">
+        <div class="gallery-overlay-text">
+          <div class="gallery-overlay-title">{photo.title}</div>
+          {photo.location && <div class="gallery-overlay-location">{photo.location}</div>}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .gallery-item:hover {
+    transform: scale(1.02);
+  }
+
+  .gallery-item:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-img {
+    width: 100%;
+    aspect-ratio: 1;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .gallery-item.tall {
+    grid-row: span 2;
+  }
+
+  .gallery-item.tall .gallery-img {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+
+  .gallery-item.wide {
+    grid-column: span 2;
+  }
+
+  .gallery-item.wide .gallery-img {
+    aspect-ratio: 2 / 1;
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(transparent 50%, rgba(26, 23, 20, 0.7));
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+  }
+
+  .gallery-overlay-text {
+    color: #FAF7F2;
+  }
+
+  .gallery-overlay-title {
+    font-size: 13px;
+    font-weight: 400;
+  }
+
+  .gallery-overlay-location {
+    font-size: 10px;
+    color: rgba(250, 247, 242, 0.6);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+
+  @media (max-width: 600px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery-item.tall { grid-row: span 1; }
+    .gallery-item.tall .gallery-img { aspect-ratio: 1; }
+    .gallery-item.wide { grid-column: span 1; }
+    .gallery-item.wide .gallery-img { aspect-ratio: 1; }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

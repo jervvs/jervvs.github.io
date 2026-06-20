@@ -1,0 +1,213 @@
+---
+---
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-image" id="lightbox-image"></div>
+    <div class="lightbox-info">
+      <div class="lightbox-title" id="lightbox-title"></div>
+      <div class="lightbox-meta">
+        <div class="lb-field">
+          <strong>Location</strong>
+          <span id="lightbox-location"></span>
+        </div>
+        <div class="lb-field">
+          <strong>Date</strong>
+          <span id="lightbox-date"></span>
+        </div>
+        <div class="lb-field">
+          <strong>Tags</strong>
+          <span id="lightbox-tags"></span>
+        </div>
+      </div>
+      <div class="lightbox-nav">
+        <button class="lb-btn" id="lightbox-prev">← Prev</button>
+        <button class="lb-btn" id="lightbox-next">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 23, 20, 0.95);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  .lightbox.open {
+    display: flex;
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    font-size: 28px;
+    color: #6B5F50;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'Outfit', sans-serif;
+    transition: color 0.3s;
+    z-index: 1;
+  }
+
+  .lightbox-close:hover {
+    color: #E7DFD3;
+  }
+
+  .lightbox-inner {
+    display: flex;
+    gap: 32px;
+    max-width: 1000px;
+    width: 100%;
+    align-items: center;
+  }
+
+  .lightbox-image {
+    flex: 1;
+    border-radius: 8px;
+    height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6B5F50;
+    font-size: 13px;
+    font-weight: 300;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .lightbox-info {
+    width: 220px;
+    flex-shrink: 0;
+  }
+
+  .lightbox-title {
+    font-size: 18px;
+    font-weight: 300;
+    color: #E7DFD3;
+    margin-bottom: 20px;
+  }
+
+  .lightbox-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .lb-field strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: #9B8E7E;
+    margin-bottom: 2px;
+  }
+
+  .lb-field span {
+    font-size: 13px;
+    font-weight: 300;
+    color: #6B5F50;
+  }
+
+  .lightbox-nav {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .lb-btn {
+    font-family: 'Outfit', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    padding: 6px 14px;
+    border-radius: 14px;
+    border: 1px solid #3a332a;
+    background: none;
+    color: #9B8E7E;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .lb-btn:hover {
+    border-color: #8BA872;
+    color: #8BA872;
+  }
+
+  @media (max-width: 700px) {
+    .lightbox { padding: 20px; }
+    .lightbox-inner { flex-direction: column; gap: 20px; }
+    .lightbox-image { width: 100%; height: 300px; flex: none; }
+    .lightbox-info { width: 100%; }
+  }
+</style>
+
+<script is:inline>
+  let items = [];
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    const item = items[index];
+    if (!item) return;
+    currentIndex = index;
+
+    document.getElementById('lightbox-title').textContent = item.title;
+    document.getElementById('lightbox-location').textContent = item.location || '—';
+    document.getElementById('lightbox-date').textContent = item.date;
+    document.getElementById('lightbox-tags').textContent = item.tags || '—';
+
+    const imgEl = document.getElementById('lightbox-image');
+    imgEl.style.background = window.getComputedStyle(item.el.querySelector('.gallery-img')).background;
+
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function navigate(dir) {
+    currentIndex = (currentIndex + dir + items.length) % items.length;
+    openLightbox(currentIndex);
+  }
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    items = Array.from(galleryItems).map((el, i) => ({
+      el,
+      title: el.dataset.title,
+      location: el.dataset.location,
+      date: el.dataset.date,
+      tags: el.dataset.tags,
+      image: el.dataset.image,
+    }));
+
+    galleryItems.forEach((item, i) => {
+      item.addEventListener('click', () => openLightbox(i));
+    });
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', () => navigate(-1));
+    document.getElementById('lightbox-next').addEventListener('click', () => navigate(1));
+
+    document.getElementById('lightbox').addEventListener('click', (e) => {
+      if (e.target.id === 'lightbox') closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigate(-1);
+      if (e.key === 'ArrowRight') navigate(1);
+    });
+  });
+</script>

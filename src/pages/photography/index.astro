@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { getCollection } from 'astro:content';
+
+const photos = (await getCollection('photos'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const photoData = photos.map(p => ({
+  title: p.data.title,
+  image: p.data.image,
+  location: p.data.location,
+  date: p.data.date,
+  size: p.data.size,
+  tags: p.data.tags,
+  caption: p.data.caption,
+}));
+---
+
+<BaseLayout title="Photography" description="Moments from around Singapore and beyond.">
+  <a href="/" class="back-link">← Home</a>
+  <h1 class="listing-title">Photography</h1>
+  <p class="listing-subtitle">Moments from around Singapore and beyond.</p>
+
+  <div class="gallery-container">
+    <GalleryGrid photos={photoData} />
+  </div>
+
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  .listing-title {
+    font-size: 28px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+
+  .listing-subtitle {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+  }
+
+  .gallery-container {
+    margin: 0 -24px;
+    padding: 0 24px;
+  }
+</style>

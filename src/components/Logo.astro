@@ -1,0 +1,39 @@
+---
+// To use a custom logo: drop your PNG at public/images/logo.png
+// It will render at 28px height. Any aspect ratio works.
+// If no image exists, the text "JC" shows instead.
+import { SITE } from '../config';
+
+const logoUrl = '/images/logo.png';
+---
+
+<a href="/" class="logo" aria-label="Home">
+  <img src={logoUrl} alt="Home" class="logo-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'" />
+  <span class="logo-text" style="display:none;">JC</span>
+</a>
+
+<style>
+  .logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.3s;
+  }
+
+  .logo:hover {
+    opacity: 0.6;
+  }
+
+  .logo-img {
+    height: 28px;
+    width: auto;
+  }
+
+  .logo-text {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    transition: color 0.3s;
+  }
+</style>

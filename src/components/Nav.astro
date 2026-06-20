@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import Logo from './Logo.astro';
 
 interface Props {
   currentPath?: string;
@@ -22,7 +23,7 @@ function isActive(linkHref: string, current: string): boolean {
 ---
 
 <nav class="nav">
-  <a href="/" class="nav-logo">Jervis Chan</a>
+  <Logo />
   <div class="nav-right">
     <ul class="nav-links">
       {links.map(link => (

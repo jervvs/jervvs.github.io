@@ -27,10 +27,12 @@ Three patterns from UX research (NNGroup) and successful creator pages (Sindre S
 
 ### 1. Config (`src/config.ts`)
 
-Add `buymeacoffee` to `SITE.social`:
+Add a new `SITE.support` object (separate from `SITE.social` to avoid breaking the "Connect" sections on the homepage and about page, which iterate all `SITE.social` entries):
 
 ```ts
-buymeacoffee: { url: 'https://buymeacoffee.com/your-username', label: 'Buy Me a Coffee' },
+support: {
+  buymeacoffee: { url: 'https://buymeacoffee.com/your-username', label: 'Buy Me a Coffee' },
+},
 ```
 
 Centralizes the URL so both the about page and footer reference the same source.
@@ -47,7 +49,7 @@ Followed by a `☕ Buy Me a Coffee` link using the existing `text-link` class.
 
 ### 3. Footer component (`src/components/Footer.astro`)
 
-New component. Single line:
+New component using semantic `<footer>` element. Single line:
 
 ```
 Built by Jervis Chan · Support this project ☕
@@ -59,13 +61,14 @@ Built by Jervis Chan · Support this project ☕
 
 ### 4. Wire footer into layout (`src/layouts/BaseLayout.astro`)
 
-Import `Footer.astro` and render it after `<slot />` inside `<main>` (or after `</main>`).
+Import `Footer.astro` and render it after `<slot />` inside `<main>`. This way the footer inherits the 700px `max-width` content column. Reduce `.page-content` `padding-bottom` from `100px` to `48px` in `global.css` to avoid excessive bottom spacing with the footer present.
 
 ## Files changed
 
 | File | Action |
 |---|---|
-| `src/config.ts` | Modified — add BMaC URL |
+| `src/config.ts` | Modified — add `SITE.support` with BMaC URL |
+| `src/styles/global.css` | Modified — reduce `.page-content` padding-bottom |
 | `src/pages/about.astro` | Modified — add Support section |
 | `src/components/Footer.astro` | **Created** — new footer component |
 | `src/layouts/BaseLayout.astro` | Modified — import and render Footer |

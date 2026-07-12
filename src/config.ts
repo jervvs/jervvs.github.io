@@ -8,4 +8,7 @@ export const SITE = {
     linkedin: { url: 'https://www.linkedin.com/in/jervis-chan/', label: 'LinkedIn' },
     email: { url: 'mailto:chanjy09@live.com', label: 'email' },
   },
+  support: {
+    buymeacoffee: { url: 'https://buymeacoffee.com/your-username', label: 'Buy Me a Coffee' },
+  },
 };

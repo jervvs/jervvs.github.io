@@ -270,7 +270,7 @@ Both light and dark themes are defined there.
 Uses [Outfit](https://fonts.google.com/specimen/Outfit) via `@fontsource/outfit`. To change: install a different `@fontsource/` package, update imports in `global.css`, update `font-family`.
 
 ### Site Info
-Edit `src/config.ts` for name, tagline, bio, and social links.
+Edit `src/config.ts` for name, tagline, bio, social links, and support/sponsorship links (e.g., Buy Me a Coffee).
 
 ### "Now" Section
 Edit `src/content/now.md` directly.
@@ -316,6 +316,7 @@ src/
 │   ├── WaveDivider.astro     # Animated SVG wave
 │   ├── SeaAmbient.astro      # Drifting ambient glow
 │   ├── CategoryColumn.astro  # Homepage category column
+│   ├── Footer.astro          # Site-wide footer with support link
 │   ├── ContentCard.astro     # Listing card
 │   ├── GalleryGrid.astro     # Photography masonry grid
 │   ├── Lightbox.astro        # Photo lightbox

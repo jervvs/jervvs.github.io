@@ -1,6 +1,7 @@
 ---
 import ClientRouter from 'astro/components/ClientRouter.astro';
 import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import SeaAmbient from '../components/SeaAmbient.astro';
 import { SITE } from '../config';
 import '../styles/global.css';
@@ -53,6 +54,7 @@ const pageTitle = title ? `${title} — ${SITE.name}` : SITE.name;
   <Nav currentPath={currentPath} />
   <main class="page-content">
     <slot />
+    <Footer />
   </main>
 </body>
 </html>

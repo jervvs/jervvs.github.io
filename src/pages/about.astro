@@ -58,6 +58,12 @@ const socialLinks = Object.values(SITE.social);
     </section>
 
     <section class="about-section">
+      <div class="section-label">Support</div>
+      <p>I'm building guides and resources to inspire more people to create and build — like building their own personal site like this one! If that sounds worth having in the world, a coffee goes a long way.</p>
+      <a href={SITE.support.buymeacoffee.url} class="text-link support-link" target="_blank" rel="noopener noreferrer">☕ {SITE.support.buymeacoffee.label}</a>
+    </section>
+
+    <section class="about-section">
       <div class="section-label">Connect</div>
       <p class="connect-text">
         Find me on
@@ -146,6 +152,13 @@ const socialLinks = Object.values(SITE.social);
     font-weight: 300;
     color: var(--text-secondary);
     line-height: 1.6;
+  }
+
+  .support-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 400;
   }
 
   .connect-text {

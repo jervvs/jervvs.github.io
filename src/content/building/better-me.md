@@ -23,7 +23,3 @@ The approach: **treat self-improvement like engineering.** Define constraints, b
 - Protein first at every meal
 - Wind-down at 11:15pm
 - Write something every week
-
-## Why It's in "Building"
-
-Because it's not a project with a finish date. It's a direction I'm moving in — something I expect to be working on, in some form, for the rest of my life. The specific projects come and go. The practice of paying attention to my health is permanent.

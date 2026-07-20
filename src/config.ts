@@ -9,6 +9,6 @@ export const SITE = {
     email: { url: 'mailto:chanjy09@live.com', label: 'email' },
   },
   support: {
-    buymeacoffee: { url: 'https://buymeacoffee.com/your-username', label: 'Buy Me a Coffee' },
+    buymeacoffee: { url: 'https://buymeacoffee.com/jervischan', label: 'Buy Me a Coffee' },
   },
 };

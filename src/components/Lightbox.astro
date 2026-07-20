@@ -3,7 +3,9 @@
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
   <div class="lightbox-inner">
-    <div class="lightbox-image" id="lightbox-image"></div>
+    <!-- CHANGED: Turned this into an <img> tag to natively support aspect ratios -->
+    <img class="lightbox-image" id="lightbox-image" src="" alt="" />
+    
     <div class="lightbox-info">
       <div class="lightbox-title" id="lightbox-title"></div>
       <div class="lightbox-meta">
@@ -68,20 +70,22 @@
     align-items: center;
   }
 
+  /* UPDATED: Cleaned up for native HTML <img> behavior */
   .lightbox-image {
     flex: 1;
+    min-width: 0; /* Prevents flex items from breaking container bounds */
     border-radius: 8px;
-    max-width: 90vw;
-    max-height: 85vh; 
+    max-width: 100%;
+    max-height: 80vh; 
     width: auto;
     height: auto;
     object-fit: contain; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6B5F50;
-    font-size: 13px;
-    font-weight: 300;
+  }
+
+  /* NEW: Fallback sizing rules specifically for when it handles a gradient */
+  .lightbox-image.has-gradient {
+    aspect-ratio: 4 / 3;
+    width: 100%;
     background-size: cover;
     background-position: center;
   }
@@ -142,7 +146,7 @@
   @media (max-width: 700px) {
     .lightbox { padding: 20px; }
     .lightbox-inner { flex-direction: column; gap: 20px; }
-    .lightbox-image { width: 100%; height: 300px; flex: none; }
+    .lightbox-image { width: 100%; height: auto; max-height: 50vh; flex: none; }
     .lightbox-info { width: 100%; }
   }
 </style>
@@ -172,16 +176,25 @@
       document.getElementById('lightbox-date')!.textContent = item.date;
       document.getElementById('lightbox-tags')!.textContent = item.tags || '—';
 
-      const imgEl = document.getElementById('lightbox-image')!;
-      // Use real image if available, otherwise fall back to gradient
+      // UPDATED: Cast to HTMLImageElement to interact with .src and .alt properties
+      const imgEl = document.getElementById('lightbox-image') as HTMLImageElement;
       const realImg = item.el.querySelector('.gallery-img img') as HTMLImageElement;
+      
       if (realImg && realImg.style.display !== 'none') {
-        imgEl.style.background = `url(${realImg.src}) center/cover no-repeat`;
+        imgEl.src = realImg.src;
+        imgEl.alt = item.title;
+        imgEl.style.background = ''; // Wipe out old gradients
+        imgEl.classList.remove('has-gradient');
       } else {
+        // Fallback: Use a transparent 1x1 spacer GIF payload so the browser doesn't draw a broken image icon
+        imgEl.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+        imgEl.alt = 'Fallback gradient background';
+        
         const galleryImg = item.el.querySelector('.gallery-img') as HTMLElement;
         if (galleryImg) {
           imgEl.style.background = window.getComputedStyle(galleryImg).background;
         }
+        imgEl.classList.add('has-gradient');
       }
 
       lightbox.classList.add('open');

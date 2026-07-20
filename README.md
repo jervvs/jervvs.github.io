@@ -20,7 +20,13 @@ npm run dev
 
 ## Content Model
 
-All content lives in `src/content/`. There are four content types, each with its own folder and schema. Adding content = creating a Markdown file with the right frontmatter.
+All content lives in `src/content/`. Here, I have defined four content collection types:
+1. Posts
+2. Projects
+3. Building
+4. Photos
+
+The content model is supposed to easily extensible / replaceable. Simply define a collection in `content.config.ts` and you can go from there. Then adding new content is as easy as creating a new Markdown file with the right frontmatter.
 
 ### Writing (`src/content/posts/`)
 
@@ -150,26 +156,6 @@ what it looks like right now, why it matters.
 The homepage shows a hero section, an animated wave divider, and category columns. Each column shows items with `order: 0` (pinned). To feature an item on the homepage, set `order: 0` in its frontmatter.
 
 The Photography column shows collection names. The "Now" section reads from `src/content/now.md` — edit this file directly.
-
----
-
-## Design Elements
-
-### Seaside Ambient
-- **Film grain overlay** — SVG noise texture for tactile warmth
-- **Animated wave divider** — continuously translating SVG wave between hero and categories
-- **Drifting ambient glow** — two radial gradients slowly moving across the page
-- **Staggered fade-up animations** — content fades in sequentially on page load
-
-All animations respect `prefers-reduced-motion`.
-
-### Dark/Light Theme
-- Follows your OS setting by default (automatic dark mode at night)
-- Manual toggle overrides the system preference
-- Smooth CSS transitions between themes
-
-### Logo
-Drop a PNG at `public/images/logo.png` — it renders at 28px height, any aspect ratio. If no image exists, shows "JC" text.
 
 ---
 

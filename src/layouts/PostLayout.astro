@@ -1,0 +1,218 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import ShareButton from '../components/ShareButton.astro';
+import { SITE } from '../config';
+
+interface Props {
+  title: string;
+  date: Date;
+  tags?: string[];
+  minutesRead: number;
+  description?: string;
+}
+
+const { title, date, tags = [], minutesRead, description } = Astro.props;
+
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  year: 'numeric',
+}).format(date);
+
+const pageUrl = `${SITE.url}${Astro.url.pathname}`;
+---
+
+<BaseLayout title={title} description={description}>
+  <ReadingProgress />
+
+  <a href="/writing/" class="back-link">← Back to writing</a>
+
+  <article class="post">
+    <header class="post-header">
+      <div class="post-meta">
+        <span>{formattedDate}</span>
+        <span class="dot"></span>
+        <span>{minutesRead} min read</span>
+      </div>
+      <h1 class="post-title">{title}</h1>
+      {tags.length > 0 && (
+        <div class="post-tags">
+          {tags.map(tag => <span class="post-tag">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    <div class="post-body">
+      <slot />
+    </div>
+
+    <footer class="post-footer">
+      <a href="/writing/" class="back-link" style="margin-bottom: 0;">← All writing</a>
+      <ShareButton title={title} url={pageUrl} />
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-meta {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .post-title {
+    font-size: 32px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    color: var(--text);
+    transition: color 0.3s;
+  }
+
+  .post-tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+
+  .post-tag {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  /* ─── PROSE STYLES ─── */
+  .post-body {
+    max-width: 660px;
+  }
+
+  .post-body :global(p) {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .post-body :global(h2) {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-top: 48px;
+    margin-bottom: 18px;
+  }
+
+  .post-body :global(h3) {
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    margin-top: 36px;
+    margin-bottom: 14px;
+  }
+
+  .post-body :global(strong) {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .post-body :global(a) {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.3s;
+  }
+
+  .post-body :global(a:hover) {
+    text-decoration-color: var(--accent);
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 2px solid var(--accent);
+    padding-left: 20px;
+    margin: 32px 0;
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .post-body :global(ul),
+  .post-body :global(ol) {
+    margin: 20px 0;
+    padding-left: 24px;
+    list-style: revert;
+  }
+
+  .post-body :global(li) {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+
+  .post-body :global(li strong) {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .post-body :global(img) {
+    width: 100%;
+    border-radius: 8px;
+    margin: 32px 0 8px;
+  }
+
+  .post-body :global(em) {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 12px;
+    display: block;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .post-body :global(.media-pair) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .post-body :global(.media-pair img) {
+    margin: 0;
+  }
+
+  .post-body :global(.media-pair figcaption) {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  .post-footer {
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>

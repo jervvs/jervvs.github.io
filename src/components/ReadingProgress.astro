@@ -1,0 +1,13 @@
+---
+---
+<div class="reading-progress" id="reading-progress"></div>
+
+<script is:inline>
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    if (h > 0) {
+      const p = Math.min((window.scrollY / h) * 100, 100);
+      document.getElementById('reading-progress').style.width = p + '%';
+    }
+  });
+</script>

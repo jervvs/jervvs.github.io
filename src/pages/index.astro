@@ -1,0 +1,210 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WaveDivider from '../components/WaveDivider.astro';
+import CategoryColumn from '../components/CategoryColumn.astro';
+import { SITE } from '../config';
+import { getCollection } from 'astro:content';
+import { readFileSync } from 'node:fs';
+
+// Query all collections
+const posts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const allPhotos = (await getCollection('photos'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group by collection, get unique collection names with date ranges
+const photoCollections = new Map<string, { name: string; count: number; newestDate: Date }>();
+for (const p of allPhotos) {
+  const key = p.data.collection;
+  if (!photoCollections.has(key)) {
+    photoCollections.set(key, { name: key, count: 0, newestDate: p.data.date });
+  }
+  const col = photoCollections.get(key)!;
+  col.count++;
+  if (p.data.date > col.newestDate) col.newestDate = p.data.date;
+}
+const recentCollections = Array.from(photoCollections.values()).slice(0, 7);
+
+const projectItems = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
+  .slice(0, 2);
+
+const buildingItems = (await getCollection('building'))
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+// Read "Now" content
+let nowContent = '';
+try {
+  nowContent = readFileSync('./src/content/now.md', 'utf-8').trim();
+} catch { nowContent = ''; }
+
+// Map collections to CategoryColumn items
+const writingItems = posts.map(p => ({
+  title: p.data.title,
+  description: p.data.description,
+  href: `/writing/${p.id}/`,
+}));
+
+const projectColumnItems = projectItems.map(p => ({
+  title: p.data.title,
+  description: p.data.description,
+  href: `/projects/${p.id}/`,
+}));
+
+const buildingColumnItems = buildingItems.slice(0, 2).map(b => ({
+  title: b.data.title,
+  description: b.data.description,
+  href: `/building/${b.id}/`,
+}));
+
+const photoColumnItems = recentCollections.map(col => ({
+  title: col.name,
+  href: `/photography/#${col.name.toLowerCase().replace(/\s+/g, '-')}`,
+}));
+
+const socialLinks = Object.values(SITE.social);
+---
+
+<BaseLayout currentPath="/">
+  <!-- Hero -->
+  <section class="hero animate-in delay-1">
+    <h1 class="hero-name">{SITE.name}</h1>
+    <p class="hero-tagline">{SITE.tagline}</p>
+    <p class="hero-bio">{SITE.bio}</p>
+  </section>
+
+  <WaveDivider />
+
+  <!-- Category Columns -->
+  <div class="categories">
+    <CategoryColumn
+      title="Writing"
+      items={writingItems}
+      viewAllHref="/writing/"
+      delay={2}
+    />
+    <CategoryColumn
+      title="Projects"
+      items={projectColumnItems}
+      viewAllHref="/projects/"
+      delay={3}
+    />
+    <CategoryColumn
+      title="Building"
+      items={buildingColumnItems}
+      viewAllHref="/building/"
+      delay={4}
+    />
+    <CategoryColumn
+      title="Photography"
+      items={photoColumnItems}
+      viewAllHref="/photography/"
+      viewAllLabel="All photos →"
+      delay={5}
+    />
+  </div>
+
+  <!-- Now -->
+  {nowContent && (
+    <section class="section-divider animate-in delay-6">
+      <div class="section-label">Now</div>
+      <p class="now-text">{nowContent}</p>
+    </section>
+  )}
+
+  <!-- Connect -->
+  <section class="section-divider animate-in delay-7">
+    <div class="section-label">Connect</div>
+    <p class="connect-text">
+      Find me on
+      {socialLinks.map((link, i) => (
+        <>
+          <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
+          {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
+        </>
+      ))}.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-bottom: 48px;
+  }
+
+  .hero-name {
+    font-size: 32px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 14px;
+    transition: color 0.3s;
+  }
+
+  .hero-tagline {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+    transition: color 0.3s;
+  }
+
+  .hero-bio {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: var(--text-secondary);
+    max-width: 480px;
+    transition: color 0.3s;
+  }
+
+  .categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 40px 0;
+  }
+
+  .section-divider {
+    padding: 36px 0;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .section-divider .section-label {
+    margin-bottom: 14px;
+  }
+
+  .now-text {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    max-width: 480px;
+    transition: color 0.3s;
+  }
+
+  .connect-text {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+  }
+
+  @media (max-width: 700px) {
+    .categories {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .categories {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

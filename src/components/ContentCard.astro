@@ -1,0 +1,101 @@
+---
+interface Props {
+  title: string;
+  href: string;
+  description?: string;
+  date?: Date;
+  tags?: string[];
+  external?: boolean;
+}
+
+const { title, href, description, date, tags = [], external = false } = Astro.props;
+
+const formattedDate = date
+  ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(date)
+  : null;
+---
+
+<a
+  href={href}
+  class="card-item"
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+>
+  <div class="card-item-top">
+    <span class="card-item-title">{title}</span>
+    {formattedDate && <span class="card-item-date">{formattedDate}</span>}
+    {external && !formattedDate && <span class="card-item-date">↗</span>}
+  </div>
+  {description && <div class="card-item-desc">{description}</div>}
+  {tags.length > 0 && (
+    <div class="card-item-tags">
+      {tags.map(tag => <span class="card-item-tag">{tag}</span>)}
+    </div>
+  )}
+</a>
+
+<style>
+  .card-item {
+    display: block;
+    padding: 22px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+
+  .card-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .card-item-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+
+  .card-item-title {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text);
+    transition: color 0.3s;
+  }
+
+  .card-item-date {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    margin-left: 16px;
+    transition: color 0.3s;
+  }
+
+  .card-item-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    transition: color 0.3s;
+  }
+
+  .card-item-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  .card-item-tag {
+    font-size: 10px;
+    font-weight: 300;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+</style>

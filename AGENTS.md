@@ -1,5 +1,15 @@
 # Agent Guidelines for jervvs.github.io
 
+> Also readable as `CLAUDE.md` (symlinked to this file).
+
+## Skills
+
+Prefer these skills over manual file edits when available:
+- **`creating-new-content-type`** — scaffolds a new content collection (schema, folder, pages, nav link, homepage column)
+- **`customise-website`** — walks through personalizing site config, colors, fonts, About page, and "Now" section
+
+Never commit real personal data on this user's behalf without confirming it's actually theirs to publish — this is a public GitHub Pages site.
+
 ## Quick Start
 - Install: `npm install`
 - Dev server: `npm run dev` (http://localhost:4321)

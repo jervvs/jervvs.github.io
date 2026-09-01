@@ -4,6 +4,10 @@ A minimal, extensible portfolio site built with [Astro](https://astro.build). Ea
 
 **Live:** [jervvs.github.io](https://jervvs.github.io)
 
+**Want your own copy?** Click **Use this template** above — this gives you a clean copy with a single commit and none of my history. (Forking works too, but will carry over my full commit history.)
+
+New to this? Start with SETUP.md for a step-by-step first run.
+
 ---
 
 ## Quick Start

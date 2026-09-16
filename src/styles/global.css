@@ -24,6 +24,18 @@
   --toggle-dot: #2B2520;
 }
 
+/* ─── MOTION TOKENS — LIGHT ─── */
+:root {
+  --motion-spring-stiffness: 80;
+  --motion-spring-damping: 20;
+  --motion-duration-slow: 600ms;
+  --motion-duration-fast: 400ms;
+  --ambient-wave-color-1: #f5e6d3;
+  --ambient-wave-color-2: #e8d5b7;
+  --ambient-wave-color-3: #d4c4a8;
+  --ambient-foam-color: rgba(255, 255, 255, 0.25);
+}
+
 /* ─── DESIGN TOKENS — DARK ─── */
 [data-theme="dark"] {
   --bg: #1A1714;
@@ -42,6 +54,15 @@
   --sea-glow-2: rgba(180, 160, 130, 0.04);
   --toggle-bg: #3A332A;
   --toggle-dot: #E7DFD3;
+
+  --motion-spring-stiffness: 120;
+  --motion-spring-damping: 12;
+  --motion-duration-slow: 400ms;
+  --motion-duration-fast: 300ms;
+  --ambient-star-color: rgba(255, 255, 255, 0.8);
+  --ambient-nebula-color-1: rgba(88, 28, 135, 0.08);
+  --ambient-nebula-color-2: rgba(30, 58, 138, 0.06);
+  --ambient-shooting-star-color: rgba(255, 255, 255, 0.9);
 }
 
 /* ─── RESET ─── */
@@ -174,20 +195,6 @@ body::after {
   to { opacity: 1; }
 }
 
-/* Staggered reveal utility classes */
-.animate-in {
-  opacity: 0;
-  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.delay-1 { animation-delay: 0.1s; }
-.delay-2 { animation-delay: 0.2s; }
-.delay-3 { animation-delay: 0.35s; }
-.delay-4 { animation-delay: 0.5s; }
-.delay-5 { animation-delay: 0.6s; }
-.delay-6 { animation-delay: 0.7s; }
-.delay-7 { animation-delay: 0.8s; }
-
 /* ─── ACCESSIBILITY: Reduced Motion ─── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -205,8 +212,9 @@ body::after {
     animation: none;
   }
 
-  .animate-in {
-    opacity: 1;
+  [data-scroll-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

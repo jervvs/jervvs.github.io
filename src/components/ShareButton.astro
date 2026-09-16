@@ -32,6 +32,8 @@ const { title, url } = Astro.props;
 </style>
 
 <script is:inline>
+  import { animate } from 'motion';
+
   document.getElementById('share-btn')?.addEventListener('click', async function() {
     const title = this.getAttribute('data-title');
     const url = this.getAttribute('data-url');
@@ -44,6 +46,7 @@ const { title, url } = Astro.props;
       await navigator.clipboard.writeText(url);
       const original = this.textContent;
       this.textContent = 'Copied!';
+      animate(this, { scale: [1, 1.1, 1] }, { duration: 0.3 });
       setTimeout(() => { this.textContent = original; }, 2000);
     }
   });

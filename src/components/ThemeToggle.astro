@@ -1,6 +1,8 @@
 ---
 ---
-<button class="theme-toggle" data-theme-toggle aria-label="Toggle theme"></button>
+<button class="theme-toggle" data-theme-toggle aria-label="Toggle theme">
+  <span class="toggle-dot"></span>
+</button>
 
 <style>
   .theme-toggle {
@@ -15,8 +17,7 @@
     flex-shrink: 0;
   }
 
-  .theme-toggle::after {
-    content: '';
+  .toggle-dot {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -24,16 +25,17 @@
     height: 14px;
     border-radius: 50%;
     background: var(--toggle-dot);
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                background 0.4s;
+    transition: background 0.4s;
   }
 
-  :global([data-theme="dark"]) .theme-toggle::after {
+  :global([data-theme="dark"]) .toggle-dot {
     transform: translateX(18px);
   }
 </style>
 
 <script>
+  import { animate } from 'motion';
+
   function initThemeToggle() {
     document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -41,6 +43,12 @@
         const next = html.getAttribute('data-theme') === 'dark' ? '' : 'dark';
         html.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
+
+        const dot = btn.querySelector('.toggle-dot');
+        if (dot) {
+          const targetX = next === 'dark' ? 18 : 0;
+          animate(dot, { x: targetX }, { type: 'spring', stiffness: 400, damping: 15 });
+        }
       });
     });
   }

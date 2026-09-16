@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WaveDivider from '../components/WaveDivider.astro';
 import CategoryColumn from '../components/CategoryColumn.astro';
+import ScrollReveal from '../components/ScrollReveal.astro';
 import { SITE } from '../config';
 import { getCollection } from 'astro:content';
 import { readFileSync } from 'node:fs';
@@ -70,64 +71,66 @@ const socialLinks = Object.values(SITE.social);
 
 <BaseLayout currentPath="/">
   <!-- Hero -->
-  <section class="hero animate-in delay-1">
-    <h1 class="hero-name">{SITE.name}</h1>
-    <p class="hero-tagline">{SITE.tagline}</p>
-    <p class="hero-bio">{SITE.bio}</p>
-  </section>
+  <ScrollReveal variant="fade-up" class="hero-section">
+    <section class="hero">
+      <h1 class="hero-name">{SITE.name}</h1>
+      <p class="hero-tagline">{SITE.tagline}</p>
+      <p class="hero-bio">{SITE.bio}</p>
+    </section>
+  </ScrollReveal>
 
   <WaveDivider />
 
   <!-- Category Columns -->
-  <div class="categories">
+  <ScrollReveal variant="wave-reveal" class="categories">
     <CategoryColumn
       title="Writing"
       items={writingItems}
       viewAllHref="/writing/"
-      delay={2}
     />
     <CategoryColumn
       title="Projects"
       items={projectColumnItems}
       viewAllHref="/projects/"
-      delay={3}
     />
     <CategoryColumn
       title="Building"
       items={buildingColumnItems}
       viewAllHref="/building/"
-      delay={4}
     />
     <CategoryColumn
       title="Photography"
       items={photoColumnItems}
       viewAllHref="/photography/"
       viewAllLabel="All photos →"
-      delay={5}
     />
-  </div>
+  </ScrollReveal>
 
   <!-- Now -->
   {nowContent && (
-    <section class="section-divider animate-in delay-6">
-      <div class="section-label">Now</div>
-      <p class="now-text">{nowContent}</p>
-    </section>
+    <ScrollReveal variant="fade-up">
+      <section class="section-divider">
+        <div class="section-label">Now</div>
+        <p class="now-text">{nowContent}</p>
+      </section>
+    </ScrollReveal>
   )}
 
   <!-- Connect -->
-  <section class="section-divider animate-in delay-7">
-    <div class="section-label">Connect</div>
-    <p class="connect-text">
-      Find me on
-      {socialLinks.map((link, i) => (
-        <>
-          <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
-          {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
-        </>
-      ))}.
-    </p>
-  </section>
+  <ScrollReveal variant="fade-up">
+    <section class="section-divider">
+      <div class="section-label">Connect</div>
+      <p class="connect-text">
+        Find me on
+        {socialLinks.map((link, i) => (
+          <>
+            <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
+            {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
+          </>
+        ))}.
+      </p>
+    </section>
+  </ScrollReveal>
 </BaseLayout>
 
 <style>

@@ -1,0 +1,74 @@
+---
+// ScrollReveal.astro — scroll-triggered reveal using motion.dev
+interface Props {
+  variant?: 'fade-up' | 'fade-left' | 'stagger-children' | 'scale-in' | 'wave-reveal';
+  class?: string;
+}
+const { variant = 'fade-up', class: className = '' } = Astro.props;
+---
+
+<div class:list={['scroll-reveal', `reveal-${variant}`, className]} data-scroll-reveal={variant}>
+  <slot />
+</div>
+
+<script>
+  // @ts-nocheck
+  import { inView, animate } from 'motion';
+
+  function getThemeParams() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+      stiffness: isDark ? 120 : 80,
+      damping: isDark ? 12 : 20,
+    };
+  }
+
+  function initReveals() {
+    const elements = document.querySelectorAll('[data-scroll-reveal]');
+    elements.forEach((el) => {
+      const variant = el.getAttribute('data-scroll-reveal');
+      const { stiffness, damping } = getThemeParams();
+
+      inView(el, () => {
+        if (variant === 'stagger-children') {
+          const children = Array.from(el.children);
+          children.forEach((child, i) => {
+            animate(child as HTMLElement,
+              { opacity: [0, 1], y: [30, 0] },
+              { duration: 0.6, delay: i * 0.06, easing: [stiffness / 200, damping / 30, 0.2, 1] }
+            );
+          });
+        } else if (variant === 'wave-reveal') {
+          const children = Array.from(el.children);
+          children.forEach((child, i) => {
+            const delay = Math.max(0, Math.sin(i * Math.PI / 3) * 80) / 1000;
+            animate(child as HTMLElement,
+              { opacity: [0, 1], y: [30, 0] },
+              { duration: 0.6, delay, easing: [stiffness / 200, damping / 30, 0.2, 1] }
+            );
+          });
+        } else {
+          // Single element variants
+          const animations = {
+            'fade-up': { keyframes: { opacity: [0, 1], y: [30, 0] }, duration: 0.6, easing: [stiffness / 200, damping / 30, 0.2, 1] },
+            'fade-left': { keyframes: { opacity: [0, 1], x: [-30, 0] }, duration: 0.6, easing: [stiffness / 200, damping / 30, 0.2, 1] },
+            'scale-in': { keyframes: { opacity: [0, 1], scale: [0.95, 1] }, duration: 0.5, easing: [stiffness / 200, damping / 30, 0.2, 1] },
+          };
+          const config = animations[variant] || animations['fade-up'];
+          animate(el as HTMLElement, config.keyframes, { duration: config.duration, easing: config.easing });
+        }
+      }, { margin: '0px 0px -50px 0px' });
+    });
+  }
+
+  // Reduced motion — skip animations
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.addEventListener('astro:page-load', initReveals);
+  }
+</script>
+
+<style>
+  .scroll-reveal > * {
+    will-change: transform, opacity;
+  }
+</style>

@@ -42,10 +42,6 @@
     padding: 40px;
   }
 
-  .lightbox.open {
-    display: flex;
-  }
-
   .lightbox-close {
     position: absolute;
     top: 24px;
@@ -152,12 +148,16 @@
 </style>
 
 <script>
+  // @ts-nocheck
+  import { animate } from 'motion';
+
   function initLightbox() {
     const lightbox = document.getElementById('lightbox');
     const galleryItems = document.querySelectorAll('.gallery-item');
     if (!lightbox || galleryItems.length === 0) return;
 
     let currentIndex = 0;
+    let isAnimating = false;
     const items = Array.from(galleryItems).map((el) => ({
       el,
       title: el.getAttribute('data-title') || '',
@@ -167,6 +167,7 @@
     }));
 
     function open(index: number) {
+      if (isAnimating) return;
       const item = items[index];
       if (!item) return;
       currentIndex = index;
@@ -176,20 +177,18 @@
       document.getElementById('lightbox-date')!.textContent = item.date;
       document.getElementById('lightbox-tags')!.textContent = item.tags || '—';
 
-      // UPDATED: Cast to HTMLImageElement to interact with .src and .alt properties
       const imgEl = document.getElementById('lightbox-image') as HTMLImageElement;
       const realImg = item.el.querySelector('.gallery-img img') as HTMLImageElement;
-      
+
       if (realImg && realImg.style.display !== 'none') {
         imgEl.src = realImg.src;
         imgEl.alt = item.title;
-        imgEl.style.background = ''; // Wipe out old gradients
+        imgEl.style.background = '';
         imgEl.classList.remove('has-gradient');
       } else {
-        // Fallback: Use a transparent 1x1 spacer GIF payload so the browser doesn't draw a broken image icon
         imgEl.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
         imgEl.alt = 'Fallback gradient background';
-        
+
         const galleryImg = item.el.querySelector('.gallery-img') as HTMLElement;
         if (galleryImg) {
           imgEl.style.background = window.getComputedStyle(galleryImg).background;
@@ -197,13 +196,28 @@
         imgEl.classList.add('has-gradient');
       }
 
-      lightbox.classList.add('open');
+      // Show lightbox and animate in
+      lightbox.style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      isAnimating = true;
+
+      animate(lightbox, { opacity: [0, 1], scale: [0.95, 1] }, {
+        duration: 0.3,
+        easing: [0.34, 1.56, 0.64, 1]
+      }).then(() => { isAnimating = false; });
     }
 
     function close() {
-      lightbox.classList.remove('open');
-      document.body.style.overflow = '';
+      if (isAnimating) return;
+      isAnimating = true;
+
+      animate(lightbox, { opacity: [1, 0], scale: [1, 0.95] }, {
+        duration: 0.2
+      }).then(() => {
+        lightbox.style.display = 'none';
+        document.body.style.overflow = '';
+        isAnimating = false;
+      });
     }
 
     function navigate(dir: number) {

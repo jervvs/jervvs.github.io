@@ -99,3 +99,22 @@ const formattedDate = date
     transition: color 0.3s, border-color 0.3s;
   }
 </style>
+
+<script>
+  // @ts-nocheck
+  import { animate } from 'motion';
+
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll('.card-item').forEach((card) => {
+      card.addEventListener('pointerdown', () => {
+        animate(card, { scale: 0.97 }, { duration: 0.15 });
+      });
+      card.addEventListener('pointerup', () => {
+        animate(card, { scale: 1 }, { duration: 0.3, easing: [0.34, 1.56, 0.64, 1] });
+      });
+      card.addEventListener('pointerleave', () => {
+        animate(card, { scale: 1 }, { duration: 0.2 });
+      });
+    });
+  });
+</script>

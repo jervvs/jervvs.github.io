@@ -51,7 +51,7 @@ function getGradient(image: string): string {
 }
 ---
 
-<div class="gallery-grid">
+<div class="gallery-grid" data-scroll-reveal="wave-reveal">
   {photos.map((photo, i) => (
     <div
       class={`gallery-item ${photo.size !== 'square' ? photo.size : ''}`}

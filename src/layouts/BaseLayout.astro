@@ -56,5 +56,34 @@ const pageTitle = title ? `${title} — ${SITE.name}` : SITE.name;
     <slot />
     <Footer />
   </main>
+  <script>
+    // @ts-nocheck
+    import { animate } from 'motion';
+
+    function getThemeParams() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      return { duration: isDark ? 0.4 : 0.6, stiffness: isDark ? 120 : 80, damping: isDark ? 12 : 20 };
+    }
+
+    document.addEventListener('astro:page-switch', () => {
+      // Outgoing page: fade up and out
+      const content = document.querySelector('.page-content');
+      if (content) {
+        animate(content, { opacity: [1, 0], y: [0, -20] }, { duration: 0.2 });
+      }
+    });
+
+    document.addEventListener('astro:after-swap', () => {
+      const { duration, stiffness, damping } = getThemeParams();
+      const content = document.querySelector('.page-content');
+      if (content) {
+        // Incoming page: wave stagger from below
+        animate(content, { opacity: [0, 1], y: [30, 0] }, {
+          duration,
+          easing: [stiffness / 200, damping / 30, 0.2, 1],
+        });
+      }
+    });
+  </script>
 </body>
 </html>

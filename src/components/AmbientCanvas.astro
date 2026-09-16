@@ -1,0 +1,239 @@
+---
+// AmbientCanvas.astro — theme-aware canvas ambient background
+// Light mode: beach waves | Dark mode: cosmic particles
+---
+
+<canvas class="ambient-canvas" aria-hidden="true"></canvas>
+
+<script>
+  // @ts-nocheck — vanilla JS, no framework types
+  (function () {
+    const canvas = document.querySelector('.ambient-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // --- Adaptive quality ---
+    const isLowEnd = (navigator.hardwareConcurrency || 4) <= 2;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    // --- State ---
+    let animFrame: number;
+    let currentTheme: 'light' | 'dark' = 'light';
+    let crossfadeProgress = 1; // 0 = old theme, 1 = new theme
+    let prevTheme: 'light' | 'dark' = 'light';
+    let lastThemeChange = 0;
+    const CROSSFADE_DURATION = 1000;
+
+    // --- Sizing ---
+    function resize() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.scale(dpr, dpr);
+    }
+    resize();
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    });
+
+    // --- Light mode: Beach waves ---
+    const waveLayers = isLowEnd ? 2 : 3;
+    const waveColors = ['#f5e6d3', '#e8d5b7', '#d4c4a8'];
+    const foamColor = 'rgba(255, 255, 255, 0.25)';
+
+    function drawWaves(time: number, alpha: number) {
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+      for (let layer = 0; layer < waveLayers; layer++) {
+        const speed = 0.3 + layer * 0.2;
+        const amplitude = 15 + layer * 8;
+        const yBase = h * 0.55 + layer * (h * 0.12);
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 4) {
+          const y = yBase + Math.sin(x * 0.008 + time * speed * 0.001) * amplitude
+                        + Math.sin(x * 0.003 + time * speed * 0.0005) * amplitude * 0.5;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fillStyle = waveColors[layer] || waveColors[0];
+        ctx.globalAlpha = alpha * 0.2;
+        ctx.fill();
+      }
+      // Foam highlights
+      for (let i = 0; i < (isLowEnd ? 5 : 10); i++) {
+        const x = (Math.sin(time * 0.0003 + i * 1.7) * 0.5 + 0.5) * w;
+        const y = h * 0.5 + Math.sin(time * 0.0005 + i * 2.3) * 30;
+        const r = 2 + Math.sin(time * 0.001 + i) * 1.5;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = foamColor;
+        ctx.globalAlpha = alpha * (0.15 + Math.sin(time * 0.002 + i) * 0.1);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // --- Dark mode: Cosmic particles ---
+    interface Star {
+      x: number; y: number; size: number; speed: number; depth: number;
+    }
+    const starCount = isLowEnd ? 30 : 80;
+    const stars: Star[] = Array.from({ length: starCount }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      size: 0.5 + Math.random() * 1.5,
+      speed: 0.1 + Math.random() * 0.3,
+      depth: Math.random(),
+    }));
+
+    const nebulaColors = ['rgba(88, 28, 135, 0.08)', 'rgba(30, 58, 138, 0.06)'];
+
+    function drawCosmos(time: number, alpha: number) {
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+
+      // Nebula blobs
+      if (!isLowEnd) {
+        for (let i = 0; i < 3; i++) {
+          const x = w * (0.2 + i * 0.3) + Math.sin(time * 0.0002 + i * 2) * 40;
+          const y = h * (0.3 + i * 0.15) + Math.cos(time * 0.00015 + i * 3) * 30;
+          const r = 120 + Math.sin(time * 0.0003 + i) * 30;
+          const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+          grad.addColorStop(0, nebulaColors[i % 2]);
+          grad.addColorStop(1, 'transparent');
+          ctx.fillStyle = grad;
+          ctx.globalAlpha = alpha * 0.6;
+          ctx.fillRect(x - r, y - r, r * 2, r * 2);
+        }
+      }
+
+      // Stars
+      for (const star of stars) {
+        const parallax = 0.3 + star.depth * 0.7;
+        const sx = ((star.x * w + time * star.speed * 0.01 * parallax) % w + w) % w;
+        const sy = ((star.y * h + time * star.speed * 0.005 * parallax) % h + h) % h;
+        const twinkle = 0.5 + Math.sin(time * 0.003 + star.x * 100) * 0.5;
+        ctx.beginPath();
+        ctx.arc(sx, sy, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.3 + twinkle * 0.5})`;
+        ctx.globalAlpha = alpha * (0.4 + twinkle * 0.6);
+        ctx.fill();
+      }
+
+      // Shooting star (every 8-15s)
+      const shootingCycle = 12000;
+      const shootingPhase = time % shootingCycle;
+      if (shootingPhase < 300) {
+        const progress = shootingPhase / 300;
+        const sx = w * 0.7 - progress * w * 0.5;
+        const sy = h * 0.2 + progress * h * 0.3;
+        const tailLen = 60 * (1 - progress);
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(sx - tailLen * 0.7, sy - tailLen * 0.3);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.9 * (1 - progress)})`;
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = alpha;
+        ctx.stroke();
+      }
+
+      ctx.globalAlpha = 1;
+    }
+
+    // --- Render loop ---
+    function render(time: number) {
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+      ctx.clearRect(0, 0, w, h);
+
+      // Crossfade logic
+      if (crossfadeProgress < 1) {
+        const elapsed = time - lastThemeChange;
+        crossfadeProgress = Math.min(elapsed / CROSSFADE_DURATION, 1);
+      }
+
+      if (prevTheme === currentTheme) {
+        // No transition — draw current theme
+        if (currentTheme === 'light') drawWaves(time, 1);
+        else drawCosmos(time, 1);
+      } else {
+        // Crossfade: draw old fading out, new fading in
+        const oldAlpha = 1 - crossfadeProgress;
+        const newAlpha = crossfadeProgress;
+        if (prevTheme === 'light') drawWaves(time, oldAlpha);
+        else drawCosmos(time, oldAlpha);
+        if (currentTheme === 'light') drawWaves(time, newAlpha);
+        else drawCosmos(time, newAlpha);
+
+        if (crossfadeProgress >= 1) {
+          prevTheme = currentTheme;
+        }
+      }
+
+      animFrame = requestAnimationFrame(render);
+    }
+
+    // --- Theme detection ---
+    function detectTheme(): 'light' | 'dark' {
+      return document.documentElement.getAttribute('data-theme') as 'light' | 'dark' || 'light';
+    }
+
+    // Observe theme changes
+    const observer = new MutationObserver(() => {
+      const newTheme = detectTheme();
+      if (newTheme !== currentTheme) {
+        prevTheme = currentTheme;
+        currentTheme = newTheme;
+        crossfadeProgress = 0;
+        lastThemeChange = performance.now();
+      }
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    // Initialize
+    currentTheme = detectTheme();
+    prevTheme = currentTheme;
+
+    // Reduced motion check
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (prefersReducedMotion.matches) {
+      // Static fallback — draw a single frame and stop
+      if (currentTheme === 'light') drawWaves(0, 0.3);
+      else drawCosmos(0, 0.3);
+      return;
+    }
+
+    // Visibility API — pause when tab hidden
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animFrame);
+      } else {
+        animFrame = requestAnimationFrame(render);
+      }
+    });
+
+    // data-no-canvas escape hatch
+    if (document.documentElement.hasAttribute('data-no-canvas')) return;
+
+    animFrame = requestAnimationFrame(render);
+  })();
+</script>
+
+<style>
+  .ambient-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>

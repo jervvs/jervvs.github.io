@@ -165,7 +165,7 @@ const socialLinks = Object.values(SITE.social);
     transition: color 0.3s;
   }
 
-  .categories {
+  :global(.categories) {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
@@ -199,14 +199,14 @@ const socialLinks = Object.values(SITE.social);
   }
 
   @media (max-width: 700px) {
-    .categories {
+    :global(.categories) {
       grid-template-columns: 1fr 1fr;
       gap: 24px 16px;
     }
   }
 
   @media (max-width: 480px) {
-    .categories {
+    :global(.categories) {
       grid-template-columns: 1fr;
     }
   }

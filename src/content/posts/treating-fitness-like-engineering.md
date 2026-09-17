@@ -1,10 +1,81 @@
 ---
-title: "Treating Fitness Like an Engineering Problem"
-date: 2026-06-18
+title: "The Engineering Mindset to Health and Fitness"
+date: 2026-06-
 description: "What happens when you apply systems thinking to your body — constraints, defaults, and the power of boring consistency."
 tags: ["fitness", "systems", "health"]
 draft: false
 ---
+
+> "If you can't measure it, you can't improve it." — Peter Drucker
+
+
+I was recently looking back at my old goal for 2023 and my goal was to hit 85kg. now 3 years passed, and I have not approached that goal, but instead strayed further from it. I could simply blame it on starting a new job, but I think there are deeper reasons to that
+
+## Why Not
+
+### Lack of Motivation
+
+
+### Too many options and distractions
+
+
+## My Research
+
+### Diet: Protein
+
+### Diet: Fiber
+
+### Supplements: Creatine
+
+### Circadian Rhythm
+
+### Fasting and Intermittent Fasting
+
+### Blood Glucose Level and Fat Burning (Especially in sleep)
+
+## My Plan
+
+So by understanding the whys, and by knowing the first principles of good first principles, this is my plan
+
+
+
+### Diet
+
+
+#### Intermittent Fasting
+
+#### Protein Focused Diet
+
+
+#### Fiber Maxxing
+
+#### Supplement with Creatine
+
+### Exercise
+
+
+#### Sprints for VO2 Max
+
+#### Zone 2
+
+#### Full Body Strength Sessions
+
+
+
+
+So after coming with this plan, how can I bring it into production?
+
+## Productionising this Diet
+
+### Metrics
+
+
+### 
+
+
+
+
+
 
 I've been an engineer long enough to know that the best systems aren't the cleverest ones — they're the ones that are simple enough to run reliably. Turns out, the same principle applies to fitness.
 

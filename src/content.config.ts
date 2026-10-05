@@ -29,7 +29,7 @@ const photos = defineCollection({
 });
 
 const projects = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
@@ -40,7 +40,7 @@ const projects = defineCollection({
 });
 
 const building = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/building' }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/building' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),

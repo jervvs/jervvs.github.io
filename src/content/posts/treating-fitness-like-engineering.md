@@ -3,7 +3,7 @@ title: "Treating Fitness Like an Engineering Problem"
 date: 2026-06-18
 description: "What happens when you apply systems thinking to your body — constraints, defaults, and the power of boring consistency."
 tags: ["fitness", "systems", "health"]
-draft: false
+draft: true
 ---
 
 I've been an engineer long enough to know that the best systems aren't the cleverest ones — they're the ones that are simple enough to run reliably. Turns out, the same principle applies to fitness.

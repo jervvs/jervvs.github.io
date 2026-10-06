@@ -1,0 +1,141 @@
+---
+import { getEntry } from 'astro:content';
+
+interface Props {
+  refs: string[];
+}
+
+const { refs } = Astro.props;
+
+const urlPrefixes: Record<string, string> = {
+  posts: 'writing',
+  projects: 'projects',
+};
+
+const resolvedWork = await Promise.all(
+  refs.map(async (ref: string) => {
+    const [collection, id] = ref.split('/');
+    const entry = await getEntry(collection as any, id);
+    if (!entry) return null;
+    // Draft posts get no production page — skip them outside dev to avoid dead links
+    if ((entry.data as any).draft && !import.meta.env.DEV) return null;
+    const urlPrefix = urlPrefixes[collection] || collection;
+    return {
+      title: entry.data.title,
+      url: `/${urlPrefix}/${id}/`,
+      date: (entry.data as any).date as Date | undefined,
+    };
+  })
+);
+
+const timeline = resolvedWork
+  .filter((w): w is NonNullable<typeof w> => w !== null)
+  .sort((a, b) => {
+    if (a.date && b.date) return b.date.valueOf() - a.date.valueOf();
+    if (a.date) return -1;
+    return 1;
+  });
+---
+
+{timeline.length > 0 && (
+  <div class="related-work">
+    <div class="section-label">Timeline</div>
+    <div class="timeline">
+      {timeline.map((work, i) => (
+        <a href={work.url} class="timeline-item">
+          <span class="timeline-date">
+            {work.date ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(work.date) : ''}
+          </span>
+          <span class="timeline-dot-wrapper">
+            <span class="timeline-dot"></span>
+            {i < timeline.length - 1 && <span class="timeline-line"></span>}
+          </span>
+          <span class="timeline-title">{work.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
+
+<style>
+  .related-work {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .related-work .section-label {
+    margin-bottom: 20px;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 72px 20px 1fr;
+    gap: 0 12px;
+    align-items: start;
+    text-decoration: none;
+    color: inherit;
+    padding: 2px 0;
+    transition: transform 0.2s;
+  }
+
+  .timeline-item:hover {
+    transform: translateX(4px);
+  }
+
+  .timeline-date {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--text-muted);
+    text-align: right;
+    padding-top: 2px;
+    transition: color 0.3s;
+  }
+
+  .timeline-dot-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5px;
+  }
+
+  .timeline-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .timeline-line {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+    margin-top: 4px;
+    transition: background 0.3s;
+  }
+
+  .timeline-title {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: text-decoration-color 0.3s, color 0.3s;
+    padding-bottom: 20px;
+  }
+
+  .timeline-item:hover .timeline-title {
+    text-decoration-color: var(--accent);
+  }
+
+  .timeline-item:last-child .timeline-title {
+    padding-bottom: 0;
+  }
+</style>

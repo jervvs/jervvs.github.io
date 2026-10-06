@@ -2,6 +2,9 @@ node_modules/
 dist/
 .astro/
 .DS_Store
+.github/
+.opencode/
+.superpowers/
 package-lock.json
 docs/superpowers/
 worktree/

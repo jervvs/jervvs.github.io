@@ -24,11 +24,10 @@ npm run dev
 
 ## Content Model
 
-All content lives in `src/content/`. Here, I have defined four content collection types:
+All content lives in `src/content/`. Here, I have defined three content collection types:
 1. Posts
 2. Projects
-3. Building
-4. Photos
+3. Photos
 
 The content model is supposed to easily extensible / replaceable. Simply define a collection in `content.config.ts` and you can go from there. Then adding new content is as easy as creating a new Markdown file with the right frontmatter.
 
@@ -115,43 +114,14 @@ Link to related writing or other work.
 | `description` | Yes | Card summary |
 | `url` | No | External link — shows "View project ↗" on detail page |
 | `order` | No | `0` = pinned to homepage. `1` = default (listing only). Lower = first |
+| `relatedWork` | No | Array of `"collection/id"` refs — renders as a date-sorted timeline on the detail page |
 | `tags` | No | Filterable on listing page |
 
 **Listing page:** `/projects/` — cards with tag filtering.
 
-**Detail page:** `/projects/[slug]/` — body content + optional external link.
+**Detail page:** `/projects/[slug]/` — body content + auto-generated timeline of related work, sorted by date + optional external link.
 
-### Building (`src/content/building/`)
-
-Long-term themes and journeys — things without a finish date. Each Building item ties together related projects and writing via a timeline.
-
-```markdown
----
-title: "A Better Me"
-description: "Physical health, mental clarity, and habits that compound."
-order: 0
-relatedWork:
-  - "posts/treating-fitness-like-engineering"
-  - "projects/90-day-recomp"
-tags: ["fitness", "health"]
----
-
-Your content here — what this journey is about,
-what it looks like right now, why it matters.
-```
-
-| Field | Required | Notes |
-|---|---|---|
-| `title` | Yes | Theme name |
-| `description` | Yes | Card summary |
-| `url` | No | External link |
-| `order` | No | `0` = pinned to homepage. `1` = default |
-| `relatedWork` | No | Array of `"collection/id"` refs — auto-resolves title, date, and URL from each item's frontmatter |
-| `tags` | No | Display labels |
-
-**Detail page:** `/building/[slug]/` — body content + auto-generated timeline of related work, sorted by date.
-
-**The `relatedWork` ref format:** `"collection/id"` where collection is `posts`, `projects`, or `building`, and id is the filename without `.md`. The template automatically looks up the title and date from the referenced content. No data duplication.
+**The `relatedWork` ref format:** `"collection/id"` where collection is `posts` or `projects`, and id is the filename without `.md`. The template automatically looks up the title and date from the referenced content. No data duplication.
 
 ---
 
@@ -220,7 +190,7 @@ To add a completely new category (e.g., "Reviews"):
        // ... your fields
      }),
    });
-   export const collections = { posts, photos, projects, building, reviews };
+   export const collections = { posts, photos, projects, reviews };
    ```
 
 2. **Create the folder:** `src/content/reviews/`
@@ -238,7 +208,7 @@ To add a completely new category (e.g., "Reviews"):
 
 7. **Add content** — create `.md` files in `src/content/reviews/`.
 
-8. **Reference from Building** — add `"reviews/my-review"` to any Building item's `relatedWork` array.
+8. **Reference from Projects** — add `"reviews/my-review"` to any project's `relatedWork` array to show it in that project's timeline.
 
 ---
 
@@ -316,7 +286,6 @@ src/
 │   ├── posts/                # Writing (Markdown)
 │   ├── photos/               # Photography entries
 │   ├── projects/             # Project entries
-│   ├── building/             # Building entries
 │   └── now.md                # "Now" section
 └── pages/                    # Routes
 ```

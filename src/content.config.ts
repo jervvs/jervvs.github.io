@@ -35,20 +35,9 @@ const projects = defineCollection({
     description: z.string(),
     url: z.string().optional(),
     order: z.number().default(1),   // 0 = pinned to homepage, 1 = default
+    relatedWork: z.array(z.string()).default([]),  // refs like "posts/my-post" — rendered as a timeline
     tags: z.array(z.string()).default([]),
   }),
 });
 
-const building = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/building' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    url: z.string().optional(),
-    order: z.number().default(1),   // 0 = pinned to homepage, 1 = default
-    relatedWork: z.array(z.string()).default([]),  // refs like "posts/my-post" or "projects/my-project"
-    tags: z.array(z.string()).default([]),
-  }),
-});
-
-export const collections = { posts, photos, projects, building };
+export const collections = { posts, photos, projects };

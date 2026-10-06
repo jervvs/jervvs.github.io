@@ -28,5 +28,3 @@ The insight that made this click: treat body recomposition like an engineering p
 5. Protein every meal, sleep the priority
 
 The plan is designed to run for 6-8 weeks before making any changes. Consistency is the point, not optimisation.
-
-Related: [Building a Better Me](/building/better-me/)

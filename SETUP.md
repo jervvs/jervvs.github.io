@@ -122,7 +122,6 @@ The repo includes sample content to show the site structure. **Delete or replace
 |------------|--------|------------|
 | Posts | `src/content/posts/` | Delete `_ideas.md` and sample posts, or keep as drafts (`draft: true`) |
 | Projects | `src/content/projects/` | Replace `90-day-recomp.md`, `incident-playbook.md`, `this-site.md` |
-| Building | `src/content/building/` | Replace `better-me.md`, `writing-habit.md` |
 | Photos | `src/content/photos/` | Replace all `.md` files and images in `public/images/photos/` |
 
 **To hide without deleting:** add `draft: true` to any item's frontmatter.
@@ -160,7 +159,7 @@ npm run dev
 # Open http://localhost:4321
 ```
 
-Verify everything looks right: homepage, writing, projects, building, photography, about, now section, dark/light toggle.
+Verify everything looks right: homepage, writing, projects, photography, about, now section, dark/light toggle.
 
 ---
 

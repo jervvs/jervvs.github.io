@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Timeline from '../../components/Timeline.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -30,6 +31,8 @@ const { Content } = await render(project);
     <div class="project-body">
       <Content />
     </div>
+
+    <Timeline refs={project.data.relatedWork} />
 
     {project.data.url && project.data.url !== '#' && (
       <div class="project-link-section">

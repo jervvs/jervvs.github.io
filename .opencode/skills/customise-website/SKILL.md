@@ -87,8 +87,6 @@ Placeholder files to review:
 - src/content/projects/90-day-recomp.md
 - src/content/projects/incident-playbook.md
 - src/content/projects/this-site.md
-- src/content/building/better-me.md
-- src/content/building/writing-habit.md
 - src/content/photos/*/*.md (20 files)
 
 Action for each: [delete] [replace] [mark draft] [keep]

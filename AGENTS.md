@@ -19,8 +19,7 @@ Never commit real personal data on this user's behalf without confirming it's ac
 ## Content Model
 All content lives in `src/content/` as Markdown with YAML frontmatter:
 - **Posts** (`src/content/posts/`): title, date, description?, tags?, draft?, series?, order?
-- **Projects** (`src/content/projects/`): title, description, url?, order? (0 = pinned to homepage), tags?
-- **Building** (`src/content/building/`): title, description, url?, order? (0 = pinned to homepage), relatedWork[], tags?
+- **Projects** (`src/content/projects/`): title, description, url?, order? (0 = pinned to homepage), relatedWork[], tags?
 - **Photos** (`src/content/photos/`): title, date, image, caption?, location?, size? (square/tall/wide), collection, tags?
 - **Now** (`src/content/now.md`): Single markdown file for "Now" page
 
@@ -33,7 +32,7 @@ All content lives in `src/content/` as Markdown with YAML frontmatter:
    - Create detail page `src/pages/<collectionname>/[...slug].astro` (copy from projects)
    - Add nav link in `src/components/Nav.astro`
    - Add homepage column in `src/pages/index.astro`
-   - Reference from Building via `relatedWork: ["collectionname/slug"]`
+   - Add `relatedWork: ["collectionname/slug"]` to a project to feature that entry in its timeline
 
 ## Styling & Theming
 - Design tokens: Edit CSS custom properties in `src/styles/global.css`

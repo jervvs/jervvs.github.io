@@ -61,12 +61,11 @@ Why does this matter? Because it means:
 2. **Every post looks consistent.** The schema ensures that the listing page always has the data it needs to render cards.
 3. **Adding a new type of content is structured.** Want to add a photography section? Define a schema (title, date, image, location), create a gallery template, and you're done. Every photo you add after that follows the same pattern.
 
-This site has four content types:
+This site has three content types:
 
 - **Writing** — title, date, description, tags
 - **Photography** — title, date, image, location, collection name
 - **Projects** — title, description, link
-- **Building** — title, description (things in progress)
 
 Each one is just a folder of text files. Adding a new photo means creating a text file with the right fields and dropping an image next to it.
 

@@ -27,7 +27,6 @@ Follow this checklist to personalize and deploy your copy of this portfolio.
 - [ ] **Delete/replace placeholder content** in all collections:
   - [ ] `src/content/posts/` (keep `_example.md` as template)
   - [ ] `src/content/projects/` (keep `_example.md` as template)
-  - [ ] `src/content/building/` (keep `_example.md` as template)
   - [ ] `src/content/photos/` (keep `_example.md` as template)
 - [ ] **Add your first real post/project/photo**
 

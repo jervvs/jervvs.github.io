@@ -28,13 +28,23 @@ const collections = {
   projects: {
     dir: 'src/content/projects',
     required: ['title', 'description'],
-    optional: ['url', 'order', 'tags'],
+    optional: ['url', 'order', 'relatedWork', 'tags'],
     validate: (fm, file) => {
       if (fm.url && !fm.url.startsWith('http')) {
         throw new Error(`url must be a valid URL in ${file}: ${fm.url}`);
       }
       if (fm.order !== undefined && typeof fm.order !== 'number') {
         throw new Error(`order must be a number in ${file}`);
+      }
+      if (fm.relatedWork && !Array.isArray(fm.relatedWork)) {
+        throw new Error(`relatedWork must be an array in ${file}`);
+      }
+      if (fm.relatedWork) {
+        for (const ref of fm.relatedWork) {
+          if (typeof ref !== 'string' || !ref.includes('/')) {
+            throw new Error(`relatedWork entries must be "collection/id" format in ${file}: ${ref}`);
+          }
+        }
       }
       if (fm.tags && !Array.isArray(fm.tags)) {
         throw new Error(`tags must be an array in ${file}`);

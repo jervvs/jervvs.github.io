@@ -7,9 +7,12 @@ interface Props {
 
 const { refs } = Astro.props;
 
+// Collection folder → public route. Keep in sync with the redirects
+// in astro.config.mjs.
 const urlPrefixes: Record<string, string> = {
-  posts: 'writing',
-  projects: 'projects',
+  posts: 'notes',
+  projects: 'things',
+  photos: 'places',
 };
 
 const resolvedWork = await Promise.all(

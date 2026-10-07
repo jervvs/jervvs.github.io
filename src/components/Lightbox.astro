@@ -1,6 +1,6 @@
 ---
 ---
-<div class="lightbox" id="lightbox">
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photograph viewer">
   <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
   <div class="lightbox-inner">
     <!-- CHANGED: Turned this into an <img> tag to natively support aspect ratios -->
@@ -35,7 +35,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(26, 23, 20, 0.95);
+    background: rgba(12, 11, 7, 0.96);
     z-index: 10000;
     align-items: center;
     justify-content: center;
@@ -51,7 +51,7 @@
     top: 24px;
     right: 28px;
     font-size: 28px;
-    color: #6B5F50;
+    color: #7A7568;
     cursor: pointer;
     background: none;
     border: none;
@@ -60,7 +60,7 @@
     z-index: 1;
   }
 
-  .lightbox-close:hover { color: #E7DFD3; }
+  .lightbox-close:hover { color: #E8E4D8; }
 
   .lightbox-inner {
     display: flex;
@@ -95,7 +95,7 @@
   .lightbox-title {
     font-size: 18px;
     font-weight: 300;
-    color: #E7DFD3;
+    color: #E8E4D8;
     margin-bottom: 20px;
   }
 
@@ -109,14 +109,14 @@
     display: block;
     font-size: 11px;
     font-weight: 400;
-    color: #9B8E7E;
+    color: #A5A093;
     margin-bottom: 2px;
   }
 
   .lb-field span {
     font-size: 13px;
     font-weight: 300;
-    color: #6B5F50;
+    color: #7A7568;
   }
 
   .lightbox-nav {
@@ -131,16 +131,16 @@
     font-weight: 300;
     padding: 6px 14px;
     border-radius: 14px;
-    border: 1px solid #3a332a;
+    border: 1px solid #454235;
     background: none;
-    color: #9B8E7E;
+    color: #A5A093;
     cursor: pointer;
     transition: all 0.3s;
   }
 
   .lb-btn:hover {
-    border-color: #8BA872;
-    color: #8BA872;
+    border-color: #9BA57C;
+    color: #9BA57C;
   }
 
   @media (max-width: 700px) {
@@ -156,8 +156,11 @@
     const lightbox = document.getElementById('lightbox');
     const galleryItems = document.querySelectorAll('.gallery-item');
     if (!lightbox || galleryItems.length === 0) return;
+    if (lightbox.dataset.bound === 'true') return;
+    lightbox.dataset.bound = 'true';
 
     let currentIndex = 0;
+    let lastFocused: HTMLElement | null = null;
     const items = Array.from(galleryItems).map((el) => ({
       el,
       title: el.getAttribute('data-title') || '',
@@ -176,11 +179,10 @@
       document.getElementById('lightbox-date')!.textContent = item.date;
       document.getElementById('lightbox-tags')!.textContent = item.tags || '—';
 
-      // UPDATED: Cast to HTMLImageElement to interact with .src and .alt properties
       const imgEl = document.getElementById('lightbox-image') as HTMLImageElement;
-      const realImg = item.el.querySelector('.gallery-img img') as HTMLImageElement;
-      
-      if (realImg && realImg.style.display !== 'none') {
+      const realImg = item.el.querySelector('.gallery-img img') as HTMLImageElement | null;
+
+      if (realImg) {
         imgEl.src = realImg.src;
         imgEl.alt = item.title;
         imgEl.style.background = ''; // Wipe out old gradients
@@ -199,11 +201,14 @@
 
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
+      lastFocused = document.activeElement as HTMLElement;
+      document.getElementById('lightbox-close')?.focus();
     }
 
     function close() {
       lightbox.classList.remove('open');
       document.body.style.overflow = '';
+      lastFocused?.focus();
     }
 
     function navigate(dir: number) {
@@ -211,9 +216,16 @@
       open(currentIndex);
     }
 
-    // Bind gallery item clicks
+    // Bind gallery items — click and keyboard, since they are divs
     galleryItems.forEach((item, i) => {
       item.addEventListener('click', () => open(i));
+      item.addEventListener('keydown', (e) => {
+        const ev = e as KeyboardEvent;
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          open(i);
+        }
+      });
     });
 
     // Bind lightbox controls
@@ -232,6 +244,23 @@
       if (e.key === 'Escape') close();
       if (e.key === 'ArrowLeft') navigate(-1);
       if (e.key === 'ArrowRight') navigate(1);
+
+      if (e.key === 'Tab') {
+        // Keep focus inside the dialog while it is open
+        const focusables = lightbox.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     });
   }
 

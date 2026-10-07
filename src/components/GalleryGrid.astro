@@ -1,5 +1,5 @@
 ---
-import { getPhotoGradient } from '../lib/photoGradient';
+import { getPhotoGradient, photoExists } from '../lib/photoGradient';
 
 interface Photo {
   title: string;
@@ -16,12 +16,17 @@ interface Props {
 }
 
 const { photos } = Astro.props;
+
+const resolved = photos.map(p => ({ ...p, hasImage: photoExists(p.image) }));
 ---
 
 <div class="gallery-grid">
-  {photos.map((photo, i) => (
+  {resolved.map((photo, i) => (
     <div
       class={`gallery-item ${photo.size !== 'square' ? photo.size : ''}`}
+      role="button"
+      tabindex="0"
+      aria-label={`View ${photo.title}${photo.location ? `, ${photo.location}` : ''}`}
       data-index={i}
       data-title={photo.title}
       data-location={photo.location || ''}
@@ -35,12 +40,10 @@ const { photos } = Astro.props;
         role="img"
         aria-label={photo.title}
       >
-        <img
-          src={photo.image}
-          alt={photo.title}
-          loading="lazy"
-          onerror="this.style.display='none'"
-        />
+        {/* Only emit an <img> when the file exists. The gradient stands in otherwise. */}
+        {photo.hasImage && (
+          <img src={photo.image} alt={photo.title} loading="lazy" />
+        )}
       </div>
       <div class="gallery-overlay">
         <div class="gallery-overlay-text">

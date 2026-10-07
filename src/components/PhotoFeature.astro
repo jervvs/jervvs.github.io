@@ -1,5 +1,5 @@
 ---
-import { getPhotoGradient } from '../lib/photoGradient';
+import { getPhotoGradient, photoExists } from '../lib/photoGradient';
 
 interface Photo {
   title: string;
@@ -13,6 +13,8 @@ interface Props {
 }
 
 const { photos } = Astro.props;
+
+const resolved = photos.map(p => ({ ...p, hasImage: photoExists(p.image) }));
 ---
 
 <!--
@@ -20,11 +22,14 @@ const { photos } = Astro.props;
   Photographs should feel like observation, not like a separate portfolio.
 -->
 <div class="photo-feature">
-  {photos.map((photo, i) => (
+  {resolved.map((photo, i) => (
     <figure class:list={['photo-frame', `frame-${i % 3}`]}>
       <a href="/places/" class="photo-link" aria-label={`${photo.title}${photo.location ? `, ${photo.location}` : ''} — view all places`}>
         <span class="photo-surface" style={`background: ${getPhotoGradient(photo.image)};`}>
-          <img src={photo.image} alt={photo.title} loading="lazy" onerror="this.style.display='none'" />
+          {/* Only emit an <img> when the file exists — no broken-image glyphs, no console errors */}
+          {photo.hasImage && (
+            <img src={photo.image} alt="" loading="lazy" onload="this.style.opacity=1" />
+          )}
         </span>
       </a>
       <figcaption class="photo-caption">
@@ -84,7 +89,8 @@ const { photos } = Astro.props;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
   }
 
   .photo-link:hover .photo-surface img {

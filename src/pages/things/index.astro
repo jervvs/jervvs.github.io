@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import SectionHeading from '../../components/SectionHeading.astro';
 import { getCollection } from 'astro:content';
 
 const things = (await getCollection('projects'))
@@ -27,7 +26,7 @@ const allTags = [...new Set(things.flatMap(t => t.data.tags))].sort();
     </div>
   )}
 
-  <SectionHeading title="Index" />
+  <h2 class="type-label index-label">Index</h2>
 
   <ol class="archive" id="thing-list">
     {things.map((thing, i) => (
@@ -91,6 +90,10 @@ const allTags = [...new Set(things.flatMap(t => t.data.tags))].sort();
 
   .tag:hover { color: var(--text); }
   .tag.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  .index-label {
+    margin: 0 0 20px;
+  }
 
   /* ─── Archive index ─── */
   .archive {

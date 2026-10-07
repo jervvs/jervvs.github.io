@@ -17,11 +17,13 @@
   /* text */
   --text: #25241F;
   --text-secondary: #57554D;
-  --text-muted: #8D897D;
+  /* 4.86:1 on --bg, so small meta text clears WCAG AA */
+  --text-muted: #6E6B5E;
 
   /* accents */
-  --accent: #78815C;
-  --accent-hover: #66704B;
+  /* 4.83:1 on --bg — accent doubles as hover text colour, so it must clear AA */
+  --accent: #676F4B;
+  --accent-hover: #5C633F;
   --accent-warm: #B88962;
   --warm: #B88962;
 
@@ -58,7 +60,8 @@
 
   --text: #E8E4D8;
   --text-secondary: #A5A093;
-  --text-muted: #7A7568;
+  /* 5.04:1 on --bg */
+  --text-muted: #8C8677;
 
   --accent: #9BA57C;
   --accent-hover: #B0BA8E;

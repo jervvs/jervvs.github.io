@@ -15,7 +15,8 @@ const posts = defineCollection({
 });
 
 const photos = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/photos' }),
+  // Underscore-prefixed files are templates and stay unpublished
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/photos' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),

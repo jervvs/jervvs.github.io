@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  href?: string;
+  linkLabel?: string;
+}
+
+const { title, href, linkLabel = `All ${title.toLowerCase()}` } = Astro.props;
+---
+
+<header class="section-heading">
+  <h2 class="heading-label type-label">{title}</h2>
+  {href && (
+    <a href={href} class="arrow-link">
+      {linkLabel}
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  )}
+</header>
+
+<style>
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 20px;
+    margin-bottom: clamp(40px, 5vw, 64px);
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .heading-label {
+    margin: 0;
+  }
+</style>

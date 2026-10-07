@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GalleryGrid from '../../components/GalleryGrid.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { getCollection } from 'astro:content';
+
+const photos = (await getCollection('photos'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const collections = new Map<string, typeof photos>();
+for (const photo of photos) {
+  const key = photo.data.collection;
+  if (!collections.has(key)) collections.set(key, []);
+  collections.get(key)!.push(photo);
+}
+
+function getDateLabel(items: typeof photos): string {
+  const dates = items.map(p => p.data.date);
+  const newest = new Date(Math.max(...dates.map(d => d.valueOf())));
+  const oldest = new Date(Math.min(...dates.map(d => d.valueOf())));
+  const fmt = (d: Date) => new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(d);
+  return newest.getFullYear() === oldest.getFullYear() && newest.getMonth() === oldest.getMonth()
+    ? fmt(newest)
+    : `${fmt(oldest)} — ${fmt(newest)}`;
+}
+
+function getLocations(items: typeof photos): string {
+  const places = [...new Set(items.map(p => p.data.location).filter(Boolean))] as string[];
+  if (places.length === 0) return '';
+  if (places.length <= 3) return places.join(' · ');
+  return `${places.slice(0, 3).join(' · ')} +${places.length - 3}`;
+}
+---
+
+<BaseLayout title="Places" description="Moments from around Singapore and beyond.">
+  <header class="archive-head">
+    <h1 class="type-display">Places</h1>
+    <p class="archive-intro">
+      Moments from around Singapore and beyond, grouped by where they happened.
+    </p>
+  </header>
+
+  {Array.from(collections.entries()).map(([name, collectionPhotos]) => {
+    const photoData = collectionPhotos.map(p => ({
+      title: p.data.title,
+      image: p.data.image,
+      location: p.data.location,
+      date: p.data.date,
+      size: p.data.size,
+      tags: p.data.tags,
+      caption: p.data.caption,
+    }));
+
+    const locations = getLocations(collectionPhotos);
+
+    return (
+      <section class="collection" id={name.toLowerCase().replace(/\s+/g, '-')}>
+        <header class="collection-head">
+          <div class="collection-head-main">
+            <h2 class="collection-name">{name}</h2>
+            {locations && <p class="collection-locations">{locations}</p>}
+          </div>
+          <div class="collection-head-meta">
+            <span class="collection-date">{getDateLabel(collectionPhotos)}</span>
+            <span class="collection-count">
+              {collectionPhotos.length} {collectionPhotos.length === 1 ? 'photograph' : 'photographs'}
+            </span>
+          </div>
+        </header>
+
+        <GalleryGrid photos={photoData} />
+      </section>
+    );
+  })}
+
+  <Lightbox />
+</BaseLayout>
+
+<style>
+  .archive-head {
+    padding-block: clamp(64px, 10vw, 128px) clamp(56px, 7vw, 96px);
+    max-width: 42ch;
+  }
+
+  .archive-intro {
+    margin-top: 28px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .collection {
+    padding-bottom: clamp(64px, 8vw, 112px);
+  }
+
+  .collection-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .collection-name {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(2rem, 4vw, 2.875rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--text);
+  }
+
+  .collection-locations {
+    margin-top: 10px;
+    font-size: 0.8125rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .collection-head-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .collection-date,
+  .collection-count {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Timeline from '../../components/Timeline.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const { status, year, url } = project.data;
+---
+
+<BaseLayout title={project.data.title} description={project.data.description} prose>
+  <a href="/things/" class="back-link">← Back to things</a>
+
+  <article class="thing">
+    <header class="thing-header">
+      <h1 class="type-title thing-title">{project.data.title}</h1>
+      <p class="thing-deck">{project.data.description}</p>
+
+      {(status || year || project.data.tags.length > 0) && (
+        <div class="thing-meta">
+          {status && <span class="type-meta">{status}</span>}
+          {year && <span class="type-meta">{year}</span>}
+          {project.data.tags.map(tag => <span class="type-meta">{tag}</span>)}
+        </div>
+      )}
+    </header>
+
+    <div class="prose thing-body">
+      <Content />
+    </div>
+
+    <Timeline refs={project.data.relatedWork} />
+
+    {url && url !== '#' && (
+      <div class="thing-outbound">
+        <a href={url} class="arrow-link" target="_blank" rel="noopener noreferrer">
+          View project
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </div>
+    )}
+
+    <footer class="thing-footer">
+      <a href="/things/" class="back-link">← All things</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .thing-header {
+    padding-bottom: clamp(40px, 5vw, 56px);
+    margin-bottom: clamp(40px, 5vw, 56px);
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .thing-title {
+    margin: 0;
+    max-width: 22ch;
+  }
+
+  .thing-deck {
+    margin-top: 20px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 48ch;
+  }
+
+  .thing-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .thing-outbound {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .thing-footer {
+    margin-top: 56px;
+  }
+
+  .thing-footer .back-link {
+    margin-bottom: 0;
+  }
+</style>

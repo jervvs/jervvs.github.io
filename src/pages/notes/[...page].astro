@@ -1,0 +1,279 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('posts'))
+    .filter(p => (!p.data.draft || import.meta.env.DEV))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+  return paginate(posts, { pageSize: 12 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+const allPosts = (await getCollection('posts'))
+  .filter(p => (!p.data.draft || import.meta.env.DEV));
+const allTags = [...new Set(allPosts.flatMap(p => p.data.tags))].sort();
+
+const fmt = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={page.currentPage > 1 ? `Notes — Page ${page.currentPage}` : 'Notes'}
+  description="Notes on engineering, systems, AI, and noticing things."
+>
+  <header class="archive-head">
+    <h1 class="type-display">Notes</h1>
+    <p class="archive-intro">
+      Notes on engineering, systems, AI, and noticing things.
+      Written when I have something worth saying.
+    </p>
+
+    {allTags.length > 0 && (
+      <div class="tag-filter" id="tag-filter" role="group" aria-label="Filter notes by tag">
+        <button class="tag active" data-tag="" aria-pressed="true">All</button>
+        {allTags.map(tag => (
+          <button class="tag" data-tag={tag} aria-pressed="false">{tag}</button>
+        ))}
+      </div>
+    )}
+  </header>
+
+  <ol class="notes" id="note-list">
+    {page.data.map(post => (
+      <li class="note-row" data-tags={post.data.tags.join(',')}>
+        <a href={`/notes/${post.id}/`} class="note-link">
+          <time class="note-date type-meta" datetime={post.data.date.toISOString()}>
+            {fmt.format(post.data.date).toUpperCase()}
+          </time>
+          <span class="note-main">
+            <span class="note-title">{post.data.title}</span>
+            {post.data.description && (
+              <span class="note-desc">{post.data.description}</span>
+            )}
+          </span>
+          <span class="note-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    ))}
+  </ol>
+
+  <p class="no-results" id="no-results" hidden>No notes with this tag.</p>
+
+  {page.lastPage > 1 && (
+    <nav class="pagination" aria-label="Notes pagination">
+      {page.url.prev && <a href={page.url.prev} class="pagination-link">← Newer</a>}
+      <span class="pagination-info">Page {page.currentPage} of {page.lastPage}</span>
+      {page.url.next && <a href={page.url.next} class="pagination-link">Older →</a>}
+    </nav>
+  )}
+</BaseLayout>
+
+<style>
+  .archive-head {
+    padding-block: clamp(64px, 10vw, 128px) clamp(48px, 6vw, 80px);
+    max-width: 44ch;
+  }
+
+  .archive-intro {
+    margin-top: 28px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  /* ─── Tag filter ─── */
+  .tag-filter {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+
+  .tag {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    padding: 0 0 4px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tag:hover { color: var(--text); }
+  .tag.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  /* ─── Notes index ─── */
+  .notes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .note-row {
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .note-row:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .note-row[hidden] {
+    display: none;
+  }
+
+  .note-link {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr) auto;
+    gap: var(--grid-gap);
+    align-items: baseline;
+    padding: 32px 0;
+  }
+
+  .note-date {
+    white-space: nowrap;
+  }
+
+  .note-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .note-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .note-link:hover .note-title { color: var(--accent); }
+
+  .note-desc {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 56ch;
+  }
+
+  .note-arrow {
+    font-size: 1rem;
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+  }
+
+  .note-link:hover .note-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--accent);
+  }
+
+  .no-results {
+    padding: 48px 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--text-muted);
+  }
+
+  /* ─── Pagination ─── */
+  .pagination {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 64px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pagination-link {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+  }
+
+  .pagination-link:hover { color: var(--accent); }
+
+  .pagination-info {
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 700px) {
+    .note-link {
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+    }
+
+    .note-date { grid-column: 1 / -1; }
+    .note-arrow { opacity: 1; transform: none; }
+  }
+</style>
+
+<script>
+  function initTagFilter() {
+    const filterBar = document.getElementById('tag-filter');
+    const list = document.getElementById('note-list');
+    const noResults = document.getElementById('no-results');
+    if (!filterBar || !list) return;
+
+    const tags = filterBar.querySelectorAll<HTMLButtonElement>('.tag');
+    const rows = list.querySelectorAll<HTMLElement>('.note-row');
+
+    function apply(tag: string) {
+      let visible = 0;
+      rows.forEach(row => {
+        const rowTags = row.dataset.tags || '';
+        const match = !tag || rowTags.split(',').includes(tag);
+        row.hidden = !match;
+        if (match) visible++;
+      });
+
+      tags.forEach(btn => {
+        const isActive = btn.dataset.tag === tag;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+
+      if (noResults) noResults.hidden = visible > 0;
+
+      const url = new URL(window.location.href);
+      if (tag) url.searchParams.set('tag', tag);
+      else url.searchParams.delete('tag');
+      history.replaceState({}, '', url.toString());
+    }
+
+    tags.forEach(btn => btn.addEventListener('click', () => apply(btn.dataset.tag || '')));
+    apply(new URL(window.location.href).searchParams.get('tag') || '');
+  }
+
+  initTagFilter();
+  document.addEventListener('astro:after-swap', initTagFilter);
+</script>

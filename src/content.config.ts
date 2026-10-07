@@ -35,6 +35,8 @@ const projects = defineCollection({
     description: z.string(),
     url: z.string().optional(),
     order: z.number().default(1),   // 0 = pinned to homepage, 1 = default
+    year: z.number().optional(),
+    status: z.enum(['growing', 'exploring', 'finished', 'paused']).optional(),
     relatedWork: z.array(z.string()).default([]),  // refs like "posts/my-post" — rendered as a timeline
     tags: z.array(z.string()).default([]),
   }),

@@ -1,0 +1,146 @@
+---
+interface Props {
+  content: string;
+  updated?: Date;
+}
+
+const { content, updated } = Astro.props;
+
+// now.md may be written either as prose paragraphs or as field notes
+// ("Building / something" lines). Support both without a schema change.
+const lines = content
+  .split('\n')
+  .map(l => l.trim())
+  .filter(Boolean);
+
+const fieldNotes: { label: string; value: string }[] = [];
+const paragraphs: string[] = [];
+
+for (const line of lines) {
+  const match = line.match(/^([A-Z][A-Za-z ]{2,14})\s*[:—–-]\s*(.+)$/);
+  if (match) {
+    fieldNotes.push({ label: match[1].trim(), value: match[2].trim() });
+  } else {
+    paragraphs.push(line);
+  }
+}
+
+const isFieldNote = fieldNotes.length > 0;
+
+const monthYear = updated
+  ? new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(updated)
+  : null;
+---
+
+<section class="now-block">
+  <div class="now-aside">
+    <h2 class="now-label type-label">Now</h2>
+    {monthYear && <span class="now-date type-meta">{monthYear}</span>}
+  </div>
+
+  <div class="now-body">
+    {isFieldNote ? (
+      <dl class="now-notes">
+        {fieldNotes.map(note => (
+          <div class="now-note">
+            <dt class="now-note-label">{note.label}</dt>
+            <dd class="now-note-value">{note.value}</dd>
+          </div>
+        ))}
+      </dl>
+    ) : (
+      paragraphs.map(p => <p class="now-paragraph">{p}</p>)
+    )}
+  </div>
+</section>
+
+<style>
+  .now-block {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--grid-gap);
+    padding-block: clamp(48px, 6vw, 80px);
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .now-aside {
+    grid-column: 1 / span 3;
+  }
+
+  .now-body {
+    grid-column: 5 / span 7;
+  }
+
+  .now-label {
+    margin: 0 0 10px;
+  }
+
+  .now-date {
+    color: var(--text-muted);
+    opacity: 0.8;
+  }
+
+  .now-notes {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .now-note {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: var(--grid-gap);
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .now-note:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .now-note-label {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 3px;
+  }
+
+  .now-note-value {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .now-paragraph {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(1.125rem, 1.8vw, 1.375rem);
+    line-height: 1.65;
+    color: var(--text);
+    max-width: 46ch;
+  }
+
+  .now-paragraph + .now-paragraph {
+    margin-top: 1em;
+  }
+
+  @media (max-width: 1024px) {
+    .now-aside { grid-column: 1 / span 8; }
+    .now-body { grid-column: 1 / span 8; margin-top: 28px; }
+  }
+
+  @media (max-width: 700px) {
+    .now-aside { grid-column: 1 / -1; }
+    .now-body { grid-column: 1 / -1; }
+
+    .now-note {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

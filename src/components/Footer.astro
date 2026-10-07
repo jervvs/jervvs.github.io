@@ -1,27 +1,107 @@
 ---
 import { SITE } from '../config';
 
-const bmac = SITE.support.buymeacoffee;
+const social = Object.values(SITE.social);
+const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <span>Built by {SITE.name}</span>
-  <span class="footer-sep">&middot;</span>
-  <a href={bmac.url} class="text-link" target="_blank" rel="noopener noreferrer">Support this project ☕</a>
+  <div class="footer-inner">
+    <div class="footer-identity">
+      <div class="footer-name">{SITE.name}</div>
+      <div class="footer-place">{SITE.location} · {year}</div>
+    </div>
+
+    <nav class="footer-social" aria-label="Social links">
+      <ul>
+        {social.map(link => (
+          <li>
+            <a
+              href={link.url}
+              class="footer-link"
+              target={link.url.startsWith('mailto:') ? undefined : '_blank'}
+              rel={link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+
+  <div class="footer-made">
+    Made with Astro.
+  </div>
 </footer>
 
 <style>
   .site-footer {
-    padding: 32px 0 48px;
+    padding: clamp(56px, 8vw, 88px) 0 48px;
+    margin-top: clamp(72px, 10vw, 128px);
     border-top: 1px solid var(--border);
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--text-muted);
-    text-align: center;
-    transition: color 0.3s, border-color 0.4s;
+    transition: border-color 0.4s;
   }
 
-  .footer-sep {
-    margin: 0 8px;
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-name {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .footer-place {
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .footer-social ul {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .footer-link {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover {
+    color: var(--accent);
+  }
+
+  .footer-made {
+    margin-top: 56px;
+    font-size: 0.6875rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  @media (max-width: 700px) {
+    .footer-inner {
+      flex-direction: column;
+      gap: 28px;
+    }
   }
 </style>

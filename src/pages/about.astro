@@ -2,167 +2,234 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE } from '../config';
 
-const socialLinks = Object.values(SITE.social);
+const social = Object.values(SITE.social);
+
+const interests = [
+  'Japan',
+  'Coffee',
+  'Skiing',
+  'Photography',
+  'Plants',
+  'Products',
+  'Random experiments',
+];
 ---
 
-<BaseLayout title="About" description="About Jervis Chan.">
-  <a href="/" class="back-link">← Home</a>
+<BaseLayout title="About" description="About Jervis Chan — engineer in Singapore.">
+  <header class="about-head">
+    <h1 class="type-display">About</h1>
+    <p class="about-statement">
+      I like understanding how things work.<br />
+      Then I like making them work better.
+    </p>
+  </header>
 
-  <!-- Hero photo -->
-  <div class="about-hero">
-    <div class="about-hero-placeholder" role="img" aria-label="An environmental photo — replace with your own"></div>
-  </div>
-
-  <h1 class="about-name">Jervis Chan</h1>
-  <p class="about-subtitle">Operations engineer based in Singapore.</p>
-
-  <div class="about-body">
-    <section class="about-section first">
-      <div class="section-label">Background</div>
-      <p>I studied computer science and business at NTU under the Renaissance Engineering Programme. I came into engineering through math and puzzles — the satisfaction of finding a clean solution to a messy problem is what pulled me into coding, and it's what keeps me in operations.</p>
-    </section>
-
-    <section class="about-section">
-      <div class="section-label">What I Do</div>
-      <p>I keep infrastructure running at scale across hundreds of production environments. Right now I'm building AI agents that can triage alerts, run through standard procedures, and propose fixes automatically.</p>
-    </section>
-
-    <section class="about-section">
-      <div class="section-label">What I Think About</div>
-      <p>Systems — not just the technical kind. How teams work together, how information flows through an organization, how small decisions compound into large outcomes. The craft of running things well.</p>
-    </section>
-
-    <section class="about-section">
-      <div class="section-label">Outside Work</div>
-      <div class="about-items">
-        <div class="about-item">
-          <div class="about-item-label">Creating</div>
-          <div class="about-item-value">
-            <a href={SITE.social.tiktok.url} class="text-link" target="_blank" rel="noopener noreferrer">TikTok</a> videos, <a href="/photography/" class="text-link">photography</a>, this site
-          </div>
-        </div>
-        <div class="about-item">
-          <div class="about-item-label">Moving</div>
-          <div class="about-item-value">Gym, formerly competitive cheerleading</div>
-        </div>
-        <div class="about-item">
-          <div class="about-item-label">Consuming</div>
-          <div class="about-item-value">Too much coffee, SRE books, management writing</div>
-        </div>
-        <div class="about-item">
-          <div class="about-item-label">Dreaming</div>
-          <div class="about-item-value">A house by the sea</div>
-        </div>
+  <div class="editorial-grid about-grid">
+    <div class="about-visual">
+      <!--
+        No portrait of Jervis exists in the repository yet. This slot is
+        honest about that rather than passing a gradient off as a photo.
+        Drop a file at public/images/about.jpg and it will render instead.
+      -->
+      <div class="about-portrait">
+        <span class="about-portrait-label">Portrait to come</span>
       </div>
-    </section>
+    </div>
 
-    <section class="about-section">
-      <div class="section-label">Support</div>
-      <p>I'm building guides and resources to inspire more people to create and build — like building their own personal site like this one! If that sounds worth having in the world, a coffee goes a long way.</p>
-      <a href={SITE.support.buymeacoffee.url} class="text-link support-link" target="_blank" rel="noopener noreferrer">☕ {SITE.support.buymeacoffee.label}</a>
-    </section>
+    <div class="about-content">
+      <section class="about-block">
+        <h2 class="type-label">Background</h2>
+        <p>
+          I studied computer science and business at NTU under the Renaissance
+          Engineering Programme. I came into engineering through math and
+          puzzles — the satisfaction of finding a clean solution to a messy
+          problem is what pulled me into coding, and it's what keeps me here.
+        </p>
+      </section>
 
-    <section class="about-section">
-      <div class="section-label">Connect</div>
-      <p class="connect-text">
-        Find me on
-        {socialLinks.map((link, i) => (
-          <>
-            <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
-            {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
-          </>
-        ))}.
-      </p>
-    </section>
+      <section class="about-block">
+        <h2 class="type-label">Work</h2>
+        <p>
+          I keep infrastructure running across hundreds of production
+          environments. Right now I'm building AI agents that can triage
+          alerts, work through standard procedures, and propose fixes on
+          their own.
+        </p>
+      </section>
+
+      <section class="about-block">
+        <h2 class="type-label">Thinking</h2>
+        <p>
+          Systems — not only the technical kind. How teams work together, how
+          information moves through an organization, how small decisions
+          compound into large outcomes. The craft of running things well.
+        </p>
+      </section>
+
+      <section class="about-block">
+        <h2 class="type-label">Outside</h2>
+        <ul class="interest-list">
+          {interests.map(item => <li>{item}</li>)}
+        </ul>
+      </section>
+
+      <section class="about-block">
+        <h2 class="type-label">Support</h2>
+        <p>
+          I write up guides to help more people make things — including how to
+          build a site like this one. If that's worth having in the world, a
+          coffee goes a long way.
+        </p>
+        <a
+          href={SITE.support.buymeacoffee.url}
+          class="arrow-link support-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {SITE.support.buymeacoffee.label}
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <section class="about-block">
+        <h2 class="type-label">Find me</h2>
+        <ul class="social-list">
+          {social.map(link => (
+            <li>
+              <a
+                href={link.url}
+                class="text-link"
+                target={link.url.startsWith('mailto:') ? undefined : '_blank'}
+                rel={link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
   </div>
 </BaseLayout>
 
 <style>
-  .about-hero {
-    margin-bottom: 32px;
+  .about-head {
+    padding-block: clamp(64px, 10vw, 128px) clamp(56px, 7vw, 88px);
+    max-width: 40ch;
   }
 
-  .about-hero-placeholder {
-    width: 100%;
-    height: 360px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #c4d4e0 0%, #8ba0b4 30%, #9b8e7e 60%, #d4c4a8 100%);
-  }
-
-  .about-hero-caption {
-    font-size: 11px;
-    font-weight: 300;
-    color: var(--text-muted);
+  .about-statement {
+    margin-top: 28px;
+    font-family: var(--font-serif);
     font-style: italic;
-    text-align: right;
-    margin-top: 8px;
-  }
-
-  .about-name {
-    font-size: 28px;
-    font-weight: 200;
-    letter-spacing: -0.03em;
-    margin-bottom: 8px;
-  }
-
-  .about-subtitle {
-    font-size: 14px;
     font-weight: 300;
-    color: var(--text-muted);
-    margin-bottom: 8px;
+    font-size: clamp(1.375rem, 2.6vw, 2rem);
+    line-height: 1.35;
+    color: var(--text);
   }
 
-  .about-section {
-    margin-top: 36px;
-    padding-top: 28px;
-    border-top: 1px solid var(--border);
+  .about-visual {
+    grid-column: 1 / span 4;
   }
 
-  .about-section.first {
-    margin-top: 32px;
+  .about-content {
+    grid-column: 6 / span 7;
   }
 
-  .about-section .section-label {
-    margin-bottom: 14px;
-  }
-
-  .about-body p {
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 1.85;
-    color: var(--text-secondary);
-  }
-
-  .about-items {
+  .about-portrait {
+    position: sticky;
+    top: 40px;
+    aspect-ratio: 4 / 5;
+    background: var(--bg-subtle);
+    border: 1px dashed var(--border-strong);
     display: flex;
-    flex-direction: column;
-    gap: 14px;
+    align-items: flex-end;
+    padding: 20px;
   }
 
-  .about-item-label {
-    font-size: 12px;
+  .about-portrait-label {
+    font-size: 0.625rem;
     font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 3px;
+    opacity: 0.7;
   }
 
-  .about-item-value {
-    font-size: 14px;
+  .about-block {
+    padding-top: 32px;
+    margin-top: 32px;
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .about-block:first-child {
+    padding-top: 0;
+    margin-top: 0;
+    border-top: none;
+  }
+
+  .about-block h2 {
+    margin: 0 0 16px;
+  }
+
+  .about-block p {
+    font-family: var(--font-serif);
     font-weight: 300;
+    font-size: 1.1875rem;
+    line-height: 1.7;
     color: var(--text-secondary);
-    line-height: 1.6;
+    max-width: 48ch;
+  }
+
+  .interest-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+
+  .interest-list li {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 1.1875rem;
+    color: var(--text-secondary);
+  }
+
+  .interest-list li + li::before {
+    content: '·';
+    margin-right: 20px;
+    color: var(--text-muted);
+  }
+
+  .social-list {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 0.9375rem;
   }
 
   .support-link {
-    display: inline-block;
-    margin-top: 16px;
-    font-size: 14px;
-    font-weight: 400;
+    margin-top: 24px;
   }
 
-  .connect-text {
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--text-secondary);
+  @media (max-width: 1024px) {
+    .about-visual { grid-column: 1 / span 8; }
+    .about-content { grid-column: 1 / span 8; margin-top: 48px; }
+
+    .about-portrait {
+      position: static;
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .about-visual,
+    .about-content {
+      grid-column: 1 / -1;
+    }
+
+    .about-statement br {
+      display: none;
+    }
   }
 </style>

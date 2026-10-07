@@ -36,4 +36,4 @@ The people who get fit aren't the ones with the best plans. They're the ones who
 
 Build a system you'll actually follow. Remove decisions. Embrace constraints. Trust the boring process.
 
-Related: [90-Day Recomposition](/projects/90-day-recomp/)
+Related: [90-Day Recomposition](/things/90-day-recomp/)

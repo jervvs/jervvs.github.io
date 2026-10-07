@@ -1,0 +1,141 @@
+---
+import { getPhotoGradient } from '../lib/photoGradient';
+
+interface Photo {
+  title: string;
+  image: string;
+  location?: string;
+  caption?: string;
+}
+
+interface Props {
+  photos: Photo[];
+}
+
+const { photos } = Astro.props;
+---
+
+<!--
+  Asymmetric composition — deliberately not a uniform grid.
+  Photographs should feel like observation, not like a separate portfolio.
+-->
+<div class="photo-feature">
+  {photos.map((photo, i) => (
+    <figure class:list={['photo-frame', `frame-${i % 3}`]}>
+      <a href="/places/" class="photo-link" aria-label={`${photo.title}${photo.location ? `, ${photo.location}` : ''} — view all places`}>
+        <span class="photo-surface" style={`background: ${getPhotoGradient(photo.image)};`}>
+          <img src={photo.image} alt={photo.title} loading="lazy" onerror="this.style.display='none'" />
+        </span>
+      </a>
+      <figcaption class="photo-caption">
+        <span class="photo-title">{photo.title}</span>
+        {photo.location && <span class="photo-location">{photo.location}</span>}
+      </figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .photo-feature {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--grid-gap);
+    row-gap: clamp(40px, 5vw, 72px);
+    align-items: start;
+  }
+
+  .photo-frame {
+    margin: 0;
+  }
+
+  /* Large anchor image, right-weighted */
+  .frame-0 {
+    grid-column: 5 / span 8;
+  }
+
+  /* Smaller counterweight, left-weighted and pushed down */
+  .frame-1 {
+    grid-column: 1 / span 5;
+    margin-top: clamp(24px, 5vw, 88px);
+  }
+
+  /* Wide, centred break */
+  .frame-2 {
+    grid-column: 3 / span 8;
+  }
+
+  .photo-link {
+    display: block;
+    overflow: hidden;
+  }
+
+  .photo-surface {
+    display: block;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background-size: cover;
+  }
+
+  .frame-1 .photo-surface {
+    aspect-ratio: 4 / 5;
+  }
+
+  .photo-surface img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .photo-link:hover .photo-surface img {
+    transform: scale(1.03);
+  }
+
+  .photo-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 14px;
+  }
+
+  .photo-title {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: 1.0625rem;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .photo-link:hover + .photo-caption .photo-title {
+    color: var(--accent);
+  }
+
+  .photo-location {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 1024px) {
+    .frame-0,
+    .frame-1,
+    .frame-2 {
+      grid-column: 1 / span 8;
+      margin-top: 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .frame-0,
+    .frame-1,
+    .frame-2 {
+      grid-column: 1 / -1;
+    }
+
+    .frame-1 .photo-surface {
+      aspect-ratio: 3 / 2;
+    }
+  }
+</style>

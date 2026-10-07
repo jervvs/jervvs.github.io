@@ -1,0 +1,132 @@
+---
+interface Note {
+  title: string;
+  href: string;
+  date: Date;
+  description?: string;
+  placeholder?: boolean;
+}
+
+interface Props {
+  notes: Note[];
+}
+
+const { notes } = Astro.props;
+
+const fmt = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+});
+---
+
+<!--
+  An editorial index, not a card grid. No descriptions here —
+  they live on the note itself. Without JS this is still a
+  complete, readable list of links.
+-->
+<ol class="note-list">
+  {notes.map(note => (
+    <li class:list={['note-row', { placeholder: note.placeholder }]}>
+      {note.placeholder ? (
+        <div class="note-link note-link-static">
+          <span class="note-date type-meta">— — —</span>
+          <span class="note-title">{note.title}</span>
+        </div>
+      ) : (
+        <a href={note.href} class="note-link">
+          <time class="note-date type-meta" datetime={note.date.toISOString()}>
+            {fmt.format(note.date).toUpperCase()}
+          </time>
+          <span class="note-title">{note.title}</span>
+          <span class="note-arrow" aria-hidden="true">→</span>
+        </a>
+      )}
+    </li>
+  ))}
+</ol>
+
+<style>
+  .note-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .note-row {
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
+  .note-row:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .note-link {
+    display: grid;
+    grid-template-columns: 9rem 1fr auto;
+    align-items: baseline;
+    gap: var(--grid-gap);
+    padding: 26px 0;
+    transition: color 0.2s;
+  }
+
+  .note-date {
+    white-space: nowrap;
+  }
+
+  .note-title {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .note-arrow {
+    font-size: 1rem;
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+  }
+
+  .note-link:hover .note-title {
+    color: var(--accent);
+  }
+
+  .note-link:hover .note-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--accent);
+  }
+
+  /* Placeholder row — reserved space, visibly unfilled */
+  .note-row.placeholder .note-title {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .note-row.placeholder {
+    border-top-style: dashed;
+  }
+
+  @media (max-width: 700px) {
+    .note-link {
+      grid-template-columns: 1fr auto;
+      gap: 6px 12px;
+      padding: 20px 0;
+    }
+
+    .note-date {
+      grid-column: 1 / -1;
+    }
+
+    /* Touch devices never hover, so the arrow must not stay hidden */
+    .note-arrow {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

@@ -1,195 +1,244 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import WaveDivider from '../components/WaveDivider.astro';
-import CategoryColumn from '../components/CategoryColumn.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import NowBlock from '../components/NowBlock.astro';
+import ProjectFeature from '../components/ProjectFeature.astro';
+import NoteList from '../components/NoteList.astro';
+import PhotoFeature from '../components/PhotoFeature.astro';
 import { SITE } from '../config';
 import { getCollection } from 'astro:content';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 
-// Query all collections
-const posts = (await getCollection('posts'))
+const notes = (await getCollection('posts'))
   .filter(p => !p.data.draft)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
-
-const allPhotos = (await getCollection('photos'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-// Group by collection, get unique collection names with date ranges
-const photoCollections = new Map<string, { name: string; count: number; newestDate: Date }>();
-for (const p of allPhotos) {
-  const key = p.data.collection;
-  if (!photoCollections.has(key)) {
-    photoCollections.set(key, { name: key, count: 0, newestDate: p.data.date });
-  }
-  const col = photoCollections.get(key)!;
-  col.count++;
-  if (p.data.date > col.newestDate) col.newestDate = p.data.date;
+const things = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+const photos = (await getCollection('photos'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Pick a spread of photographs rather than the three newest from one trip.
+const featurePhotos: typeof photos = [];
+const seenCollections = new Set<string>();
+for (const photo of photos) {
+  if (featurePhotos.length >= 3) break;
+  const key = photo.data.collection;
+  if (seenCollections.has(key)) continue;
+  seenCollections.add(key);
+  featurePhotos.push(photo);
 }
-const recentCollections = Array.from(photoCollections.values()).slice(0, 7);
+// If every photo shares one collection, fall back to simply taking the newest.
+const chosenPhotos = featurePhotos.length >= 2
+  ? featurePhotos
+  : photos.slice(0, 3);
 
-const projectItems = (await getCollection('projects'))
-  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title))
-  .slice(0, 3);
-
-// Read "Now" content
 let nowContent = '';
+let nowUpdated: Date | undefined;
 try {
   nowContent = readFileSync('./src/content/now.md', 'utf-8').trim();
-} catch { nowContent = ''; }
+  nowUpdated = statSync('./src/content/now.md').mtime;
+} catch {
+  nowContent = '';
+}
 
-// Map collections to CategoryColumn items
-const writingItems = posts.map(p => ({
-  title: p.data.title,
-  description: p.data.description,
-  href: `/writing/${p.id}/`,
-}));
-
-const projectColumnItems = projectItems.map(p => ({
-  title: p.data.title,
-  description: p.data.description,
-  href: `/projects/${p.id}/`,
-}));
-
-const photoColumnItems = recentCollections.map(col => ({
-  title: col.name,
-  href: `/photography/#${col.name.toLowerCase().replace(/\s+/g, '-')}`,
-}));
-
-const socialLinks = Object.values(SITE.social);
+// Reserve the notes index rhythm until there are five published notes.
+const NOTE_TARGET = 5;
+const placeholderNotes = Array.from(
+  { length: Math.max(0, NOTE_TARGET - Math.min(notes.length, NOTE_TARGET)) },
+  () => ({ title: 'Unwritten note', href: '', date: new Date(0) }),
+).map(n => ({ ...n, placeholder: true }));
 ---
 
 <BaseLayout currentPath="/">
-  <!-- Hero -->
-  <section class="hero animate-in delay-1">
-    <h1 class="hero-name">{SITE.name}</h1>
-    <p class="hero-tagline">{SITE.tagline}</p>
-    <p class="hero-bio">{SITE.bio}</p>
+  <!-- ─── Hero ─── -->
+  <section class="hero">
+    <h1 class="hero-name type-display">
+      I make things,<br />
+      think about systems,<br />
+      and notice too much.
+    </h1>
+    <p class="hero-meta type-meta">
+      {SITE.name} · {SITE.location} · Engineer
+    </p>
   </section>
 
-  <WaveDivider />
+  <!-- ─── Now ─── -->
+  {nowContent && <NowBlock content={nowContent} updated={nowUpdated} />}
 
-  <!-- Category Columns -->
-  <div class="categories">
-    <CategoryColumn
-      title="Writing"
-      items={writingItems}
-      viewAllHref="/writing/"
-      delay={2}
-    />
-    <CategoryColumn
-      title="Projects"
-      items={projectColumnItems}
-      viewAllHref="/projects/"
-      delay={3}
-    />
-    <CategoryColumn
-      title="Photography"
-      items={photoColumnItems}
-      viewAllHref="/photography/"
-      viewAllLabel="All photos →"
-      delay={5}
-    />
-  </div>
+  <!-- ─── Things ─── -->
+  <section class="section">
+    <SectionHeading title="Things" href="/things/" />
 
-  <!-- Now -->
-  {nowContent && (
-    <section class="section-divider animate-in delay-6">
-      <div class="section-label">Now</div>
-      <p class="now-text">{nowContent}</p>
-    </section>
-  )}
+    {things.length > 0 ? (
+      <div class="things-list">
+        {things.slice(0, 3).map((thing, i) => (
+          <ProjectFeature
+            number={i + 1}
+            title={thing.data.title}
+            description={thing.data.description}
+            href={`/things/${thing.id}/`}
+            status={thing.data.status}
+            year={thing.data.year}
+            tags={thing.data.tags}
+            flip={i % 2 === 1}
+          />
+        ))}
+        {/* Reserve the rest of the composition until real things exist */}
+        {Array.from({ length: Math.max(0, 3 - things.length) }, (_, i) => (
+          <ProjectFeature
+            number={things.length + i + 1}
+            title=""
+            description=""
+            href=""
+            flip={(things.length + i) % 2 === 1}
+            placeholder
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="things-list">
+        {[0, 1, 2].map(i => (
+          <ProjectFeature
+            number={i + 1}
+            title=""
+            description=""
+            href=""
+            flip={i % 2 === 1}
+            placeholder
+          />
+        ))}
+      </div>
+    )}
+  </section>
 
-  <!-- Connect -->
-  <section class="section-divider animate-in delay-7">
-    <div class="section-label">Connect</div>
-    <p class="connect-text">
-      Find me on
-      {socialLinks.map((link, i) => (
-        <>
-          <a href={link.url} class="text-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
-          {i < socialLinks.length - 1 && (i === socialLinks.length - 2 ? ', or ' : ', ')}
-        </>
-      ))}.
-    </p>
+  <!-- ─── Notes ─── -->
+  <section class="section">
+    <SectionHeading title="Notes" href="/notes/" />
+
+    {notes.length > 0 ? (
+      <NoteList
+        notes={[
+          ...notes.slice(0, 5).map(note => ({
+            title: note.data.title,
+            href: `/notes/${note.id}/`,
+            date: note.data.date,
+          })),
+          ...placeholderNotes,
+        ]}
+      />
+    ) : (
+      <NoteList notes={placeholderNotes} />
+    )}
+  </section>
+
+  <!-- ─── Places ─── -->
+  <section class="section">
+    <SectionHeading title="Places" href="/places/" linkLabel="All places" />
+    <PhotoFeature
+      photos={chosenPhotos.map(photo => ({
+        title: photo.data.title,
+        image: photo.data.image,
+        location: photo.data.location,
+        caption: photo.data.caption,
+      }))}
+    />
+  </section>
+
+  <!-- ─── About ─── -->
+  <section class="section about-teaser">
+    <div class="editorial-grid">
+      <div class="about-teaser-aside">
+        <h2 class="type-label">About</h2>
+      </div>
+      <div class="about-teaser-body">
+        <p class="about-statement">
+          I like understanding how things work.<br />
+          Then I like making them work better.
+        </p>
+        <p class="about-detail">
+          Software, systems, and the space where the two meet.
+        </p>
+        <a href="/about/" class="arrow-link">
+          More about me
+          <span class="arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
 <style>
+  /* ─── Hero ─── */
   .hero {
-    padding-bottom: 48px;
+    padding-block: clamp(72px, 12vw, 168px) clamp(64px, 9vw, 120px);
   }
 
   .hero-name {
-    font-size: 32px;
-    font-weight: 200;
-    letter-spacing: -0.03em;
+    margin: 0;
+    max-width: 20ch;
+  }
+
+  .hero-meta {
+    margin-top: 40px;
+  }
+
+  /* ─── Empty states ─── */
+  .empty-note {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--text-muted);
+  }
+
+  /* ─── About teaser ─── */
+  .about-teaser-aside {
+    grid-column: 1 / span 3;
+  }
+
+  .about-teaser-body {
+    grid-column: 5 / span 7;
+  }
+
+  .about-teaser-aside h2 {
+    margin: 0;
+  }
+
+  .about-statement {
+    font-family: var(--font-serif);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 2.8vw, 2.125rem);
+    line-height: 1.28;
+    letter-spacing: -0.018em;
     color: var(--text);
-    margin-bottom: 14px;
-    transition: color 0.3s;
   }
 
-  .hero-tagline {
-    font-size: 16px;
+  .about-detail {
+    font-size: 1rem;
     font-weight: 300;
+    line-height: 1.7;
     color: var(--text-secondary);
-    margin-bottom: 12px;
-    letter-spacing: -0.01em;
-    transition: color 0.3s;
+    margin-top: 20px;
   }
 
-  .hero-bio {
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.75;
-    color: var(--text-secondary);
-    max-width: 480px;
-    transition: color 0.3s;
+  .about-teaser-body .arrow-link {
+    margin-top: 32px;
   }
 
-  .categories {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    padding: 40px 0;
-  }
-
-  .section-divider {
-    padding: 36px 0;
-    border-top: 1px solid var(--border);
-    transition: border-color 0.4s;
-  }
-
-  .section-divider .section-label {
-    margin-bottom: 14px;
-  }
-
-  .now-text {
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.8;
-    color: var(--text-secondary);
-    max-width: 480px;
-    transition: color 0.3s;
-  }
-
-  .connect-text {
-    font-size: 14px;
-    font-weight: 300;
-    color: var(--text-secondary);
-    transition: color 0.3s;
+  @media (max-width: 1024px) {
+    .about-teaser-aside { grid-column: 1 / span 8; }
+    .about-teaser-body { grid-column: 1 / span 8; margin-top: 28px; }
   }
 
   @media (max-width: 700px) {
-    .categories {
-      grid-template-columns: 1fr 1fr;
-      gap: 24px 16px;
+    .about-teaser-aside,
+    .about-teaser-body {
+      grid-column: 1 / -1;
     }
-  }
 
-  @media (max-width: 480px) {
-    .categories {
-      grid-template-columns: 1fr;
+    .about-statement br {
+      display: none;
     }
   }
 </style>

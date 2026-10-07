@@ -1,32 +1,62 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const links = [
+  { href: '/things/', label: 'Things' },
+  { href: '/notes/', label: 'Notes' },
+  { href: '/places/', label: 'Places' },
+  { href: '/about/', label: 'About' },
+];
 ---
 
 <BaseLayout title="Not Found">
-  <div class="not-found">
-    <h1 class="not-found-title">Page not found</h1>
-    <p class="not-found-text">The page you're looking for doesn't exist.</p>
-    <a href="/" class="back-link">← Back home</a>
-  </div>
+  <header class="not-found">
+    <h1 class="type-display">Lost</h1>
+    <p class="not-found-text">
+      This page doesn't exist. It may have moved, or never been here.
+    </p>
+  </header>
+
+  <nav class="not-found-links" aria-label="Site sections">
+    <ul>
+      {links.map(link => (
+        <li>
+          <a href={link.href} class="arrow-link">
+            {link.label}
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
 </BaseLayout>
 
 <style>
   .not-found {
-    text-align: center;
-    padding: 80px 0;
-  }
-
-  .not-found-title {
-    font-size: 32px;
-    font-weight: 200;
-    letter-spacing: -0.03em;
-    margin-bottom: 12px;
+    padding-block: clamp(80px, 14vw, 176px) 0;
+    max-width: 36ch;
   }
 
   .not-found-text {
-    font-size: 14px;
+    margin-top: 28px;
+    font-family: var(--font-serif);
+    font-style: italic;
     font-weight: 300;
-    color: var(--text-muted);
-    margin-bottom: 32px;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .not-found-links {
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    max-width: 320px;
+  }
+
+  .not-found-links ul {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 </style>

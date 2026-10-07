@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { getCollection } from 'astro:content';
+
+const things = (await getCollection('projects'))
+  .sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+const allTags = [...new Set(things.flatMap(t => t.data.tags))].sort();
+---
+
+<BaseLayout title="Things" description="Things I've made, and things still growing.">
+  <header class="archive-head">
+    <h1 class="type-display">Things</h1>
+    <p class="archive-intro">
+      Things I've made, and things still growing.
+      Some finished, some paused, some still a sketch.
+    </p>
+  </header>
+
+  {allTags.length > 0 && (
+    <div class="tag-filter" id="tag-filter" role="group" aria-label="Filter things by tag">
+      <button class="tag active" data-tag="" aria-pressed="true">All</button>
+      {allTags.map(tag => (
+        <button class="tag" data-tag={tag} aria-pressed="false">{tag}</button>
+      ))}
+    </div>
+  )}
+
+  <SectionHeading title="Index" />
+
+  <ol class="archive" id="thing-list">
+    {things.map((thing, i) => (
+      <li class="archive-row" data-tags={thing.data.tags.join(',')}>
+        <a href={`/things/${thing.id}/`} class="archive-link">
+          <span class="archive-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <span class="archive-main">
+            <span class="archive-title">{thing.data.title}</span>
+            <span class="archive-desc">{thing.data.description}</span>
+          </span>
+          <span class="archive-meta">
+            {thing.data.status && <span class="archive-status">{thing.data.status}</span>}
+            {thing.data.year && <span class="archive-year">{thing.data.year}</span>}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ol>
+
+  <p class="no-results" id="no-results" hidden>No things with this tag.</p>
+</BaseLayout>
+
+<style>
+  .archive-head {
+    padding-block: clamp(64px, 10vw, 128px) clamp(48px, 6vw, 72px);
+    max-width: 40ch;
+  }
+
+  .archive-intro {
+    margin-top: 28px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  /* ─── Tag filter — inline text, not app chrome ─── */
+  .tag-filter {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding-bottom: clamp(48px, 6vw, 80px);
+  }
+
+  .tag {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    padding: 0 0 4px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tag:hover { color: var(--text); }
+  .tag.active { color: var(--text); border-bottom-color: var(--accent); }
+
+  /* ─── Archive index ─── */
+  .archive {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .archive-row {
+    border-top: 1px solid var(--border);
+    transition: border-color 0.4s, opacity 0.2s;
+  }
+
+  .archive-row:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .archive-row[hidden] {
+    display: none;
+  }
+
+  .archive-link {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) 10rem;
+    gap: var(--grid-gap);
+    align-items: baseline;
+    padding: 30px 0;
+    transition: color 0.2s;
+  }
+
+  .archive-num {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    color: var(--text-muted);
+  }
+
+  .archive-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .archive-title {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    transition: color 0.2s;
+  }
+
+  .archive-link:hover .archive-title {
+    color: var(--accent);
+  }
+
+  .archive-desc {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 52ch;
+  }
+
+  .archive-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .archive-status,
+  .archive-year {
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .no-results {
+    padding: 48px 0;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.125rem;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 700px) {
+    .archive-link {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .archive-meta {
+      grid-column: 2;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 12px;
+      text-align: left;
+    }
+  }
+</style>
+
+<script>
+  function initTagFilter() {
+    const filterBar = document.getElementById('tag-filter');
+    const list = document.getElementById('thing-list');
+    const noResults = document.getElementById('no-results');
+    if (!filterBar || !list) return;
+
+    const tags = filterBar.querySelectorAll<HTMLButtonElement>('.tag');
+    const rows = list.querySelectorAll<HTMLElement>('.archive-row');
+
+    function apply(tag: string) {
+      let visible = 0;
+      rows.forEach(row => {
+        const rowTags = row.dataset.tags || '';
+        const match = !tag || rowTags.split(',').includes(tag);
+        row.hidden = !match;
+        if (match) visible++;
+      });
+
+      tags.forEach(btn => {
+        const isActive = btn.dataset.tag === tag;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+
+      if (noResults) noResults.hidden = visible > 0;
+
+      const url = new URL(window.location.href);
+      if (tag) url.searchParams.set('tag', tag);
+      else url.searchParams.delete('tag');
+      history.replaceState({}, '', url.toString());
+    }
+
+    tags.forEach(btn => btn.addEventListener('click', () => apply(btn.dataset.tag || '')));
+    apply(new URL(window.location.href).searchParams.get('tag') || '');
+  }
+
+  initTagFilter();
+  document.addEventListener('astro:after-swap', initTagFilter);
+</script>

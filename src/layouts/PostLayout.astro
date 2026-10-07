@@ -15,6 +15,7 @@ interface Props {
 const { title, date, tags = [], minutesRead, description } = Astro.props;
 
 const formattedDate = new Intl.DateTimeFormat('en-US', {
+  day: 'numeric',
   month: 'long',
   year: 'numeric',
 }).format(date);
@@ -22,46 +23,54 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
 const pageUrl = `${SITE.url}${Astro.url.pathname}`;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} prose>
   <ReadingProgress />
 
-  <a href="/writing/" class="back-link">← Back to writing</a>
+  <a href="/notes/" class="back-link">← Back to notes</a>
 
   <article class="post">
     <header class="post-header">
-      <div class="post-meta">
-        <span>{formattedDate}</span>
-        <span class="dot"></span>
+      <div class="post-meta type-meta">
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        <span class="dot" aria-hidden="true"></span>
         <span>{minutesRead} min read</span>
       </div>
-      <h1 class="post-title">{title}</h1>
+
+      <h1 class="type-title post-title">{title}</h1>
+
+      {description && <p class="post-deck">{description}</p>}
+
       {tags.length > 0 && (
-        <div class="post-tags">
-          {tags.map(tag => <span class="post-tag">{tag}</span>)}
-        </div>
+        <ul class="post-tags">
+          {tags.map(tag => <li class="type-meta">{tag}</li>)}
+        </ul>
       )}
     </header>
 
-    <div class="post-body">
+    <div class="prose post-body">
       <slot />
     </div>
 
     <footer class="post-footer">
-      <a href="/writing/" class="back-link" style="margin-bottom: 0;">← All writing</a>
+      <a href="/notes/" class="back-link">← All notes</a>
       <ShareButton title={title} url={pageUrl} />
     </footer>
   </article>
 </BaseLayout>
 
 <style>
+  .post-header {
+    padding-bottom: clamp(40px, 5vw, 56px);
+    margin-bottom: clamp(40px, 5vw, 56px);
+    border-bottom: 1px solid var(--border);
+    transition: border-color 0.4s;
+  }
+
   .post-meta {
-    font-size: 12px;
-    font-weight: 300;
-    color: var(--text-muted);
-    margin-bottom: 14px;
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
+    margin-bottom: 20px;
   }
 
   .dot {
@@ -72,139 +81,26 @@ const pageUrl = `${SITE.url}${Astro.url.pathname}`;
   }
 
   .post-title {
-    font-size: 32px;
-    font-weight: 200;
-    letter-spacing: -0.03em;
-    line-height: 1.25;
-    margin-bottom: 12px;
-    color: var(--text);
-    transition: color 0.3s;
+    margin: 0;
+    max-width: 22ch;
+  }
+
+  .post-deck {
+    margin-top: 20px;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    max-width: 46ch;
   }
 
   .post-tags {
     display: flex;
-    gap: 6px;
-    margin-bottom: 36px;
+    gap: 18px;
     flex-wrap: wrap;
-  }
-
-  .post-tag {
-    font-size: 10px;
-    font-weight: 300;
-    color: var(--text-muted);
-    padding: 2px 8px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-  }
-
-  /* ─── PROSE STYLES ─── */
-  .post-body {
-    max-width: 660px;
-  }
-
-  .post-body :global(p) {
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 1.85;
-    color: var(--text-secondary);
-    margin-bottom: 24px;
-  }
-
-  .post-body :global(h2) {
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    margin-top: 48px;
-    margin-bottom: 18px;
-  }
-
-  .post-body :global(h3) {
-    font-size: 18px;
-    font-weight: 400;
-    color: var(--text);
-    margin-top: 36px;
-    margin-bottom: 14px;
-  }
-
-  .post-body :global(strong) {
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .post-body :global(a) {
-    color: var(--text);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: var(--border);
-    transition: text-decoration-color 0.3s;
-  }
-
-  .post-body :global(a:hover) {
-    text-decoration-color: var(--accent);
-  }
-
-  .post-body :global(blockquote) {
-    border-left: 2px solid var(--accent);
-    padding-left: 20px;
-    margin: 32px 0;
-    font-style: italic;
-    color: var(--text-secondary);
-    font-size: 15px;
-    line-height: 1.8;
-  }
-
-  .post-body :global(ul),
-  .post-body :global(ol) {
-    margin: 20px 0;
-    padding-left: 24px;
-    list-style: revert;
-  }
-
-  .post-body :global(li) {
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 1.8;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-  }
-
-  .post-body :global(li strong) {
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .post-body :global(img) {
-    width: 100%;
-    border-radius: 8px;
-    margin: 32px 0 8px;
-  }
-
-  .post-body :global(em) {
-    font-style: italic;
-    color: var(--text-muted);
-    font-size: 12px;
-    display: block;
-    text-align: center;
-    margin-bottom: 24px;
-  }
-
-  .post-body :global(.media-pair) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 32px 0;
-  }
-
-  .post-body :global(.media-pair img) {
-    margin: 0;
-  }
-
-  .post-body :global(.media-pair figcaption) {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-align: center;
-    margin-top: 6px;
+    margin-top: 28px;
   }
 
   .post-footer {
@@ -214,5 +110,11 @@ const pageUrl = `${SITE.url}${Astro.url.pathname}`;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .post-footer .back-link {
+    margin-bottom: 0;
   }
 </style>
